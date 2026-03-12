@@ -137,7 +137,7 @@ struct DropdownRootView: View {
             .accessibilityLabel("Toggle floating window")
             .help("Toggle floating window")
 
-            Text("v1.0.0")
+            Text("v\(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.3.7")")
                 .font(.system(size: 10, weight: .medium, design: .monospaced))
                 .foregroundStyle(DesignTokens.Colors.textMuted)
 
