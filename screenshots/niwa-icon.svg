@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <filter id="icon-shadow" x="-5%" y="-3%" width="110%" height="112%">
+      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#3D3229" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- macOS rounded square (~22% corner radius of 128 = ~28) -->
+  <rect x="4" y="4" width="120" height="120" rx="28" fill="#FAF6F1" filter="url(#icon-shadow)"/>
+
+  <!-- Stylized plant/leaf in terracotta -->
+  <g transform="translate(64, 68)">
+    <!-- Stem -->
+    <path d="M0,28 Q0,8 0,-4" fill="none" stroke="#E07A5F" stroke-width="3.5" stroke-linecap="round"/>
+    <!-- Left leaf -->
+    <path d="M0,6 Q-18,-8 -14,-26 Q-6,-18 0,-2" fill="#E07A5F"/>
+    <!-- Right leaf -->
+    <path d="M0,-2 Q18,-16 16,-34 Q6,-24 0,-10" fill="#E07A5F"/>
+    <!-- Small left leaf -->
+    <path d="M0,16 Q-12,4 -10,-6 Q-4,2 0,12" fill="#E07A5F" opacity="0.8"/>
+    <!-- Leaf vein hints -->
+    <path d="M-1,4 Q-8,-6 -10,-16" fill="none" stroke="#FAF6F1" stroke-width="0.8" opacity="0.4"/>
+    <path d="M0,-4 Q8,-14 10,-24" fill="none" stroke="#FAF6F1" stroke-width="0.8" opacity="0.4"/>
+  </g>
+</svg>

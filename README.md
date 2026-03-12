@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="screenshots/niwa-icon.png" alt="Niwa Icon" width="128" />
+  <img src="screenshots/niwa-icon.svg" alt="Niwa Icon" width="128" />
 </p>
 
 <h1 align="center">Niwa (庭)</h1>
@@ -20,14 +20,25 @@
   <img src="https://img.shields.io/badge/License-MIT-green" alt="MIT License" />
 </p>
 
+<br />
+
+<p align="center">
+  <img src="screenshots/hero-light.svg" alt="Niwa Light Mode" width="340" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="screenshots/hero-dark.svg" alt="Niwa Dark Mode" width="340" />
+</p>
+
+<p align="center">
+  <sub>Light mode (warm cream) &nbsp;&nbsp;·&nbsp;&nbsp; Dark mode (warm brown)</sub>
+</p>
+
 ---
 
 <details>
 <summary><strong>Table of Contents</strong></summary>
 
-- [Screenshots](#-screenshots)
 - [Features](#-features)
-- [Plant Growth Stages](#-plant-growth-stages)
+- [Plant Growth](#-plant-growth)
 - [Install](#-install)
 - [How It Works](#-how-it-works)
 - [Settings](#%EF%B8%8F-settings)
@@ -35,33 +46,10 @@
 - [Architecture](#-architecture)
 - [Privacy](#-privacy)
 - [Contributing](#-contributing)
+- [Changelog](#-changelog)
 - [License](#-license)
 
 </details>
-
----
-
-## Screenshots
-
-<p align="center">
-  <img src="screenshots/light-mode.png" alt="Niwa Light Mode" width="320" />
-  &nbsp;&nbsp;
-  <img src="screenshots/dark-mode.png" alt="Niwa Dark Mode" width="320" />
-</p>
-
-<p align="center">
-  <em>Light mode (warm cream) &nbsp;|&nbsp; Dark mode (warm dark brown)</em>
-</p>
-
-<p align="center">
-  <img src="screenshots/settings.png" alt="Niwa Settings" width="320" />
-  &nbsp;&nbsp;
-  <img src="screenshots/floating-window.png" alt="Floating Window" width="240" />
-</p>
-
-<p align="center">
-  <em>Inline settings &nbsp;|&nbsp; Floating mini window</em>
-</p>
 
 ---
 
@@ -125,12 +113,16 @@
 
 ---
 
-## Plant Growth Stages
+## Plant Growth
 
 Your virtual plant grows as you level up — a visual representation of your productivity journey.
 
-| Stage | Levels | Preview |
-|-------|--------|---------|
+<p align="center">
+  <img src="screenshots/plant-stages.svg" alt="All 8 plant growth stages" width="680" />
+</p>
+
+| Stage | Levels | Description |
+|-------|--------|-------------|
 | **Seed** | 0 | A small seed resting in soil |
 | **Sprout** | 1–3 | First green shoot breaks through |
 | **Seedling** | 4–7 | Small stem with a few leaves |
@@ -139,10 +131,6 @@ Your virtual plant grows as you level up — a visual representation of your pro
 | **Small Tree** | 19–25 | Trunk forms, canopy develops |
 | **Full Tree** | 26–35 | Mature tree with full canopy |
 | **Ancient Tree** | 36+ | Majestic tree with deep roots |
-
-<p align="center">
-  <img src="screenshots/plant-stages.png" alt="All 8 plant growth stages" width="600" />
-</p>
 
 ---
 
@@ -244,17 +232,21 @@ All data is stored locally using **SwiftData** with an App Group container. Noth
 
 ## Settings
 
+<p align="center">
+  <img src="screenshots/settings-light.svg" alt="Niwa Settings" width="340" />
+</p>
+
 Settings are embedded inline in the dropdown — no separate window.
 
 | Section | Options |
 |---------|---------|
-| **Timer** | Work duration, short break, long break, sessions before long break |
-| **Health** | Water interval, standing interval |
-| **Work Hours** | Start/end time (reminders only fire within) |
-| **Lunch** | Start/end time (reminders paused during) |
-| **Appearance** | System / Light / Dark theme |
-| **Window** | Always on top toggle |
-| **Data** | Export JSON, Reset data, Full restart |
+| **⏱️ Timer** | Work duration, short break, long break, sessions before long break |
+| **💚 Health** | Water interval, standing interval |
+| **💼 Work Hours** | Start/end time (reminders only fire within) |
+| **🍜 Lunch** | Start/end time (reminders paused during) |
+| **🎨 Appearance** | System / Light / Dark theme |
+| **🪟 Window** | Always on top toggle |
+| **💾 Data** | Export JSON, Reset data, Full restart |
 
 > [!TIP]
 > **Full Restart** wipes everything and returns you to Level 0 with a fresh seed. Use **Reset All Data** to clear tasks/notes/XP while keeping your settings.
@@ -263,7 +255,7 @@ Settings are embedded inline in the dropdown — no separate window.
 
 ## Design System
 
-Niwa uses a custom warm, earthy design language.
+Niwa uses a custom warm, earthy design language inspired by Japanese gardens.
 
 ### Color Palette
 
@@ -310,19 +302,19 @@ Niwa/
 │   │   ├── DropdownRootView.swift
 │   │   ├── Components/
 │   │   │   ├── HeroView.swift       # Plant + timer + XP bar
-│   │   │   ├── PlantView.swift      # 8 growth stages (pure SwiftUI shapes)
+│   │   │   ├── PlantView.swift      # 8 growth stages (pure SwiftUI)
 │   │   │   ├── LevelUpOverlay.swift
 │   │   │   └── ...
 │   │   ├── FloatingWindow/
-│   │   │   ├── FloatingWindowController.swift  # NSPanel management
+│   │   │   ├── FloatingWindowController.swift
 │   │   │   └── FloatingWindowContentView.swift
 │   │   └── Settings/
 │   │       └── InlineSettingsView.swift
-│   └── Assets.xcassets/         # Color sets (light + dark variants)
+│   └── Assets.xcassets/         # Color sets (light + dark)
 ├── NiwaShared/                  # Shared between app + widget
 │   ├── Constants/
-│   │   ├── DesignTokens.swift   # Colors, spacing, typography, animation
-│   │   └── XPConstants.swift    # XP amounts, level formula, defaults
+│   │   ├── DesignTokens.swift   # Colors, spacing, typography
+│   │   └── XPConstants.swift    # XP amounts, level formula
 │   ├── Engines/
 │   │   ├── GamificationEngine.swift
 │   │   ├── PomodoroTimerEngine.swift
@@ -336,9 +328,9 @@ Niwa/
 │       ├── HealthEvent.swift
 │       └── XPEvent.swift
 └── NiwaWidget/                  # WidgetKit extension
-    ├── SmallWidgetView.swift    # Timer + level + plant
-    ├── MediumWidgetView.swift   # Timer + tasks + health
-    └── LargeWidgetView.swift    # Full dashboard + sparkline
+    ├── SmallWidgetView.swift
+    ├── MediumWidgetView.swift
+    └── LargeWidgetView.swift
 ```
 
 ### Key Design Decisions
@@ -371,19 +363,17 @@ Niwa/
 
 ## Contributing
 
-Contributions are welcome! Please:
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, code style, and pull request guidelines.
 
-1. Fork the repo
-2. Create a feature branch (`git checkout -b feature/amazing-thing`)
-3. Commit your changes
-4. Push to the branch (`git push origin feature/amazing-thing`)
-5. Open a Pull Request
+Found a security issue? Please report it privately — see [SECURITY.md](SECURITY.md).
 
-### Build Requirements
+This project follows the [Contributor Covenant](CODE_OF_CONDUCT.md) code of conduct.
 
-- macOS 15.0+
-- Xcode 16+
-- [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`)
+---
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for version history.
 
 ---
 
