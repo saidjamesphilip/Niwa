@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Niwa (庭) — Grow Your Productivity</title>
+    <meta name="description" content="A native macOS menu bar app combining Pomodoro timer, tasks, notes, clipboard history, and health reminders — with a gamified leveling system.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Raleway:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FAF6F1;
+            --bg-secondary: #F0EAE0;
+            --bg-dark: #1C1917;
+            --bg-dark-secondary: #2C2520;
+            --primary: #E07A5F;
+            --primary-hover: #C96B52;
+            --secondary: #81B29A;
+            --secondary-dark: #6E9E86;
+            --text: #3D3229;
+            --text-secondary: #7A6E63;
+            --text-muted: #A89B8C;
+            --subtle: #D4C5B2;
+            --border: #E8DED1;
+            --font-serif: 'Lora', Georgia, serif;
+            --font-sans: 'Raleway', -apple-system, system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --max-w: 1060px;
+            --z-nav: 50;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── Focus States ── */
+        a:focus-visible, button:focus-visible, code:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        /* ── Nav ── */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: var(--z-nav);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 32px;
+            background: rgba(250,246,241,0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            transition: box-shadow 0.2s ease-out;
+        }
+        nav.scrolled { box-shadow: 0 1px 8px rgba(61,50,41,0.06); }
+        .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; cursor: pointer; }
+        .nav-brand svg { width: 28px; height: 28px; }
+        .nav-brand span { font-family: var(--font-serif); font-size: 18px; font-weight: 600; color: var(--text); }
+        .nav-links { display: flex; gap: 24px; align-items: center; }
+        .nav-links a {
+            text-decoration: none; font-size: 13px; font-weight: 500;
+            color: var(--text-secondary); transition: color 0.2s ease-out; cursor: pointer;
+        }
+        .nav-links a:hover { color: var(--primary); }
+        .nav-cta {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: var(--text); color: var(--bg); font-size: 13px; font-weight: 600;
+            padding: 8px 18px; border-radius: 8px; text-decoration: none;
+            transition: background 0.2s ease-out; cursor: pointer;
+        }
+        .nav-cta:hover { background: var(--primary); }
+
+        /* ── Hero ── */
+        .hero {
+            padding: 120px 32px 60px;
+            text-align: center;
+            max-width: var(--max-w); margin: 0 auto;
+        }
+        .hero-icon { margin-bottom: 20px; }
+        .hero-icon svg { width: 80px; height: 80px; filter: drop-shadow(0 4px 12px rgba(224,122,95,0.2)); }
+        .hero h1 {
+            font-family: var(--font-serif); font-size: clamp(36px, 5vw, 56px);
+            font-weight: 700; line-height: 1.15; margin-bottom: 12px;
+            color: var(--text);
+        }
+        .hero h1 em { font-style: italic; color: var(--primary); }
+        .hero p {
+            font-size: 17px; line-height: 1.6; color: var(--text-secondary);
+            max-width: 520px; margin: 0 auto 28px;
+        }
+        .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        .btn-primary {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--text); color: var(--bg); font-size: 15px; font-weight: 600;
+            padding: 12px 28px; border-radius: 10px; text-decoration: none;
+            transition: background 0.2s ease-out, transform 0.2s ease-out; cursor: pointer;
+        }
+        .btn-primary:hover { background: var(--primary); transform: translateY(-1px); }
+        .btn-secondary {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: var(--bg-secondary); color: var(--text); font-size: 15px; font-weight: 500;
+            padding: 12px 28px; border-radius: 10px; text-decoration: none; border: 1px solid var(--border);
+            transition: border-color 0.2s ease-out, background 0.2s ease-out, transform 0.2s ease-out; cursor: pointer;
+        }
+        .btn-secondary:hover { border-color: var(--primary); background: #fff; transform: translateY(-1px); }
+
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: var(--bg-secondary); border: 1px solid var(--border);
+            padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 500;
+            color: var(--text-secondary); margin-bottom: 16px;
+        }
+        .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--secondary); }
+
+        /* ── Showcase ── */
+        .showcase {
+            padding: 60px 32px 80px;
+            background: var(--bg-dark);
+            overflow: hidden;
+        }
+        .showcase-inner {
+            max-width: var(--max-w); margin: 0 auto;
+        }
+        .showcase-heading {
+            text-align: center; margin-bottom: 48px;
+        }
+        .showcase-heading h2 {
+            font-family: var(--font-serif); font-size: 32px; font-weight: 600; color: #FAF6F1; margin-bottom: 8px;
+        }
+        .showcase-heading p { font-size: 15px; color: var(--text-muted); max-width: 460px; margin: 0 auto; line-height: 1.6; }
+
+        /* Hero mockup */
+        .showcase-hero {
+            position: relative;
+            max-width: 780px;
+            margin: 0 auto 56px;
+        }
+        .mockup-glow {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 600px; height: 400px;
+            background: radial-gradient(ellipse, rgba(224,122,95,0.12) 0%, rgba(129,178,154,0.06) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .mockup-frame {
+            position: relative; z-index: 1;
+            background: var(--bg-dark-secondary);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 0;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.04);
+            overflow: hidden;
+        }
+        .mockup-titlebar {
+            display: flex; align-items: center; gap: 8px;
+            padding: 14px 16px;
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        .mockup-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .mockup-dot.red { background: #FF5F57; }
+        .mockup-dot.yellow { background: #FFBD2E; }
+        .mockup-dot.green { background: #28C840; }
+        .mockup-titlebar-text {
+            flex: 1; text-align: center;
+            font-size: 11px; color: rgba(255,255,255,0.3);
+            font-family: var(--font-sans); font-weight: 500;
+        }
+        .mockup-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            min-height: 360px;
+        }
+        .mockup-panel {
+            padding: 32px;
+        }
+        .mockup-panel-light {
+            background: var(--bg);
+        }
+        .mockup-panel-dark {
+            background: var(--bg-dark);
+        }
+        .mockup-label {
+            font-size: 10px; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 1px; margin-bottom: 20px; display: block;
+        }
+        .mockup-label-light { color: var(--text-muted); }
+        .mockup-label-dark { color: rgba(255,255,255,0.3); }
+
+        /* Floating badges */
+        .showcase-badges {
+            position: relative;
+            max-width: 780px;
+            margin: -28px auto 0;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .showcase-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(255,255,255,0.06); backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 8px 16px; border-radius: 10px;
+            font-size: 12px; font-weight: 600; color: #FAF6F1;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+        }
+        .showcase-badge svg { flex-shrink: 0; }
+
+        /* Feature spotlights */
+        .spotlight-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 56px;
+        }
+        .spotlight-card {
+            background: var(--bg-dark-secondary);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+            overflow: hidden;
+            transition: border-color 0.2s ease-out, transform 0.2s ease-out;
+            cursor: default;
+        }
+        .spotlight-card:hover {
+            border-color: rgba(224,122,95,0.3);
+            transform: translateY(-2px);
+        }
+        .spotlight-visual {
+            height: 200px;
+            display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
+        }
+        .spotlight-content {
+            padding: 20px 24px 24px;
+        }
+        .spotlight-content h3 {
+            font-size: 15px; font-weight: 600; color: #FAF6F1; margin-bottom: 6px;
+        }
+        .spotlight-content p {
+            font-size: 13px; line-height: 1.5; color: var(--text-muted);
+        }
+        .spotlight-tag {
+            display: inline-block; margin-top: 10px;
+            font-size: 11px; font-weight: 600; color: var(--primary);
+            background: rgba(224,122,95,0.12); padding: 3px 10px; border-radius: 5px;
+        }
+
+        /* ── Features ── */
+        .features {
+            padding: 80px 32px;
+            max-width: var(--max-w); margin: 0 auto;
+        }
+        .features h2 {
+            font-family: var(--font-serif); font-size: 32px; font-weight: 600; text-align: center; margin-bottom: 8px;
+        }
+        .features > p { text-align: center; color: var(--text-secondary); font-size: 15px; margin-bottom: 48px; }
+        .feature-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+        }
+        .feature-card {
+            padding: 28px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out, transform 0.2s ease-out;
+            cursor: default;
+        }
+        .feature-card:hover { border-color: var(--primary); box-shadow: 0 4px 20px rgba(224,122,95,0.08); transform: translateY(-2px); }
+        .feature-icon {
+            width: 40px; height: 40px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 14px; font-size: 18px;
+        }
+        .feature-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+        .feature-card p { font-size: 13px; line-height: 1.6; color: var(--text-secondary); }
+        .feature-xp {
+            display: inline-block; margin-top: 10px;
+            font-size: 11px; font-weight: 600; color: var(--primary);
+            background: rgba(224,122,95,0.1); padding: 3px 10px; border-radius: 5px;
+        }
+
+        /* ── Growth ── */
+        .growth {
+            padding: 80px 32px;
+            background: var(--bg-secondary);
+            text-align: center;
+        }
+        .growth h2 { font-family: var(--font-serif); font-size: 32px; font-weight: 600; margin-bottom: 8px; }
+        .growth > p { color: var(--text-secondary); font-size: 15px; margin-bottom: 40px; }
+        .growth svg { max-width: 100%; height: auto; }
+
+        /* ── Install ── */
+        .install {
+            padding: 80px 32px;
+            max-width: 700px; margin: 0 auto;
+            text-align: center;
+        }
+        .install h2 { font-family: var(--font-serif); font-size: 28px; font-weight: 600; margin-bottom: 6px; }
+        .install > p { color: var(--text-secondary); font-size: 15px; margin-bottom: 28px; }
+        .install-card {
+            background: var(--bg-dark);
+            border-radius: 12px; padding: 24px 28px;
+            text-align: left;
+        }
+        .install-step {
+            display: flex; align-items: flex-start; gap: 12px;
+            margin-bottom: 14px;
+        }
+        .install-step:last-child { margin-bottom: 0; }
+        .install-num {
+            width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+            background: var(--primary); color: #fff;
+            font-size: 11px; font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+            margin-top: 2px;
+        }
+        .install-step code {
+            font-family: var(--font-mono); font-size: 13px; color: #FAF6F1;
+            background: rgba(255,255,255,0.06); padding: 8px 14px; border-radius: 6px;
+            display: block; width: 100%; cursor: pointer; position: relative;
+            transition: background 0.2s ease-out;
+            border: none;
+        }
+        .install-step code:hover { background: rgba(255,255,255,0.1); }
+        .install-step code::after {
+            content: 'copy'; position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+            font-size: 10px; font-weight: 600; color: var(--text-muted); font-family: var(--font-sans);
+            transition: color 0.2s ease-out;
+        }
+        .install-step code:hover::after { color: var(--primary); }
+        .install-step .desc { font-size: 12px; color: #A89B8C; margin-top: 6px; }
+
+        /* ── Privacy ── */
+        .privacy {
+            padding: 64px 32px;
+            background: var(--bg-dark); color: #FAF6F1;
+            text-align: center;
+        }
+        .privacy h2 { font-family: var(--font-serif); font-size: 28px; margin-bottom: 8px; }
+        .privacy p { font-size: 14px; color: #A89B8C; max-width: 520px; margin: 0 auto 24px; line-height: 1.6; }
+        .privacy-pills { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        .privacy-pill {
+            display: flex; align-items: center; gap: 6px;
+            background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);
+            padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight: 500;
+            transition: border-color 0.2s ease-out;
+        }
+        .privacy-pill:hover { border-color: rgba(129,178,154,0.4); }
+
+        /* ── FAQ ── */
+        .faq {
+            padding: 80px 32px;
+            max-width: 640px; margin: 0 auto;
+        }
+        .faq h2 { font-family: var(--font-serif); font-size: 28px; text-align: center; margin-bottom: 32px; }
+        .faq-item { border-bottom: 1px solid var(--border); }
+        .faq-q {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 0; cursor: pointer; font-size: 14px; font-weight: 600;
+            background: none; border: none; width: 100%; text-align: left;
+            font-family: var(--font-sans); color: var(--text);
+            transition: color 0.2s ease-out;
+        }
+        .faq-q:hover { color: var(--primary); }
+        .faq-q .arrow { font-size: 18px; color: var(--text-muted); transition: transform 0.25s var(--ease); }
+        .faq-item.open .arrow { transform: rotate(45deg); }
+        .faq-a {
+            max-height: 0; overflow: hidden; transition: max-height 0.3s var(--ease);
+        }
+        .faq-item.open .faq-a { max-height: 200px; }
+        .faq-a p { font-size: 13px; color: var(--text-secondary); line-height: 1.7; padding-bottom: 16px; }
+
+        /* ── Footer ── */
+        footer {
+            padding: 40px 32px; text-align: center;
+            border-top: 1px solid var(--border);
+        }
+        footer p { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+        footer a { color: var(--primary); text-decoration: none; transition: color 0.2s ease-out; }
+        footer a:hover { text-decoration: underline; }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            nav { padding: 10px 16px; }
+            .nav-links { display: none; }
+            .hero { padding: 100px 20px 40px; }
+            .mockup-body { grid-template-columns: 1fr; }
+            .spotlight-grid { grid-template-columns: 1fr; }
+            .feature-grid { grid-template-columns: 1fr; }
+            .showcase-badges { gap: 8px; }
+            .showcase-badge { font-size: 11px; padding: 6px 12px; }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 28px; }
+            .hero p { font-size: 15px; }
+            .mockup-panel { padding: 24px 20px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                transition-duration: 0.01ms !important;
+                animation-duration: 0.01ms !important;
+            }
+            html { scroll-behavior: auto; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ── Nav ── -->
+<nav>
+    <a href="#" class="nav-brand">
+        <svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="4" width="120" height="120" rx="28" fill="#FAF6F1"/>
+            <rect x="4" y="4" width="120" height="120" rx="28" stroke="#E8DED1" stroke-width="1"/>
+            <g transform="translate(64, 68)">
+                <path d="M0,28 Q0,8 0,-4" fill="none" stroke="#E07A5F" stroke-width="3.5" stroke-linecap="round"/>
+                <path d="M0,6 Q-18,-8 -14,-26 Q-6,-18 0,-2" fill="#E07A5F"/>
+                <path d="M0,-2 Q18,-16 16,-34 Q6,-24 0,-10" fill="#E07A5F"/>
+                <path d="M0,16 Q-12,4 -10,-6 Q-4,2 0,12" fill="#E07A5F" opacity="0.8"/>
+            </g>
+        </svg>
+        <span>Niwa</span>
+    </a>
+    <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#growth">Growth</a>
+        <a href="#install">Install</a>
+        <a href="#faq">FAQ</a>
+        <a href="https://github.com/saidjamesphilip/Niwa" class="nav-cta">
+            <svg width="14" height="14" viewBox="0 0 98 96" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z"/></svg>
+            GitHub
+        </a>
+    </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero">
+    <div class="hero-badge"><span class="dot"></span> Native macOS &middot; SwiftUI &middot; Zero dependencies</div>
+    <div class="hero-icon">
+        <svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="4" width="120" height="120" rx="28" fill="#FAF6F1"/>
+            <rect x="5" y="5" width="118" height="118" rx="27" stroke="#E8DED1" stroke-width="1.5"/>
+            <g transform="translate(64, 68)">
+                <path d="M0,28 Q0,8 0,-4" fill="none" stroke="#E07A5F" stroke-width="3.5" stroke-linecap="round"/>
+                <path d="M0,6 Q-18,-8 -14,-26 Q-6,-18 0,-2" fill="#E07A5F"/>
+                <path d="M0,-2 Q18,-16 16,-34 Q6,-24 0,-10" fill="#E07A5F"/>
+                <path d="M0,16 Q-12,4 -10,-6 Q-4,2 0,12" fill="#E07A5F" opacity="0.8"/>
+                <path d="M-1,4 Q-8,-6 -10,-16" fill="none" stroke="#FAF6F1" stroke-width="0.8" opacity="0.4"/>
+                <path d="M0,-4 Q8,-14 10,-24" fill="none" stroke="#FAF6F1" stroke-width="0.8" opacity="0.4"/>
+            </g>
+        </svg>
+    </div>
+    <h1>Grow your <em>productivity</em></h1>
+    <p>Niwa (庭) lives in your menu bar. A Pomodoro timer, tasks, notes, clipboard history, and health reminders — all with a leveling system where your plant grows as you do.</p>
+    <div class="hero-actions">
+        <a href="#install" class="btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            Download
+        </a>
+        <a href="https://github.com/saidjamesphilip/Niwa" class="btn-secondary">
+            <svg width="14" height="14" viewBox="0 0 98 96" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z"/></svg>
+            Source Code
+        </a>
+    </div>
+</section>
+
+<!-- ── Showcase ── -->
+<section class="showcase">
+    <div class="showcase-inner">
+        <div class="showcase-heading">
+            <h2>See it in action</h2>
+            <p>Six productivity tools in one compact dropdown. Beautiful in light and dark mode.</p>
+        </div>
+
+        <!-- Main mockup: app in macOS window context -->
+        <div class="showcase-hero">
+            <div class="mockup-glow"></div>
+            <div class="mockup-frame">
+                <div class="mockup-titlebar">
+                    <span class="mockup-dot red"></span>
+                    <span class="mockup-dot yellow"></span>
+                    <span class="mockup-dot green"></span>
+                    <span class="mockup-titlebar-text">Niwa — Menu Bar</span>
+                    <span style="width: 46px;"></span>
+                </div>
+                <div class="mockup-body">
+                    <!-- Light mode panel -->
+                    <div class="mockup-panel mockup-panel-light">
+                        <span class="mockup-label mockup-label-light">Light Mode</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 280" width="100%" height="auto" style="display:block;">
+                            <defs>
+                                <linearGradient id="xpg-l" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#E07A5F"/><stop offset="100%" stop-color="#E8967F"/></linearGradient>
+                            </defs>
+                            <!-- Plant + Timer header -->
+                            <g transform="translate(32, 8)">
+                                <!-- Plant -->
+                                <line x1="0" y1="52" x2="0" y2="24" stroke="#81B29A" stroke-width="2.5" stroke-linecap="round"/>
+                                <ellipse cx="-8" cy="28" rx="9" ry="5" fill="#81B29A" transform="rotate(-30, -8, 28)"/>
+                                <ellipse cx="9" cy="20" rx="9" ry="5" fill="#6E9E86" transform="rotate(25, 9, 20)"/>
+                                <ellipse cx="0" cy="54" rx="10" ry="2.5" fill="#D4C5B2"/>
+                                <text x="0" y="72" text-anchor="middle" font-family="-apple-system, system-ui" font-size="11" font-weight="600" fill="#3D3229">Level 3</text>
+                                <text x="0" y="84" text-anchor="middle" font-family="-apple-system, system-ui" font-size="9" fill="#7A6E63">Sprout</text>
+                            </g>
+                            <g transform="translate(210, 36)">
+                                <!-- Timer ring -->
+                                <circle r="32" fill="none" stroke="#F0EAE0" stroke-width="3"/>
+                                <circle r="32" fill="none" stroke="#E07A5F" stroke-width="3" stroke-linecap="round" stroke-dasharray="140 201" transform="rotate(-90)"/>
+                                <text y="5" text-anchor="middle" font-family="SF Mono, monospace" font-size="15" font-weight="600" fill="#3D3229">17:24</text>
+                            </g>
+                            <!-- XP bar -->
+                            <rect x="12" y="102" width="296" height="8" rx="4" fill="#F0EAE0"/>
+                            <rect x="12" y="102" width="133" height="8" rx="4" fill="url(#xpg-l)"/>
+                            <text x="160" y="124" text-anchor="middle" font-family="-apple-system, system-ui" font-size="9" fill="#A89B8C">340 / 450 XP</text>
+                            <!-- Tab bar -->
+                            <line x1="12" y1="136" x2="308" y2="136" stroke="#E8DED1" stroke-width="0.5"/>
+                            <text x="50" y="153" text-anchor="middle" font-family="-apple-system, system-ui" font-size="11" font-weight="600" fill="#E07A5F">Tasks</text>
+                            <line x1="32" y1="158" x2="68" y2="158" stroke="#E07A5F" stroke-width="2" stroke-linecap="round"/>
+                            <text x="150" y="153" text-anchor="middle" font-family="-apple-system, system-ui" font-size="11" fill="#A89B8C">Notes</text>
+                            <text x="260" y="153" text-anchor="middle" font-family="-apple-system, system-ui" font-size="11" fill="#A89B8C">Clipboard</text>
+                            <!-- Tasks -->
+                            <g transform="translate(12, 172)">
+                                <rect width="14" height="14" rx="3" fill="none" stroke="#D4C5B2" stroke-width="1.5"/>
+                                <text x="22" y="11" font-family="-apple-system, system-ui" font-size="12" fill="#3D3229">Design new landing page</text>
+                            </g>
+                            <g transform="translate(12, 198)">
+                                <rect width="14" height="14" rx="3" fill="none" stroke="#D4C5B2" stroke-width="1.5"/>
+                                <text x="22" y="11" font-family="-apple-system, system-ui" font-size="12" fill="#3D3229">Review pull requests</text>
+                            </g>
+                            <g transform="translate(12, 224)">
+                                <rect width="14" height="14" rx="3" fill="#81B29A" stroke="#81B29A" stroke-width="1.5"/>
+                                <polyline points="2.5,7 5.5,10.5 11.5,3.5" fill="none" stroke="#FAF6F1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                <text x="22" y="11" font-family="-apple-system, system-ui" font-size="12" fill="#A89B8C" text-decoration="line-through">Update documentation</text>
+                            </g>
+                            <!-- Status bar -->
+                            <line x1="12" y1="252" x2="308" y2="252" stroke="#E8DED1" stroke-width="0.5"/>
+                            <g transform="translate(12, 262)">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#81B29A" stroke-width="2" stroke-linecap="round"><path d="M12 2v6l4 2M12 22c5.523 0 10-4.477 10-10"/></svg>
+                                <text x="18" y="10" font-family="-apple-system, system-ui" font-size="10" fill="#7A6E63">3 reminders</text>
+                            </g>
+                        </svg>
+                    </div>
+                    <!-- Dark mode panel -->
+                    <div class="mockup-panel mockup-panel-dark">
+                        <span class="mockup-label mockup-label-dark">Dark Mode</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 280" width="100%" height="auto" style="display:block;">
+                            <defs>
+                                <linearGradient id="xpg-d" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#E07A5F"/><stop offset="100%" stop-color="#E8967F"/></linearGradient>
+                            </defs>
+                            <!-- Plant + Timer header -->
+                            <g transform="translate(32, 8)">
+                                <!-- Bush plant (higher level) -->
+                                <line x1="0" y1="52" x2="0" y2="38" stroke="#6B5B4B" stroke-width="3.5" stroke-linecap="round"/>
+                                <ellipse cy="26" rx="18" ry="14" fill="#81B29A"/>
+                                <ellipse cx="-8" cy="22" rx="10" ry="8" fill="#6E9E86"/>
+                                <ellipse cx="8" cy="24" rx="9" ry="7" fill="#4A8068"/>
+                                <ellipse cy="18" rx="8" ry="6" fill="#81B29A"/>
+                                <ellipse cy="54" rx="10" ry="2.5" fill="#3D3229"/>
+                                <text x="0" y="72" text-anchor="middle" font-family="-apple-system, system-ui" font-size="11" font-weight="600" fill="#FAF6F1">Level 15</text>
+                                <text x="0" y="84" text-anchor="middle" font-family="-apple-system, system-ui" font-size="9" fill="#BFB3A5">Bush</text>
+                            </g>
+                            <g transform="translate(210, 36)">
+                                <circle r="32" fill="none" stroke="#2C2520" stroke-width="3"/>
+                                <circle r="32" fill="none" stroke="#E07A5F" stroke-width="3" stroke-linecap="round" stroke-dasharray="134 201" transform="rotate(-90)"/>
+                                <text y="5" text-anchor="middle" font-family="SF Mono, monospace" font-size="15" font-weight="600" fill="#FAF6F1">08:12</text>
+                            </g>
+                            <!-- XP bar -->
+                            <rect x="12" y="102" width="296" height="8" rx="4" fill="#2C2520"/>
+                            <rect x="12" y="102" width="177" height="8" rx="4" fill="url(#xpg-d)"/>
+                            <text x="160" y="124" text-anchor="middle" font-family="-apple-system, system-ui" font-size="9" fill="#7A6E63">4200 / 6000 XP</text>
+                            <!-- Tab bar -->
+                            <line x1="12" y1="136" x2="308" y2="136" stroke="#3D3229" stroke-width="0.5"/>
+                            <text x="50" y="153" text-anchor="middle" font-family="-apple-system, system-ui" font-size="11" font-weight="600" fill="#E07A5F">Tasks</text>
+                            <line x1="32" y1="158" x2="68" y2="158" stroke="#E07A5F" stroke-width="2" stroke-linecap="round"/>
+                            <text x="150" y="153" text-anchor="middle" font-family="-apple-system, system-ui" font-size="11" fill="#7A6E63">Notes</text>
+                            <text x="260" y="153" text-anchor="middle" font-family="-apple-system, system-ui" font-size="11" fill="#7A6E63">Clipboard</text>
+                            <!-- Tasks -->
+                            <g transform="translate(12, 172)">
+                                <rect width="14" height="14" rx="3" fill="none" stroke="#3D3229" stroke-width="1.5"/>
+                                <text x="22" y="11" font-family="-apple-system, system-ui" font-size="12" fill="#FAF6F1">Ship v2.0 release</text>
+                            </g>
+                            <g transform="translate(12, 198)">
+                                <rect width="14" height="14" rx="3" fill="none" stroke="#3D3229" stroke-width="1.5"/>
+                                <text x="22" y="11" font-family="-apple-system, system-ui" font-size="12" fill="#FAF6F1">Write API docs</text>
+                            </g>
+                            <g transform="translate(12, 224)">
+                                <rect width="14" height="14" rx="3" fill="#81B29A" stroke="#81B29A" stroke-width="1.5"/>
+                                <polyline points="2.5,7 5.5,10.5 11.5,3.5" fill="none" stroke="#1C1917" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                <text x="22" y="11" font-family="-apple-system, system-ui" font-size="12" fill="#7A6E63" text-decoration="line-through">Fix auth bug</text>
+                            </g>
+                            <!-- Status bar -->
+                            <line x1="12" y1="252" x2="308" y2="252" stroke="#3D3229" stroke-width="0.5"/>
+                            <g transform="translate(12, 262)">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#81B29A" stroke-width="2" stroke-linecap="round"><path d="M12 2v6l4 2M12 22c5.523 0 10-4.477 10-10"/></svg>
+                                <text x="18" y="10" font-family="-apple-system, system-ui" font-size="10" fill="#7A6E63">5 reminders</text>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating feature badges -->
+        <div class="showcase-badges">
+            <div class="showcase-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E07A5F" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Pomodoro Timer
+            </div>
+            <div class="showcase-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#81B29A" stroke-width="2" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                Tasks &amp; Notes
+            </div>
+            <div class="showcase-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E07A5F" stroke-width="2" stroke-linecap="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/></svg>
+                Clipboard History
+            </div>
+            <div class="showcase-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#81B29A" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg>
+                Health Reminders
+            </div>
+            <div class="showcase-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E07A5F" stroke-width="2" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                XP &amp; Leveling
+            </div>
+        </div>
+
+        <!-- Feature spotlights -->
+        <div class="spotlight-grid">
+            <!-- Focus Timer -->
+            <div class="spotlight-card">
+                <div class="spotlight-visual" style="background: linear-gradient(135deg, #2C2520 0%, #3D2E26 100%);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">
+                        <defs>
+                            <linearGradient id="timer-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#E07A5F"/><stop offset="100%" stop-color="#C96B52"/></linearGradient>
+                        </defs>
+                        <!-- Outer ring glow -->
+                        <circle cx="80" cy="80" r="56" fill="none" stroke="rgba(224,122,95,0.08)" stroke-width="20"/>
+                        <!-- Track -->
+                        <circle cx="80" cy="80" r="56" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="5"/>
+                        <!-- Progress -->
+                        <circle cx="80" cy="80" r="56" fill="none" stroke="url(#timer-grad)" stroke-width="5" stroke-linecap="round" stroke-dasharray="245 352" transform="rotate(-90,80,80)"/>
+                        <!-- Time -->
+                        <text x="80" y="76" text-anchor="middle" font-family="SF Mono, monospace" font-size="22" font-weight="700" fill="#FAF6F1">17:24</text>
+                        <text x="80" y="94" text-anchor="middle" font-family="-apple-system, system-ui" font-size="10" fill="#A89B8C">Focus Session</text>
+                        <!-- Floating +XP -->
+                        <g transform="translate(118, 28)">
+                            <rect x="-18" y="-8" width="36" height="16" rx="8" fill="rgba(224,122,95,0.2)"/>
+                            <text text-anchor="middle" y="4" font-family="-apple-system, system-ui" font-size="9" font-weight="700" fill="#E07A5F">+25 XP</text>
+                        </g>
+                    </svg>
+                </div>
+                <div class="spotlight-content">
+                    <h3>Deep Focus Timer</h3>
+                    <p>25/5/15 minute Pomodoro cycles with a satisfying progress ring. Earn XP every session.</p>
+                    <span class="spotlight-tag">+25 XP per session</span>
+                </div>
+            </div>
+
+            <!-- Tasks & Notes -->
+            <div class="spotlight-card">
+                <div class="spotlight-visual" style="background: linear-gradient(135deg, #2C2520 0%, #2A302C 100%);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="180" height="160" viewBox="0 0 180 160">
+                        <!-- Task card floating -->
+                        <g transform="translate(10, 16) rotate(-2)">
+                            <rect width="160" height="46" rx="8" fill="rgba(250,246,241,0.95)" stroke="rgba(232,222,209,0.5)"/>
+                            <rect x="12" y="12" width="16" height="16" rx="4" fill="#81B29A" stroke="#81B29A" stroke-width="1.5"/>
+                            <polyline points="15.5,20 18.5,23.5 24.5,16.5" fill="none" stroke="#FAF6F1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            <text x="38" y="24" font-family="-apple-system, system-ui" font-size="11" fill="#A89B8C" text-decoration="line-through">Design landing page</text>
+                            <text x="136" y="24" font-family="-apple-system, system-ui" font-size="8" font-weight="600" fill="#81B29A">Done</text>
+                        </g>
+                        <g transform="translate(14, 68) rotate(1)">
+                            <rect width="160" height="46" rx="8" fill="rgba(250,246,241,0.95)" stroke="rgba(232,222,209,0.5)"/>
+                            <rect x="12" y="12" width="16" height="16" rx="4" fill="none" stroke="#D4C5B2" stroke-width="1.5"/>
+                            <text x="38" y="24" font-family="-apple-system, system-ui" font-size="11" fill="#3D3229">Write API documentation</text>
+                        </g>
+                        <!-- Note card peeking -->
+                        <g transform="translate(24, 118) rotate(-1)">
+                            <rect width="140" height="32" rx="6" fill="rgba(240,234,224,0.9)" stroke="rgba(232,222,209,0.4)"/>
+                            <text x="10" y="20" font-family="-apple-system, system-ui" font-size="10" fill="#7A6E63">Meeting notes — Q1 review...</text>
+                        </g>
+                    </svg>
+                </div>
+                <div class="spotlight-content">
+                    <h3>Tasks &amp; Quick Notes</h3>
+                    <p>Capture tasks and notes instantly from your menu bar. Drag, reorder, and complete.</p>
+                    <span class="spotlight-tag">+15 XP per task</span>
+                </div>
+            </div>
+
+            <!-- Growth & Health -->
+            <div class="spotlight-card">
+                <div class="spotlight-visual" style="background: linear-gradient(135deg, #2C2520 0%, #24302A 100%);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="180" height="160" viewBox="0 0 180 160">
+                        <!-- Growth stages preview -->
+                        <g transform="translate(30, 30)">
+                            <!-- Sprout -->
+                            <g opacity="0.4">
+                                <ellipse cy="60" rx="8" ry="2" fill="#3D3229"/>
+                                <line x1="0" y1="58" x2="0" y2="44" stroke="#81B29A" stroke-width="1.5" stroke-linecap="round"/>
+                                <ellipse cx="-4" cy="48" rx="5" ry="3" fill="#81B29A" transform="rotate(-25,-4,48)"/>
+                                <ellipse cx="5" cy="42" rx="5" ry="3" fill="#6E9E86" transform="rotate(20,5,42)"/>
+                            </g>
+                        </g>
+                        <!-- Main: Full tree (highlighted) -->
+                        <g transform="translate(90, 20)">
+                            <ellipse cy="86" rx="16" ry="3.5" fill="#3D3229"/>
+                            <rect x="-3.5" y="52" width="7" height="34" rx="2" fill="#8B7B6B"/>
+                            <line x1="-3.5" y1="64" x2="-10" y2="58" stroke="#8B7B6B" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="3.5" y1="60" x2="10" y2="54" stroke="#8B7B6B" stroke-width="2" stroke-linecap="round"/>
+                            <ellipse cy="34" rx="24" ry="20" fill="#81B29A"/>
+                            <circle cx="-10" cy="28" r="10" fill="#6E9E86"/>
+                            <circle cx="10" cy="30" r="9" fill="#4A8068"/>
+                            <circle cy="22" r="10" fill="#81B29A"/>
+                            <!-- Level badge -->
+                            <g transform="translate(22, -2)">
+                                <rect x="-14" y="-8" width="28" height="16" rx="8" fill="rgba(129,178,154,0.25)"/>
+                                <text text-anchor="middle" y="4" font-family="-apple-system, system-ui" font-size="8" font-weight="700" fill="#81B29A">L26</text>
+                            </g>
+                        </g>
+                        <!-- Ancient tree (faded) -->
+                        <g transform="translate(148, 30)" opacity="0.35">
+                            <ellipse cy="60" rx="10" ry="2.5" fill="#3D3229"/>
+                            <rect x="-3" y="38" width="6" height="22" rx="1.5" fill="#8B7B6B"/>
+                            <ellipse cy="26" rx="16" ry="14" fill="#81B29A"/>
+                            <circle cx="-6" cy="22" r="7" fill="#6E9E86"/>
+                            <circle cx="6" cy="24" r="6" fill="#4A8068"/>
+                        </g>
+                        <!-- Health icons row -->
+                        <g transform="translate(30, 130)">
+                            <rect x="-4" y="-10" width="128" height="24" rx="12" fill="rgba(255,255,255,0.04)"/>
+                            <svg x="4" y="-6" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#81B29A" stroke-width="2" stroke-linecap="round"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>
+                            <text x="24" y="2" font-family="-apple-system, system-ui" font-size="9" fill="#7A6E63">Water</text>
+                            <svg x="64" y="-6" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E07A5F" stroke-width="2" stroke-linecap="round"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/></svg>
+                            <text x="84" y="2" font-family="-apple-system, system-ui" font-size="9" fill="#7A6E63">Stand</text>
+                        </g>
+                    </svg>
+                </div>
+                <div class="spotlight-content">
+                    <h3>Grow &amp; Stay Healthy</h3>
+                    <p>Your plant evolves through 8 stages as you level up. Water and standing reminders keep you well.</p>
+                    <span class="spotlight-tag">8 growth stages</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── Features ── -->
+<section class="features" id="features">
+    <h2>Everything in your menu bar</h2>
+    <p>Six tools that earn you XP. Level up, grow your plant.</p>
+
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="feature-icon" style="background: rgba(224,122,95,0.1);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E07A5F" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <h3>Pomodoro Timer</h3>
+            <p>25/5/15 min cycles with circular progress ring. Date-based — no drift, survives restarts.</p>
+            <span class="feature-xp">+25 XP per session</span>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon" style="background: rgba(129,178,154,0.1);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#81B29A" stroke-width="2" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+            </div>
+            <h3>Task Manager</h3>
+            <p>Quick-add, drag-to-reorder, tap to complete. Clean and minimal.</p>
+            <span class="feature-xp">+15 XP per task</span>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon" style="background: rgba(224,122,95,0.1);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E07A5F" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <h3>Quick Notes</h3>
+            <p>Capture thoughts instantly from the menu bar. Sorted by recency.</p>
+            <span class="feature-xp">+5 XP per note</span>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon" style="background: rgba(129,178,154,0.1);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#81B29A" stroke-width="2" stroke-linecap="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/></svg>
+            </div>
+            <h3>Clipboard History</h3>
+            <p>Auto-saves your last 20 copies. Tap to re-copy. Polls every 0.5s.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon" style="background: rgba(224,122,95,0.1);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E07A5F" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg>
+            </div>
+            <h3>Health Reminders</h3>
+            <p>Water and standing reminders with smart scheduling — respects work hours and lunch.</p>
+            <span class="feature-xp">+10 XP each</span>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon" style="background: rgba(129,178,154,0.1);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#81B29A" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <h3>Floating Window</h3>
+            <p>Borderless mini-player showing timer + current task. Always-on-top optional.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ── Growth ── -->
+<section class="growth" id="growth">
+    <h2>Watch your garden grow</h2>
+    <p>8 growth stages from seed to ancient tree. Your plant evolves as you level up.</p>
+    <div style="max-width: 700px; margin: 0 auto; background: var(--bg-dark); border-radius: 12px; padding: 20px 12px; overflow-x: auto;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="700" height="140" viewBox="0 0 700 140" style="display: block; margin: 0 auto;">
+            <!-- Stage 1: Seed -->
+            <g transform="translate(44, 10)">
+                <ellipse cy="80" rx="16" ry="4" fill="#3D3229"/>
+                <ellipse cy="72" rx="7" ry="5" fill="#8B7B6B"/>
+                <ellipse cx="-1" cy="71" rx="4" ry="3" fill="#6B5B4B"/>
+                <text y="104" text-anchor="middle" font-family="-apple-system, system-ui" font-size="10" font-weight="500" fill="#888">Seed</text>
+                <text y="116" text-anchor="middle" font-family="-apple-system, system-ui" font-size="9" fill="#666">L0</text>
+            </g>
+            <!-- Stage 2: Sprout -->
+            <g transform="translate(131, 10)">
+                <ellipse cy="80" rx="16" ry="4" fill="#3D3229"/>
+                <line x1="0" y1="78" x2="0" y2="55" stroke="#81B29A" stroke-width="2" stroke-linecap="round"/>
+                <ellipse cx="-7" cy="58" rx="7" ry="4" fill="#81B29A" transform="rotate(-25, -7, 58)"/>
+                <ellipse cx="7" cy="50" rx="7" ry="4" fill="#6E9E86" transform="rotate(20, 7, 50)"/>
+                <text y="104" text-anchor="middle" font-family="-apple-system, system-ui" font-size="10" font-weight="500" fill="#888">Sprout</text>
+                <text y="116" text-anchor="middle" font-family="-apple-system, system-ui" font-size="9" fill="#666">L1-3</text>
+            </g>
+            <!-- Stage 3: Seedling -->
+            <g transform="translate(218, 10)">
+                <ellipse cy="80" rx="16" ry="4" fill="#3D3229"/>
+                <line x1="0" y1="78" x2="0" y2="40" stroke="#81B29A" stroke-width="2.5" stroke-linecap="round"/>
+                <ellipse cx="-9" cy="65" rx="8" ry="4" fill="#81B29A" transform="rotate(-30, -9, 65)"/>
+                <ellipse cx="9" cy="55" rx="8" ry="4" fill="#6E9E86" transform="rotate(25, 9, 55)"/>
+                <ellipse cx="-8" cy="46" rx="7" ry="3.5" fill="#4A8068" transform="rotate(-20, -8, 46)"/>
+                <ellipse cx="7" cy="38" rx="7" ry="3.5" fill="#81B29A" transform="rotate(15, 7, 38)"/>
+                <text y="104" text-anchor="middle" font-family="-apple-system, system-ui" font-size="10" font-weight="500" fill="#888">Seedling</text>
+                <text y="116" text-anchor="middle" font-family="-apple-system, system-ui" font-size="9" fill="#666">L4-7</text>
+            </g>
+            <!-- Stage 4: Young Plant -->
+            <g transform="translate(305, 10)">
+                <ellipse cy="80" rx="18" ry="4" fill="#3D3229"/>
+                <line x1="0" y1="78" x2="0" y2="30" stroke="#6B5B4B" stroke-width="3" stroke-linecap="round"/>
+                <ellipse cx="-12" cy="68" rx="10" ry="4.5" fill="#81B29A" transform="rotate(-35, -12, 68)"/>
+                <ellipse cx="12" cy="58" rx="10" ry="4.5" fill="#6E9E86" transform="rotate(30, 12, 58)"/>
+                <ellipse cx="-10" cy="48" rx="9" ry="4" fill="#4A8068" transform="rotate(-25, -10, 48)"/>
+                <ellipse cx="10" cy="38" rx="9" ry="4" fill="#81B29A" transform="rotate(20, 10, 38)"/>
+                <ellipse cx="-6" cy="30" rx="8" ry="3.5" fill="#6E9E86" transform="rotate(-15, -6, 30)"/>
+                <text y="104" text-anchor="middle" font-family="-apple-system, system-ui" font-size="10" font-weight="500" fill="#888">Young Plant</text>
+                <text y="116" text-anchor="middle" font-family="-apple-system, system-ui" font-size="9" fill="#666">L8-12</text>
+            </g>
+            <!-- Stage 5: Bush -->
+            <g transform="translate(392, 10)">
+                <ellipse cy="80" rx="20" ry="4" fill="#3D3229"/>
+                <line x1="0" y1="78" x2="0" y2="55" stroke="#6B5B4B" stroke-width="4" stroke-linecap="round"/>
+                <ellipse cy="42" rx="22" ry="18" fill="#81B29A"/>
+                <ellipse cx="-10" cy="38" rx="13" ry="10" fill="#6E9E86"/>
+                <ellipse cx="10" cy="40" rx="12" ry="9" fill="#4A8068"/>
+                <ellipse cy="34" rx="10" ry="8" fill="#81B29A"/>
+                <text y="104" text-anchor="middle" font-family="-apple-system, system-ui" font-size="10" font-weight="500" fill="#888">Bush</text>
+                <text y="116" text-anchor="middle" font-family="-apple-system, system-ui" font-size="9" fill="#666">L13-18</text>
+            </g>
+            <!-- Stage 6: Small Tree -->
+            <g transform="translate(479, 10)">
+                <ellipse cy="80" rx="20" ry="4" fill="#3D3229"/>
+                <rect x="-4" y="48" width="8" height="32" rx="2" fill="#8B7B6B"/>
+                <circle cy="34" r="22" fill="#81B29A"/>
+                <circle cx="-8" cy="30" r="12" fill="#6E9E86"/>
+                <circle cx="8" cy="32" r="11" fill="#4A8068"/>
+                <circle cy="24" r="10" fill="#81B29A"/>
+                <text y="104" text-anchor="middle" font-family="-apple-system, system-ui" font-size="10" font-weight="500" fill="#888">Small Tree</text>
+                <text y="116" text-anchor="middle" font-family="-apple-system, system-ui" font-size="9" fill="#666">L19-25</text>
+            </g>
+            <!-- Stage 7: Full Tree -->
+            <g transform="translate(566, 10)">
+                <ellipse cy="80" rx="22" ry="4" fill="#3D3229"/>
+                <rect x="-5" y="40" width="10" height="40" rx="2" fill="#8B7B6B"/>
+                <line x1="-5" y1="55" x2="-12" y2="50" stroke="#8B7B6B" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="5" y1="50" x2="12" y2="45" stroke="#8B7B6B" stroke-width="2.5" stroke-linecap="round"/>
+                <ellipse cy="24" rx="28" ry="22" fill="#81B29A"/>
+                <circle cx="-12" cy="18" r="12" fill="#6E9E86"/>
+                <circle cx="12" cy="20" r="11" fill="#4A8068"/>
+                <circle cy="12" r="12" fill="#81B29A"/>
+                <text y="104" text-anchor="middle" font-family="-apple-system, system-ui" font-size="10" font-weight="500" fill="#888">Full Tree</text>
+                <text y="116" text-anchor="middle" font-family="-apple-system, system-ui" font-size="9" fill="#666">L26-35</text>
+            </g>
+            <!-- Stage 8: Ancient Tree -->
+            <g transform="translate(653, 10)">
+                <ellipse cy="80" rx="24" ry="5" fill="#3D3229"/>
+                <path d="M-6,78 Q-14,82 -20,78" fill="none" stroke="#6B5B4B" stroke-width="2" stroke-linecap="round"/>
+                <path d="M6,78 Q14,82 20,78" fill="none" stroke="#6B5B4B" stroke-width="2" stroke-linecap="round"/>
+                <rect x="-7" y="35" width="14" height="45" rx="3" fill="#8B7B6B"/>
+                <line x1="-7" y1="52" x2="-16" y2="44" stroke="#8B7B6B" stroke-width="3" stroke-linecap="round"/>
+                <line x1="7" y1="48" x2="16" y2="40" stroke="#8B7B6B" stroke-width="3" stroke-linecap="round"/>
+                <ellipse cy="18" rx="32" ry="24" fill="#81B29A"/>
+                <circle cx="-14" cy="12" r="14" fill="#6E9E86"/>
+                <circle cx="14" cy="14" r="13" fill="#4A8068"/>
+                <circle cy="6" r="14" fill="#81B29A"/>
+                <circle cx="-20" cy="20" r="7" fill="#4A8068"/>
+                <circle cx="20" cy="22" r="7" fill="#6E9E86"/>
+                <text y="104" text-anchor="middle" font-family="-apple-system, system-ui" font-size="10" font-weight="500" fill="#888">Ancient Tree</text>
+                <text y="116" text-anchor="middle" font-family="-apple-system, system-ui" font-size="9" fill="#666">L36+</text>
+            </g>
+        </svg>
+    </div>
+</section>
+
+<!-- ── Install ── -->
+<section class="install" id="install">
+    <h2>Get started</h2>
+    <p>Clone, build, and run in under a minute.</p>
+    <div class="install-card">
+        <div class="install-step">
+            <span class="install-num">1</span>
+            <div>
+                <code tabindex="0" role="button" aria-label="Copy git clone command" onclick="navigator.clipboard.writeText(this.textContent.trim())">git clone https://github.com/saidjamesphilip/Niwa.git</code>
+            </div>
+        </div>
+        <div class="install-step">
+            <span class="install-num">2</span>
+            <div>
+                <code tabindex="0" role="button" aria-label="Copy build command" onclick="navigator.clipboard.writeText(this.textContent.trim())">cd Niwa && xcodegen generate</code>
+            </div>
+        </div>
+        <div class="install-step">
+            <span class="install-num">3</span>
+            <div>
+                <code tabindex="0" role="button" aria-label="Copy open command" onclick="navigator.clipboard.writeText(this.textContent.trim())">open Niwa.xcodeproj</code>
+                <div class="desc">Build &amp; run (Cmd+R) — the leaf icon appears in your menu bar.</div>
+            </div>
+        </div>
+    </div>
+    <p style="margin-top: 16px; font-size: 12px; color: var(--text-muted);">Requires macOS 15+ and Xcode 16+. No external dependencies.</p>
+</section>
+
+<!-- ── Privacy ── -->
+<section class="privacy">
+    <h2>Your data stays on your Mac</h2>
+    <p>Niwa makes zero network calls. No analytics, no accounts, no cloud sync. Everything lives in a local SwiftData store.</p>
+    <div class="privacy-pills">
+        <div class="privacy-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#81B29A" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            100% offline
+        </div>
+        <div class="privacy-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#81B29A" stroke-width="2" stroke-linecap="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            No telemetry
+        </div>
+        <div class="privacy-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#81B29A" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Local SwiftData
+        </div>
+        <div class="privacy-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#81B29A" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+            No accounts
+        </div>
+    </div>
+</section>
+
+<!-- ── FAQ ── -->
+<section class="faq" id="faq">
+    <h2>FAQ</h2>
+
+    <div class="faq-item">
+        <button class="faq-q">Does Niwa need an internet connection? <span class="arrow">+</span></button>
+        <div class="faq-a"><p>No. Niwa is 100% offline. It stores everything in a local SwiftData database on your Mac. No servers, no accounts, no analytics.</p></div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-q">How does the leveling system work? <span class="arrow">+</span></button>
+        <div class="faq-a"><p>You earn XP by completing tasks (+15), finishing Pomodoro sessions (+25), creating notes (+5), and logging water/standing (+10 each). XP fills a progress bar — when it's full, you level up and your plant grows.</p></div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-q">Can I customise the timer durations? <span class="arrow">+</span></button>
+        <div class="faq-a"><p>Yes. Open Settings and adjust work, short break, and long break durations. You can also configure sessions before a long break.</p></div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-q">What macOS versions are supported? <span class="arrow">+</span></button>
+        <div class="faq-a"><p>Niwa requires macOS 15 (Sequoia) or later. It's built with SwiftUI and SwiftData which require modern system APIs.</p></div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-q">Is Niwa open source? <span class="arrow">+</span></button>
+        <div class="faq-a"><p>Yes — MIT licensed. You can view the source, fork it, and contribute on GitHub.</p></div>
+    </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+    <p>
+        Niwa (庭) &middot; MIT License &middot;
+        <a href="https://github.com/saidjamesphilip/Niwa">GitHub</a> &middot;
+        <a href="https://github.com/saidjamesphilip/Niwa/blob/main/CHANGELOG.md">Changelog</a> &middot;
+        <a href="https://github.com/saidjamesphilip/Niwa/blob/main/CONTRIBUTING.md">Contributing</a>
+    </p>
+</footer>
+
+<script>
+// Nav scroll effect
+const nav = document.querySelector('nav');
+window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 10);
+}, { passive: true });
+
+// FAQ accordion
+document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const item = btn.parentElement;
+        const wasOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+        if (!wasOpen) item.classList.add('open');
+    });
+});
+
+// Copy feedback
+document.querySelectorAll('.install-step code').forEach(el => {
+    el.addEventListener('click', () => {
+        el.style.setProperty('color', '#81B29A');
+        el.style.setProperty('--copied', '1');
+        setTimeout(() => {
+            el.style.removeProperty('color');
+            el.style.removeProperty('--copied');
+        }, 800);
+    });
+    el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            el.click();
+        }
+    });
+});
+</script>
+</body>
+</html>
