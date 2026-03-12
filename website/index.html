@@ -71,7 +71,7 @@
         "codeRepository": "https://github.com/saidjamesphilip/Niwa",
         "programmingLanguage": "Swift",
         "screenshot": "https://niwa-app.pages.dev/og-image.png",
-        "softwareVersion": "1.3.7",
+        "softwareVersion": "1.3.10",
         "featureList": [
             "Pomodoro Timer with 25/5/15 minute cycles",
             "Task Manager with drag-to-reorder",
@@ -80,7 +80,7 @@
             "Health Reminders (water and standing)",
             "Gamified leveling system with 8 plant growth stages",
             "Floating mini-player window",
-            "100% offline — no analytics, no accounts",
+            "No analytics, no accounts — optional update check only",
             "Light and Dark mode support"
         ]
     }
@@ -97,7 +97,7 @@
                 "name": "Does Niwa need an internet connection?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "No. Niwa is 100% offline. It stores everything in a local SwiftData database on your Mac. No servers, no accounts, no analytics."
+                    "text": "Niwa works fully offline. It stores everything in a local SwiftData database on your Mac. No accounts, no analytics. The only optional network call is a manual 'Check for Updates' in Settings that checks GitHub Releases."
                 }
             },
             {
@@ -198,11 +198,12 @@
         .nav-links a:hover { color: var(--primary); }
         .nav-cta {
             display: inline-flex; align-items: center; gap: 6px;
-            background: var(--text); color: var(--bg); font-size: 13px; font-weight: 600;
+            background: var(--bg-secondary); color: var(--text); font-size: 13px; font-weight: 600;
             padding: 8px 18px; border-radius: 8px; text-decoration: none;
-            transition: background 0.2s ease-out; cursor: pointer;
+            border: 1px solid var(--border);
+            transition: border-color 0.2s ease-out, background 0.2s ease-out; cursor: pointer;
         }
-        .nav-cta:hover { background: var(--primary); }
+        .nav-cta:hover { border-color: var(--primary); background: #fff; }
 
         /* ── Hero ── */
         .hero {
@@ -618,7 +619,7 @@
             Source Code
         </a>
     </div>
-    <div class="version-tag">Current release <code>v1.3.7</code></div>
+    <div class="version-tag">Current release <code>v1.3.10</code></div>
 </section>
 
 <!-- ── Showcase ── -->
@@ -1066,40 +1067,46 @@
 <!-- ── Install ── -->
 <section class="install" id="install" aria-label="Installation instructions">
     <h2>Get started</h2>
-    <p>Clone, build, and run in under a minute.</p>
+    <p>Install with Homebrew or download directly.</p>
+
+    <h3 style="font-size: 14px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px;">Homebrew (recommended)</h3>
     <div class="install-card">
         <div class="install-step">
             <span class="install-num">1</span>
             <div>
-                <code tabindex="0" role="button" aria-label="Copy git clone command" onclick="navigator.clipboard.writeText(this.textContent.trim())">git clone https://github.com/saidjamesphilip/Niwa.git</code>
+                <code tabindex="0" role="button" aria-label="Copy brew tap command" onclick="navigator.clipboard.writeText(this.textContent.trim())">brew tap saidjamesphilip/niwa</code>
             </div>
         </div>
         <div class="install-step">
             <span class="install-num">2</span>
             <div>
-                <code tabindex="0" role="button" aria-label="Copy build command" onclick="navigator.clipboard.writeText(this.textContent.trim())">cd Niwa && xcodegen generate</code>
-            </div>
-        </div>
-        <div class="install-step">
-            <span class="install-num">3</span>
-            <div>
-                <code tabindex="0" role="button" aria-label="Copy open command" onclick="navigator.clipboard.writeText(this.textContent.trim())">open Niwa.xcodeproj</code>
-                <div class="desc">Build &amp; run (Cmd+R) — the leaf icon appears in your menu bar.</div>
+                <code tabindex="0" role="button" aria-label="Copy brew install command" onclick="navigator.clipboard.writeText(this.textContent.trim())">brew install niwa</code>
+                <div class="desc">The leaf icon appears in your menu bar. Update anytime with <strong style="color:#FAF6F1;">brew upgrade niwa</strong></div>
             </div>
         </div>
     </div>
-    <div class="version-tag" style="margin-top: 16px; justify-content: center;">Version <code>v1.3.7</code></div>
-    <p style="margin-top: 8px; font-size: 12px; color: var(--text-muted);">Requires macOS 15+ and Xcode 16+. No external dependencies.</p>
+
+    <h3 style="font-size: 14px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 32px; margin-bottom: 12px;">Direct download</h3>
+    <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;">
+        <a href="https://github.com/saidjamesphilip/Niwa/releases/latest" style="display: inline-flex; align-items: center; gap: 8px; background: var(--bg-secondary); color: var(--text); font-size: 14px; font-weight: 500; padding: 10px 20px; border-radius: 8px; text-decoration: none; border: 1px solid var(--border); transition: border-color 0.2s; cursor: pointer;" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border)'">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            Download .zip from GitHub
+        </a>
+    </div>
+    <p style="margin-top: 10px; font-size: 12px; color: var(--text-muted);">Unzip, drag Niwa.app to Applications, right-click → Open on first launch.</p>
+
+    <div class="version-tag" style="margin-top: 20px; justify-content: center;">Version <code>v1.3.10</code></div>
+    <p style="margin-top: 8px; font-size: 12px; color: var(--text-muted);">Requires macOS 15+. No external dependencies.</p>
 </section>
 
 <!-- ── Privacy ── -->
 <section class="privacy" aria-label="Privacy information">
     <h2>Your data stays on your Mac</h2>
-    <p>Niwa makes zero network calls. No analytics, no accounts, no cloud sync. Everything lives in a local SwiftData store.</p>
+    <p>Niwa stores everything locally in SwiftData. No analytics, no accounts, no cloud sync. The only optional network call is a manual "Check for Updates" in Settings.</p>
     <div class="privacy-pills">
         <div class="privacy-pill">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#81B29A" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-            100% offline
+            Works offline
         </div>
         <div class="privacy-pill">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#81B29A" stroke-width="2" stroke-linecap="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
@@ -1122,7 +1129,7 @@
 
     <div class="faq-item">
         <button class="faq-q">Does Niwa need an internet connection? <span class="arrow">+</span></button>
-        <div class="faq-a"><p>No. Niwa is 100% offline. It stores everything in a local SwiftData database on your Mac. No servers, no accounts, no analytics.</p></div>
+        <div class="faq-a"><p>Niwa works fully offline. It stores everything in a local SwiftData database on your Mac. No accounts, no analytics. The only optional network call is a manual "Check for Updates" in Settings, which checks GitHub Releases for newer versions.</p></div>
     </div>
 
     <div class="faq-item">

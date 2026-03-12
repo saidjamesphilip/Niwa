@@ -28,6 +28,7 @@
 		41322B50BF4DF26DA410B0BD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44915DBBEF147EB80E365AE /* AppDelegate.swift */; };
 		428FA7ABB4AC460B36462C09 /* TimerSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077D9A2FEB38FB0CEE420C6B /* TimerSession.swift */; };
 		4D8046388C3122D2B112A0F1 /* WidgetXPSparkline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1D0AF11A5557C357D9DABD /* WidgetXPSparkline.swift */; };
+		4F10543E5F4A02925B924966 /* UpdateChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FC73502E44C3C91CCA48FA /* UpdateChecker.swift */; };
 		4F4BBBB7BE3691A2EB5C2D98 /* PomodoroTimerEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115C2579873489427E00F0F9 /* PomodoroTimerEngine.swift */; };
 		520D0F70C39B2F83806A1485 /* NotesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57F556F494D0EC1C104F4F7 /* NotesListView.swift */; };
 		5DC7F4A04126CD65326D188F /* ContentTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA565B3DCF0E8FD3A5D3EA4 /* ContentTabView.swift */; };
@@ -140,6 +141,7 @@
 		D57F556F494D0EC1C104F4F7 /* NotesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesListView.swift; sourceTree = "<group>"; };
 		D6B5EC57DA88D66031E4AF60 /* TaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManager.swift; sourceTree = "<group>"; };
 		DC1D13CB664B1C0ECE331F20 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		E1FC73502E44C3C91CCA48FA /* UpdateChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateChecker.swift; sourceTree = "<group>"; };
 		E333EA4AD20CF39D23903B75 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E88D7F762A43CD227F102B3F /* NiwaWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiwaWidgetBundle.swift; sourceTree = "<group>"; };
 		EC78BC81E3FF693C53D02C16 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 				B50996E5D2B13383B3BF11C5 /* NoteManager.swift */,
 				DC1D13CB664B1C0ECE331F20 /* NotificationManager.swift */,
 				D6B5EC57DA88D66031E4AF60 /* TaskManager.swift */,
+				E1FC73502E44C3C91CCA48FA /* UpdateChecker.swift */,
 				01E6D1A1506A6845C9574C8A /* UserProfileManager.swift */,
 			);
 			path = Services;
@@ -428,6 +431,7 @@
 				1E805E088347FB5267EE401F /* TaskRowView.swift in Sources */,
 				BC4C6582D2B4269DA83FDCF3 /* TimerSession.swift in Sources */,
 				0A085FD70618F2083ACA865D /* TimerView.swift in Sources */,
+				4F10543E5F4A02925B924966 /* UpdateChecker.swift in Sources */,
 				6256DE88BE1ED960BBB6A1F5 /* UserProfile.swift in Sources */,
 				C0236E3C10232FD174A68E12 /* UserProfileManager.swift in Sources */,
 				C29712DC891D37C39B53C650 /* XPBarView.swift in Sources */,
@@ -481,7 +485,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NiwaApp/NiwaApp.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 10;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NiwaApp/Info.plist;
 				INFOPLIST_KEY_LSUIElement = YES;
@@ -489,7 +493,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.3.7;
+				MARKETING_VERSION = 1.3.10;
 				PRODUCT_BUNDLE_IDENTIFIER = com.niwa.app;
 				PRODUCT_NAME = Niwa;
 				SDKROOT = macosx;
@@ -567,7 +571,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NiwaApp/NiwaApp.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 10;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NiwaApp/Info.plist;
 				INFOPLIST_KEY_LSUIElement = YES;
@@ -575,7 +579,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.3.7;
+				MARKETING_VERSION = 1.3.10;
 				PRODUCT_BUNDLE_IDENTIFIER = com.niwa.app;
 				PRODUCT_NAME = Niwa;
 				SDKROOT = macosx;
@@ -645,7 +649,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = NiwaWidget/NiwaWidget.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 10;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NiwaWidget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -653,7 +657,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MARKETING_VERSION = 1.3.7;
+				MARKETING_VERSION = 1.3.10;
 				PRODUCT_BUNDLE_IDENTIFIER = com.niwa.app.widget;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -665,7 +669,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = NiwaWidget/NiwaWidget.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 10;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NiwaWidget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -673,7 +677,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MARKETING_VERSION = 1.3.7;
+				MARKETING_VERSION = 1.3.10;
 				PRODUCT_BUNDLE_IDENTIFIER = com.niwa.app.widget;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;

@@ -10,6 +10,7 @@ struct InlineSettingsView: View {
     @State private var showResetConfirmation = false
     @State private var showFullResetConfirmation = false
     @State private var statusMessage = ""
+    @StateObject private var updateChecker = UpdateChecker()
 
     var body: some View {
         ScrollView {
@@ -97,6 +98,45 @@ struct InlineSettingsView: View {
                         dataRow(icon: "leaf", label: "Full Restart \u{2014} Back to Seed", color: DesignTokens.Colors.danger, description: "Wipes everything and restarts fresh from Level 0. Cannot be undone.") {
                             showFullResetConfirmation = true
                         }
+                    }
+
+                    // About & Updates
+                    settingsSection("\u{2139}\u{FE0F}  About") {
+                        HStack {
+                            Image(systemName: "arrow.triangle.2.circlepath")
+                                .font(.system(size: 12))
+                                .foregroundStyle(DesignTokens.Colors.secondary)
+                                .frame(width: 20)
+
+                            if updateChecker.isChecking {
+                                Text("Checking...")
+                                    .font(DesignTokens.Typography.bodyFont)
+                                    .foregroundStyle(DesignTokens.Colors.textSecondary)
+                            } else if updateChecker.updateAvailable, let version = updateChecker.latestVersion {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("v\(version) available")
+                                        .font(DesignTokens.Typography.bodyFont)
+                                        .foregroundStyle(DesignTokens.Colors.primary)
+                                    Button("Download update") {
+                                        updateChecker.openDownloadPage()
+                                    }
+                                    .buttonStyle(.plain)
+                                    .font(.system(size: 11, weight: .medium))
+                                    .foregroundStyle(DesignTokens.Colors.primary)
+                                    .underline()
+                                }
+                            } else {
+                                Button("Check for updates") {
+                                    Task { await updateChecker.checkForUpdates() }
+                                }
+                                .buttonStyle(.plain)
+                                .font(DesignTokens.Typography.bodyFont)
+                                .foregroundStyle(DesignTokens.Colors.textSecondary)
+                            }
+
+                            Spacer()
+                        }
+                        .padding(.vertical, 4)
                     }
 
                     if !statusMessage.isEmpty {

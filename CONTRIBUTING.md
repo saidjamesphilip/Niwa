@@ -55,13 +55,38 @@ All visual properties are centralized in `NiwaShared/Constants/DesignTokens.swif
 4. Use `DesignTokens.CornerRadius` for rounded corners
 5. Use `DesignTokens.Animation` for animation curves
 
-## Pull Requests
+## Development Workflow
 
-1. Fork the repo and create a feature branch (`feat/...`, `fix/...`)
+### Branching
+
+All work happens on feature branches — never commit directly to `main`.
+
+```bash
+git checkout -b feat/my-feature    # or fix/my-bug
+# ... make changes ...
+git add -A && git commit -m "Add my feature"
+git push -u origin feat/my-feature
+```
+
+### Pull Requests
+
+1. Create a feature branch (`feat/...`, `fix/...`, `docs/...`)
 2. Make your changes
 3. Verify the build succeeds: `xcodebuild -scheme NiwaApp build`
 4. Test locally — run the app and verify your changes work
-5. Open a PR — describe what changed and why
+5. Push and open a PR on GitHub — describe what changed and why
+6. Once approved, merge to `main`
+
+### Releasing
+
+Releases are triggered by pushing a version tag. Only maintainers do this:
+
+```bash
+git tag v1.3.8
+git push origin v1.3.8
+```
+
+This triggers a GitHub Actions workflow that builds the app, creates a zip, and publishes a GitHub Release. After the release, the Homebrew Cask formula is updated with the new version and SHA.
 
 ## Reporting Issues
 

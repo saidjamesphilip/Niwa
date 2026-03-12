@@ -141,6 +141,15 @@ struct DropdownRootView: View {
                 .font(.system(size: 10, weight: .medium, design: .monospaced))
                 .foregroundStyle(DesignTokens.Colors.textMuted)
 
+            #if DEBUG
+            Text("DEV")
+                .font(.system(size: 8, weight: .bold, design: .monospaced))
+                .foregroundStyle(.white)
+                .padding(.horizontal, 4)
+                .padding(.vertical, 1)
+                .background(Color.orange.cornerRadius(3))
+            #endif
+
             Spacer()
 
             Button {
