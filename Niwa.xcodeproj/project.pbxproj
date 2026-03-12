@@ -1,0 +1,716 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		007C30FD9EA0908C0B6CD860 /* FloatingWindowContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3C4CAADC04A7A9F337F14F /* FloatingWindowContentView.swift */; };
+		039CC0A32D3814BBA72EFF2A /* HealthEventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02AE0A8C96ED657C6985C00A /* HealthEventManager.swift */; };
+		083E765B3D38642F9C114927 /* HealthEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5DA083410BC36CE388B1062 /* HealthEvent.swift */; };
+		0A085FD70618F2083ACA865D /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D08A3FE8E59157A567F6491 /* TimerView.swift */; };
+		0DD85692C2B71305BBFD9B52 /* ReminderSchedulingEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB685F52334FDB495292915 /* ReminderSchedulingEngine.swift */; };
+		1AA23E73E7C8232162CCB78F /* NiwaTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80E86A5880D073343AF7E0E0 /* NiwaTask.swift */; };
+		1DB6E7DC76A0E5DBD31910B0 /* NiwaNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86F29BB508E5620DB33CC1A /* NiwaNote.swift */; };
+		1DEA2AE793DBE3D65CC14B13 /* HealthEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5DA083410BC36CE388B1062 /* HealthEvent.swift */; };
+		1E805E088347FB5267EE401F /* TaskRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE220B79D48654F793D84391 /* TaskRowView.swift */; };
+		1ECC7345178E6F2E4896FBF2 /* XPConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89825B6502E06090F6AEBC28 /* XPConstants.swift */; };
+		225506DAD6DAEBD4A9585E51 /* XPChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0F76F0CFA25AEE4B3A7F09 /* XPChartView.swift */; };
+		29ED93A6F80BD1B1F35A4A60 /* ModelContainerSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C5264BCDFD7880F7216D02 /* ModelContainerSetup.swift */; };
+		2B18A056A5DD53B1E815BF08 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5E508CE0F53CD071839921 /* DesignTokens.swift */; };
+		2C3FEC93180D6A40E4AAB491 /* NiwaNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86F29BB508E5620DB33CC1A /* NiwaNote.swift */; };
+		2FBA563C4C46BF979A346F85 /* HealthStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100414349BC7E0D1374CEE51 /* HealthStatusView.swift */; };
+		30358D0DEAC0C549F61711D4 /* NoteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50996E5D2B13383B3BF11C5 /* NoteManager.swift */; };
+		39A67A9F1426A4B03DBD42DA /* XPEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A20ACD99DF0FB0C70BC12F2 /* XPEvent.swift */; };
+		3C412664AB139F208F0458BB /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5E508CE0F53CD071839921 /* DesignTokens.swift */; };
+		41322B50BF4DF26DA410B0BD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44915DBBEF147EB80E365AE /* AppDelegate.swift */; };
+		428FA7ABB4AC460B36462C09 /* TimerSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077D9A2FEB38FB0CEE420C6B /* TimerSession.swift */; };
+		4D8046388C3122D2B112A0F1 /* WidgetXPSparkline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1D0AF11A5557C357D9DABD /* WidgetXPSparkline.swift */; };
+		4F4BBBB7BE3691A2EB5C2D98 /* PomodoroTimerEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115C2579873489427E00F0F9 /* PomodoroTimerEngine.swift */; };
+		520D0F70C39B2F83806A1485 /* NotesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57F556F494D0EC1C104F4F7 /* NotesListView.swift */; };
+		5DC7F4A04126CD65326D188F /* ContentTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA565B3DCF0E8FD3A5D3EA4 /* ContentTabView.swift */; };
+		6256DE88BE1ED960BBB6A1F5 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC78BC81E3FF693C53D02C16 /* UserProfile.swift */; };
+		6832D447EFE2FF57E9251629 /* GamificationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CFC84AF338148B638DC065 /* GamificationEngine.swift */; };
+		6C89308B5A85479F30B3DEF1 /* TaskListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0B99115A2E9F236F56C66E /* TaskListView.swift */; };
+		7107CAA88559324CAADC6175 /* FloatingWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7A231F1358364A226B680E /* FloatingWindowController.swift */; };
+		72948E25DA91449D598BB1A6 /* ClipboardEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B5FDD9C0C7C67C98ED2434 /* ClipboardEntry.swift */; };
+		7451072E2FF24DC8CB54A1AB /* GamificationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CFC84AF338148B638DC065 /* GamificationEngine.swift */; };
+		7E214006FFE25354701EE7A4 /* NiwaWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C68D4DE8A47D3694480CA399 /* NiwaWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8110C5D74F7CF71233AD7903 /* ModelContainerSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C5264BCDFD7880F7216D02 /* ModelContainerSetup.swift */; };
+		8370D1CBEEBA551D8F393742 /* HeroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED8905B142AE85F9D594B8B /* HeroView.swift */; };
+		90454112D99E84A7E15E49A0 /* SmallWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA703A690F20CC57F0DCF5D0 /* SmallWidgetView.swift */; };
+		9421C1086727FED529B1CD93 /* InlineSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE26E8D30CCB1954D071CB58 /* InlineSettingsView.swift */; };
+		98BF570CD379907D7928C9CA /* NiwaWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88D7F762A43CD227F102B3F /* NiwaWidgetBundle.swift */; };
+		9950D7C52D91B13FDA5422D9 /* PlantView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01FEF20F0630E3EC42E6F7D /* PlantView.swift */; };
+		9EB3FE90D8CE604EB1B67619 /* ClipboardEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B5FDD9C0C7C67C98ED2434 /* ClipboardEntry.swift */; };
+		A22C404F0D4ED5A62D2498CE /* NiwaWidgetEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9594A73F5D1D20C5656B11 /* NiwaWidgetEntry.swift */; };
+		A5717DCDDF3A6B65E7B9F01E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E333EA4AD20CF39D23903B75 /* Assets.xcassets */; };
+		AF2A382E83B3FB0618EDA5F6 /* NiwaTimelineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A69D63225294540599FA9C6 /* NiwaTimelineProvider.swift */; };
+		B1CF432B0FFA67ECDFA681EC /* DropdownRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776AA5336122BCDB0E79033E /* DropdownRootView.swift */; };
+		B6693D40728580E571C672D2 /* MediumWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C32A65BF7B5F815F0E6EFD /* MediumWidgetView.swift */; };
+		BA5C975A65038EB6EC557BBA /* PomodoroTimerEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115C2579873489427E00F0F9 /* PomodoroTimerEngine.swift */; };
+		BC4C6582D2B4269DA83FDCF3 /* TimerSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077D9A2FEB38FB0CEE420C6B /* TimerSession.swift */; };
+		BE65F536C86CE728E1473A48 /* NoteEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873ED7C152B18D4246C2EFFE /* NoteEditorView.swift */; };
+		C0236E3C10232FD174A68E12 /* UserProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E6D1A1506A6845C9574C8A /* UserProfileManager.swift */; };
+		C29712DC891D37C39B53C650 /* XPBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A97994EAE89153B1FD0429 /* XPBarView.swift */; };
+		C60600581E0E6C7B1E8C010D /* NiwaTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80E86A5880D073343AF7E0E0 /* NiwaTask.swift */; };
+		C7C460BBBC4FBA295EAE0EEF /* XPConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89825B6502E06090F6AEBC28 /* XPConstants.swift */; };
+		CB94784BB82560C3ACED6147 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC1D13CB664B1C0ECE331F20 /* NotificationManager.swift */; };
+		D1096972C1636730ECF8C8F3 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC78BC81E3FF693C53D02C16 /* UserProfile.swift */; };
+		D3446D1D11F514DD24C34F12 /* ReminderSchedulingEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB685F52334FDB495292915 /* ReminderSchedulingEngine.swift */; };
+		DBEB089B6A5EBD61F3A4F4B1 /* NiwaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E87A5920DB12AE735E192E0 /* NiwaApp.swift */; };
+		DCEBE36E2FF853A299A73376 /* XPEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A20ACD99DF0FB0C70BC12F2 /* XPEvent.swift */; };
+		DEE1DC523DBCF6AAF2CB0B5B /* ClipboardMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1EC0D515E4A6E9C77C26456 /* ClipboardMonitor.swift */; };
+		E511BD7573FE0AD26F313884 /* ClipboardHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8237E4B7E3520ED8D75418DB /* ClipboardHistoryView.swift */; };
+		EE573789BE75E865FE59601A /* TaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B5EC57DA88D66031E4AF60 /* TaskManager.swift */; };
+		F02C8A541653229490E5EBAD /* LevelUpOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616A470092FAF68F68E1AB6F /* LevelUpOverlay.swift */; };
+		F319F2680CE5FBA62D4E9E90 /* LargeWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE41CAF16405364AF6DAE9CB /* LargeWidgetView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2D88CFEC569814FC79DB435E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2B1720FDBD476B0AC9F3948B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B4543E0010CEBA17870F42D3;
+			remoteInfo = NiwaWidget;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		3C207877EA4E27DDCB7B4FA3 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				7E214006FFE25354701EE7A4 /* NiwaWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		00CFC84AF338148B638DC065 /* GamificationEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamificationEngine.swift; sourceTree = "<group>"; };
+		01E6D1A1506A6845C9574C8A /* UserProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileManager.swift; sourceTree = "<group>"; };
+		02AE0A8C96ED657C6985C00A /* HealthEventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthEventManager.swift; sourceTree = "<group>"; };
+		077D9A2FEB38FB0CEE420C6B /* TimerSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerSession.swift; sourceTree = "<group>"; };
+		0C1D0AF11A5557C357D9DABD /* WidgetXPSparkline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetXPSparkline.swift; sourceTree = "<group>"; };
+		100414349BC7E0D1374CEE51 /* HealthStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthStatusView.swift; sourceTree = "<group>"; };
+		111E9AB4204A7A5CDFB699AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		115C2579873489427E00F0F9 /* PomodoroTimerEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PomodoroTimerEngine.swift; sourceTree = "<group>"; };
+		246B3802807C6345CF8E8AED /* NiwaWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NiwaWidget.entitlements; sourceTree = "<group>"; };
+		2E87A5920DB12AE735E192E0 /* NiwaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiwaApp.swift; sourceTree = "<group>"; };
+		3A69D63225294540599FA9C6 /* NiwaTimelineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiwaTimelineProvider.swift; sourceTree = "<group>"; };
+		3D08A3FE8E59157A567F6491 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
+		3D3C4CAADC04A7A9F337F14F /* FloatingWindowContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingWindowContentView.swift; sourceTree = "<group>"; };
+		3E7A231F1358364A226B680E /* FloatingWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingWindowController.swift; sourceTree = "<group>"; };
+		4B9594A73F5D1D20C5656B11 /* NiwaWidgetEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiwaWidgetEntry.swift; sourceTree = "<group>"; };
+		58B5FDD9C0C7C67C98ED2434 /* ClipboardEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardEntry.swift; sourceTree = "<group>"; };
+		59712553F7C61E9507E1A609 /* NiwaApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NiwaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B5E508CE0F53CD071839921 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
+		616A470092FAF68F68E1AB6F /* LevelUpOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelUpOverlay.swift; sourceTree = "<group>"; };
+		776AA5336122BCDB0E79033E /* DropdownRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownRootView.swift; sourceTree = "<group>"; };
+		7A0B99115A2E9F236F56C66E /* TaskListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListView.swift; sourceTree = "<group>"; };
+		7A20ACD99DF0FB0C70BC12F2 /* XPEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPEvent.swift; sourceTree = "<group>"; };
+		7E0F76F0CFA25AEE4B3A7F09 /* XPChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPChartView.swift; sourceTree = "<group>"; };
+		80E86A5880D073343AF7E0E0 /* NiwaTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiwaTask.swift; sourceTree = "<group>"; };
+		8237E4B7E3520ED8D75418DB /* ClipboardHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardHistoryView.swift; sourceTree = "<group>"; };
+		873ED7C152B18D4246C2EFFE /* NoteEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteEditorView.swift; sourceTree = "<group>"; };
+		89825B6502E06090F6AEBC28 /* XPConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPConstants.swift; sourceTree = "<group>"; };
+		8DB685F52334FDB495292915 /* ReminderSchedulingEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderSchedulingEngine.swift; sourceTree = "<group>"; };
+		96C32A65BF7B5F815F0E6EFD /* MediumWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediumWidgetView.swift; sourceTree = "<group>"; };
+		9ED8905B142AE85F9D594B8B /* HeroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroView.swift; sourceTree = "<group>"; };
+		A01FEF20F0630E3EC42E6F7D /* PlantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantView.swift; sourceTree = "<group>"; };
+		A51BF51CE1E12AE07442E25E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		A5A97994EAE89153B1FD0429 /* XPBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPBarView.swift; sourceTree = "<group>"; };
+		AA703A690F20CC57F0DCF5D0 /* SmallWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallWidgetView.swift; sourceTree = "<group>"; };
+		B50996E5D2B13383B3BF11C5 /* NoteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteManager.swift; sourceTree = "<group>"; };
+		B86F29BB508E5620DB33CC1A /* NiwaNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiwaNote.swift; sourceTree = "<group>"; };
+		C5DA083410BC36CE388B1062 /* HealthEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthEvent.swift; sourceTree = "<group>"; };
+		C68D4DE8A47D3694480CA399 /* NiwaWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NiwaWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC236069B01E13626AA524FF /* NiwaApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NiwaApp.entitlements; sourceTree = "<group>"; };
+		CE41CAF16405364AF6DAE9CB /* LargeWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeWidgetView.swift; sourceTree = "<group>"; };
+		D1EC0D515E4A6E9C77C26456 /* ClipboardMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardMonitor.swift; sourceTree = "<group>"; };
+		D2C5264BCDFD7880F7216D02 /* ModelContainerSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelContainerSetup.swift; sourceTree = "<group>"; };
+		D44915DBBEF147EB80E365AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		D57F556F494D0EC1C104F4F7 /* NotesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesListView.swift; sourceTree = "<group>"; };
+		D6B5EC57DA88D66031E4AF60 /* TaskManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManager.swift; sourceTree = "<group>"; };
+		DC1D13CB664B1C0ECE331F20 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		E333EA4AD20CF39D23903B75 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E88D7F762A43CD227F102B3F /* NiwaWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiwaWidgetBundle.swift; sourceTree = "<group>"; };
+		EC78BC81E3FF693C53D02C16 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		EE26E8D30CCB1954D071CB58 /* InlineSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InlineSettingsView.swift; sourceTree = "<group>"; };
+		FAA565B3DCF0E8FD3A5D3EA4 /* ContentTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentTabView.swift; sourceTree = "<group>"; };
+		FE220B79D48654F793D84391 /* TaskRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskRowView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		1BC97A50A32208BC23B688D6 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				8237E4B7E3520ED8D75418DB /* ClipboardHistoryView.swift */,
+				FAA565B3DCF0E8FD3A5D3EA4 /* ContentTabView.swift */,
+				776AA5336122BCDB0E79033E /* DropdownRootView.swift */,
+				100414349BC7E0D1374CEE51 /* HealthStatusView.swift */,
+				873ED7C152B18D4246C2EFFE /* NoteEditorView.swift */,
+				D57F556F494D0EC1C104F4F7 /* NotesListView.swift */,
+				7A0B99115A2E9F236F56C66E /* TaskListView.swift */,
+				3D08A3FE8E59157A567F6491 /* TimerView.swift */,
+				A52729A3F5B54970EE759882 /* Components */,
+				784182DBACD2FE68EA65757A /* FloatingWindow */,
+				C974BD51446D84C06DABEE51 /* Settings */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		2DF1B60404A437AE7B8082FE /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				D1EC0D515E4A6E9C77C26456 /* ClipboardMonitor.swift */,
+				02AE0A8C96ED657C6985C00A /* HealthEventManager.swift */,
+				B50996E5D2B13383B3BF11C5 /* NoteManager.swift */,
+				DC1D13CB664B1C0ECE331F20 /* NotificationManager.swift */,
+				D6B5EC57DA88D66031E4AF60 /* TaskManager.swift */,
+				01E6D1A1506A6845C9574C8A /* UserProfileManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		66B12E57755E09EE977E42CB /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				5B5E508CE0F53CD071839921 /* DesignTokens.swift */,
+				89825B6502E06090F6AEBC28 /* XPConstants.swift */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
+		784182DBACD2FE68EA65757A /* FloatingWindow */ = {
+			isa = PBXGroup;
+			children = (
+				3D3C4CAADC04A7A9F337F14F /* FloatingWindowContentView.swift */,
+				3E7A231F1358364A226B680E /* FloatingWindowController.swift */,
+			);
+			path = FloatingWindow;
+			sourceTree = "<group>";
+		};
+		7B0675D310FDACB1202221DB /* Engines */ = {
+			isa = PBXGroup;
+			children = (
+				00CFC84AF338148B638DC065 /* GamificationEngine.swift */,
+				115C2579873489427E00F0F9 /* PomodoroTimerEngine.swift */,
+				8DB685F52334FDB495292915 /* ReminderSchedulingEngine.swift */,
+			);
+			path = Engines;
+			sourceTree = "<group>";
+		};
+		8A426CE60117D5D735E22615 = {
+			isa = PBXGroup;
+			children = (
+				E659DA28078521549D5593EC /* NiwaApp */,
+				E386E5F9A02AADA0425AE0C4 /* NiwaShared */,
+				F409ACB064D60548A37122FB /* NiwaWidget */,
+				DF8D901E62B226BB13A23ED4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A52729A3F5B54970EE759882 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				9ED8905B142AE85F9D594B8B /* HeroView.swift */,
+				616A470092FAF68F68E1AB6F /* LevelUpOverlay.swift */,
+				A01FEF20F0630E3EC42E6F7D /* PlantView.swift */,
+				FE220B79D48654F793D84391 /* TaskRowView.swift */,
+				A5A97994EAE89153B1FD0429 /* XPBarView.swift */,
+				7E0F76F0CFA25AEE4B3A7F09 /* XPChartView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		C974BD51446D84C06DABEE51 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				EE26E8D30CCB1954D071CB58 /* InlineSettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		DF8D901E62B226BB13A23ED4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				59712553F7C61E9507E1A609 /* NiwaApp.app */,
+				C68D4DE8A47D3694480CA399 /* NiwaWidget.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E386E5F9A02AADA0425AE0C4 /* NiwaShared */ = {
+			isa = PBXGroup;
+			children = (
+				66B12E57755E09EE977E42CB /* Constants */,
+				7B0675D310FDACB1202221DB /* Engines */,
+				F18C2D4B5C20A66D7D6636EA /* Models */,
+			);
+			path = NiwaShared;
+			sourceTree = "<group>";
+		};
+		E659DA28078521549D5593EC /* NiwaApp */ = {
+			isa = PBXGroup;
+			children = (
+				D44915DBBEF147EB80E365AE /* AppDelegate.swift */,
+				E333EA4AD20CF39D23903B75 /* Assets.xcassets */,
+				111E9AB4204A7A5CDFB699AB /* Info.plist */,
+				CC236069B01E13626AA524FF /* NiwaApp.entitlements */,
+				2E87A5920DB12AE735E192E0 /* NiwaApp.swift */,
+				2DF1B60404A437AE7B8082FE /* Services */,
+				1BC97A50A32208BC23B688D6 /* Views */,
+			);
+			path = NiwaApp;
+			sourceTree = "<group>";
+		};
+		F18C2D4B5C20A66D7D6636EA /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				58B5FDD9C0C7C67C98ED2434 /* ClipboardEntry.swift */,
+				C5DA083410BC36CE388B1062 /* HealthEvent.swift */,
+				D2C5264BCDFD7880F7216D02 /* ModelContainerSetup.swift */,
+				B86F29BB508E5620DB33CC1A /* NiwaNote.swift */,
+				80E86A5880D073343AF7E0E0 /* NiwaTask.swift */,
+				077D9A2FEB38FB0CEE420C6B /* TimerSession.swift */,
+				EC78BC81E3FF693C53D02C16 /* UserProfile.swift */,
+				7A20ACD99DF0FB0C70BC12F2 /* XPEvent.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F409ACB064D60548A37122FB /* NiwaWidget */ = {
+			isa = PBXGroup;
+			children = (
+				A51BF51CE1E12AE07442E25E /* Info.plist */,
+				CE41CAF16405364AF6DAE9CB /* LargeWidgetView.swift */,
+				96C32A65BF7B5F815F0E6EFD /* MediumWidgetView.swift */,
+				3A69D63225294540599FA9C6 /* NiwaTimelineProvider.swift */,
+				246B3802807C6345CF8E8AED /* NiwaWidget.entitlements */,
+				E88D7F762A43CD227F102B3F /* NiwaWidgetBundle.swift */,
+				4B9594A73F5D1D20C5656B11 /* NiwaWidgetEntry.swift */,
+				AA703A690F20CC57F0DCF5D0 /* SmallWidgetView.swift */,
+				0C1D0AF11A5557C357D9DABD /* WidgetXPSparkline.swift */,
+			);
+			path = NiwaWidget;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B4543E0010CEBA17870F42D3 /* NiwaWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 432FD9DFA93E30C22AAF9A7E /* Build configuration list for PBXNativeTarget "NiwaWidget" */;
+			buildPhases = (
+				5EE9911182F77AAFEAE1750E /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NiwaWidget;
+			packageProductDependencies = (
+			);
+			productName = NiwaWidget;
+			productReference = C68D4DE8A47D3694480CA399 /* NiwaWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		ED6A35968EA1896195F69CBA /* NiwaApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5AFC608296D5EC9B03E058C0 /* Build configuration list for PBXNativeTarget "NiwaApp" */;
+			buildPhases = (
+				1F6CED3182F7489644EDE0E6 /* Sources */,
+				DDD3B2A268133109AEAC11BB /* Resources */,
+				3C207877EA4E27DDCB7B4FA3 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5A6AE6C7410AC8C38E8DF50C /* PBXTargetDependency */,
+			);
+			name = NiwaApp;
+			packageProductDependencies = (
+			);
+			productName = NiwaApp;
+			productReference = 59712553F7C61E9507E1A609 /* NiwaApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2B1720FDBD476B0AC9F3948B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					B4543E0010CEBA17870F42D3 = {
+						ProvisioningStyle = Automatic;
+					};
+					ED6A35968EA1896195F69CBA = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 5BE407BFB2F5C7B9390EEF6C /* Build configuration list for PBXProject "Niwa" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 8A426CE60117D5D735E22615;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = DF8D901E62B226BB13A23ED4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				ED6A35968EA1896195F69CBA /* NiwaApp */,
+				B4543E0010CEBA17870F42D3 /* NiwaWidget */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DDD3B2A268133109AEAC11BB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A5717DCDDF3A6B65E7B9F01E /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1F6CED3182F7489644EDE0E6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				41322B50BF4DF26DA410B0BD /* AppDelegate.swift in Sources */,
+				72948E25DA91449D598BB1A6 /* ClipboardEntry.swift in Sources */,
+				E511BD7573FE0AD26F313884 /* ClipboardHistoryView.swift in Sources */,
+				DEE1DC523DBCF6AAF2CB0B5B /* ClipboardMonitor.swift in Sources */,
+				5DC7F4A04126CD65326D188F /* ContentTabView.swift in Sources */,
+				3C412664AB139F208F0458BB /* DesignTokens.swift in Sources */,
+				B1CF432B0FFA67ECDFA681EC /* DropdownRootView.swift in Sources */,
+				007C30FD9EA0908C0B6CD860 /* FloatingWindowContentView.swift in Sources */,
+				7107CAA88559324CAADC6175 /* FloatingWindowController.swift in Sources */,
+				6832D447EFE2FF57E9251629 /* GamificationEngine.swift in Sources */,
+				1DEA2AE793DBE3D65CC14B13 /* HealthEvent.swift in Sources */,
+				039CC0A32D3814BBA72EFF2A /* HealthEventManager.swift in Sources */,
+				2FBA563C4C46BF979A346F85 /* HealthStatusView.swift in Sources */,
+				8370D1CBEEBA551D8F393742 /* HeroView.swift in Sources */,
+				9421C1086727FED529B1CD93 /* InlineSettingsView.swift in Sources */,
+				F02C8A541653229490E5EBAD /* LevelUpOverlay.swift in Sources */,
+				29ED93A6F80BD1B1F35A4A60 /* ModelContainerSetup.swift in Sources */,
+				DBEB089B6A5EBD61F3A4F4B1 /* NiwaApp.swift in Sources */,
+				2C3FEC93180D6A40E4AAB491 /* NiwaNote.swift in Sources */,
+				C60600581E0E6C7B1E8C010D /* NiwaTask.swift in Sources */,
+				BE65F536C86CE728E1473A48 /* NoteEditorView.swift in Sources */,
+				30358D0DEAC0C549F61711D4 /* NoteManager.swift in Sources */,
+				520D0F70C39B2F83806A1485 /* NotesListView.swift in Sources */,
+				CB94784BB82560C3ACED6147 /* NotificationManager.swift in Sources */,
+				9950D7C52D91B13FDA5422D9 /* PlantView.swift in Sources */,
+				4F4BBBB7BE3691A2EB5C2D98 /* PomodoroTimerEngine.swift in Sources */,
+				D3446D1D11F514DD24C34F12 /* ReminderSchedulingEngine.swift in Sources */,
+				6C89308B5A85479F30B3DEF1 /* TaskListView.swift in Sources */,
+				EE573789BE75E865FE59601A /* TaskManager.swift in Sources */,
+				1E805E088347FB5267EE401F /* TaskRowView.swift in Sources */,
+				BC4C6582D2B4269DA83FDCF3 /* TimerSession.swift in Sources */,
+				0A085FD70618F2083ACA865D /* TimerView.swift in Sources */,
+				6256DE88BE1ED960BBB6A1F5 /* UserProfile.swift in Sources */,
+				C0236E3C10232FD174A68E12 /* UserProfileManager.swift in Sources */,
+				C29712DC891D37C39B53C650 /* XPBarView.swift in Sources */,
+				225506DAD6DAEBD4A9585E51 /* XPChartView.swift in Sources */,
+				C7C460BBBC4FBA295EAE0EEF /* XPConstants.swift in Sources */,
+				DCEBE36E2FF853A299A73376 /* XPEvent.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5EE9911182F77AAFEAE1750E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9EB3FE90D8CE604EB1B67619 /* ClipboardEntry.swift in Sources */,
+				2B18A056A5DD53B1E815BF08 /* DesignTokens.swift in Sources */,
+				7451072E2FF24DC8CB54A1AB /* GamificationEngine.swift in Sources */,
+				083E765B3D38642F9C114927 /* HealthEvent.swift in Sources */,
+				F319F2680CE5FBA62D4E9E90 /* LargeWidgetView.swift in Sources */,
+				B6693D40728580E571C672D2 /* MediumWidgetView.swift in Sources */,
+				8110C5D74F7CF71233AD7903 /* ModelContainerSetup.swift in Sources */,
+				1DB6E7DC76A0E5DBD31910B0 /* NiwaNote.swift in Sources */,
+				1AA23E73E7C8232162CCB78F /* NiwaTask.swift in Sources */,
+				AF2A382E83B3FB0618EDA5F6 /* NiwaTimelineProvider.swift in Sources */,
+				98BF570CD379907D7928C9CA /* NiwaWidgetBundle.swift in Sources */,
+				A22C404F0D4ED5A62D2498CE /* NiwaWidgetEntry.swift in Sources */,
+				BA5C975A65038EB6EC557BBA /* PomodoroTimerEngine.swift in Sources */,
+				0DD85692C2B71305BBFD9B52 /* ReminderSchedulingEngine.swift in Sources */,
+				90454112D99E84A7E15E49A0 /* SmallWidgetView.swift in Sources */,
+				428FA7ABB4AC460B36462C09 /* TimerSession.swift in Sources */,
+				D1096972C1636730ECF8C8F3 /* UserProfile.swift in Sources */,
+				4D8046388C3122D2B112A0F1 /* WidgetXPSparkline.swift in Sources */,
+				1ECC7345178E6F2E4896FBF2 /* XPConstants.swift in Sources */,
+				39A67A9F1426A4B03DBD42DA /* XPEvent.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5A6AE6C7410AC8C38E8DF50C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B4543E0010CEBA17870F42D3 /* NiwaWidget */;
+			targetProxy = 2D88CFEC569814FC79DB435E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		156514357AEE54765B6DD2C9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = NiwaApp/NiwaApp.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NiwaApp/Info.plist;
+				INFOPLIST_KEY_LSUIElement = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.niwa.app;
+				PRODUCT_NAME = Niwa;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		3679167F4189ACDFF94FA57E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		794FA0EEFA90FD518A5391F0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = NiwaApp/NiwaApp.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NiwaApp/Info.plist;
+				INFOPLIST_KEY_LSUIElement = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.niwa.app;
+				PRODUCT_NAME = Niwa;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		83F0225BA0E6BF99169D4C5A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		B032FE32D91AA53DE5867EEA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = NiwaWidget/NiwaWidget.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NiwaWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.niwa.app.widget;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		EB29C50B169948D8600E7C54 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = NiwaWidget/NiwaWidget.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NiwaWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.niwa.app.widget;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		432FD9DFA93E30C22AAF9A7E /* Build configuration list for PBXNativeTarget "NiwaWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B032FE32D91AA53DE5867EEA /* Debug */,
+				EB29C50B169948D8600E7C54 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		5AFC608296D5EC9B03E058C0 /* Build configuration list for PBXNativeTarget "NiwaApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				156514357AEE54765B6DD2C9 /* Debug */,
+				794FA0EEFA90FD518A5391F0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		5BE407BFB2F5C7B9390EEF6C /* Build configuration list for PBXProject "Niwa" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3679167F4189ACDFF94FA57E /* Debug */,
+				83F0225BA0E6BF99169D4C5A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2B1720FDBD476B0AC9F3948B /* Project object */;
+}
