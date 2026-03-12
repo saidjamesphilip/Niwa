@@ -18,7 +18,7 @@ If you discover a security vulnerability, please report it responsibly:
 
 ## Scope
 
-Niwa is a local-only application with no network access. However, the following areas are in scope for security reports:
+Niwa is a local-first application. The only network call is a user-initiated "Check for Updates" that fetches the latest version from GitHub Releases. The following areas are in scope for security reports:
 
 | Area | Detail |
 |------|--------|
@@ -26,10 +26,11 @@ Niwa is a local-only application with no network access. However, the following 
 | **Clipboard access** | Reads `NSPasteboard.general` to populate clipboard history |
 | **Notification content** | Health reminder notifications via `UNUserNotificationCenter` |
 | **Process execution** | App restart uses `/usr/bin/open` via `Process` |
+| **Update checker** | Manual-only GET to `api.github.com/repos/.../releases/latest` — no auth, no user data sent |
 
 ### Out of Scope
 
-- Niwa makes **zero network requests** — no APIs, no analytics, no telemetry
+- No analytics, no telemetry, no tracking
 - No user authentication or credential storage
 - No remote data sync
 

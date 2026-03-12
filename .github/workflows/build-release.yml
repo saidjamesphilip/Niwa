@@ -1,0 +1,73 @@
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: macos-15
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Build app
+        run: |
+          xcodebuild -project Niwa.xcodeproj \
+            -scheme NiwaApp \
+            -configuration Release \
+            -derivedDataPath build \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Package app
+        run: |
+          APP_PATH="build/Build/Products/Release/Niwa.app"
+          VERSION="${GITHUB_REF_NAME#v}"
+          ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" "Niwa-${VERSION}-mac.zip"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "ZIP_NAME=Niwa-${VERSION}-mac.zip" >> $GITHUB_ENV
+
+      - name: Calculate SHA256
+        run: |
+          SHA=$(shasum -a 256 "$ZIP_NAME" | awk '{print $1}')
+          echo "SHA256=$SHA" >> $GITHUB_ENV
+          echo "SHA256: $SHA"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Niwa v${{ env.VERSION }}
+          body: |
+            ## Niwa v${{ env.VERSION }}
+
+            ### Install
+
+            **Homebrew (recommended):**
+            ```bash
+            brew tap saidjamesphilip/niwa
+            brew install niwa
+            ```
+
+            **Manual download:**
+            1. Download `Niwa-${{ env.VERSION }}-mac.zip` below
+            2. Unzip and drag `Niwa.app` to your Applications folder
+            3. Right-click → Open (first time only, to bypass Gatekeeper)
+
+            **Requirements:** macOS 15 (Sequoia) or later
+
+            ---
+            SHA256: `${{ env.SHA256 }}`
+          files: ${{ env.ZIP_NAME }}
+          draft: false
+          prerelease: false

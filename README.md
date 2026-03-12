@@ -136,24 +136,33 @@ Your virtual plant grows as you level up — a visual representation of your pro
 
 ## Install
 
+### Homebrew (recommended)
+
+```bash
+brew tap saidjamesphilip/niwa
+brew install niwa
+```
+
+To update: `brew upgrade niwa`
+
+### Manual Download
+
+1. Download the latest `.zip` from [Releases](https://github.com/saidjamesphilip/Niwa/releases/latest)
+2. Unzip and drag `Niwa.app` to your **Applications** folder
+3. Right-click the app → **Open** (first launch only, to bypass Gatekeeper)
+
 ### Build from Source
 
 > **Requirements:** Xcode 16+, macOS 15.0+, [XcodeGen](https://github.com/yonaskolb/XcodeGen)
 
 ```bash
-# Clone the repository
 git clone https://github.com/saidjamesphilip/Niwa.git
 cd Niwa
-
-# Generate Xcode project
 xcodegen generate
-
-# Build and run
-xcodebuild -scheme NiwaApp -configuration Debug build
-open ~/Library/Developer/Xcode/DerivedData/Niwa-*/Build/Products/Debug/Niwa.app
+open Niwa.xcodeproj
 ```
 
-Or open `Niwa.xcodeproj` in Xcode and press **Cmd+R**.
+Then press **Cmd+R** in Xcode to build and run.
 
 <details>
 <summary><strong>Install XcodeGen (if needed)</strong></summary>
@@ -175,8 +184,9 @@ xattr -cr /path/to/Niwa.app
 
 </details>
 
-> [!NOTE]
-> Niwa is currently source-only. Homebrew and DMG releases are planned for a future version.
+### Updating
+
+Niwa has a built-in update checker — open **Settings → About → Check for updates**. It compares your version against the latest GitHub Release and links you to the download if a newer version is available.
 
 ---
 
@@ -352,12 +362,12 @@ Niwa/
 | | Detail |
 |-|--------|
 | **Data storage** | All data stored locally in SwiftData (App Group container) |
-| **Network** | Zero network calls. No analytics, no telemetry, no tracking |
+| **Network** | No analytics, no telemetry, no tracking. Optional manual "Check for Updates" calls GitHub Releases API |
 | **Clipboard** | Reads `NSPasteboard.general` locally. Text stays on your machine |
 | **Notifications** | Local `UNUserNotificationCenter` only. No push servers |
 
 > [!IMPORTANT]
-> Niwa never sends your data anywhere. Everything lives on your Mac.
+> Niwa never sends your data anywhere. Everything lives on your Mac. The only network call is a manual "Check for Updates" in Settings.
 
 ---
 
