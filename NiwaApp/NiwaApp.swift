@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import AppKit
 
 @main
 struct NiwaApp: App {
@@ -46,6 +47,15 @@ struct NiwaApp: App {
             gamificationEngine: engine,
             profileManager: profMgr
         )
+
+        // Apply saved appearance mode
+        if let mode = profMgr.profile?.appearanceMode {
+            switch mode {
+            case 1: NSApp.appearance = NSAppearance(named: .aqua)
+            case 2: NSApp.appearance = NSAppearance(named: .darkAqua)
+            default: break
+            }
+        }
     }
 
     var body: some Scene {

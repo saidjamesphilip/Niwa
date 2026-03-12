@@ -66,6 +66,7 @@ struct InlineSettingsView: View {
                     settingsSection("\u{1F3A8}  Appearance") {
                         appearancePicker(value: profile.appearanceMode) {
                             profile.appearanceMode = $0; save()
+                            applyAppearance($0)
                         }
                     }
 
@@ -300,6 +301,14 @@ struct InlineSettingsView: View {
     }
 
     // MARK: - Actions
+
+    private func applyAppearance(_ mode: Int) {
+        switch mode {
+        case 1: NSApp.appearance = NSAppearance(named: .aqua)
+        case 2: NSApp.appearance = NSAppearance(named: .darkAqua)
+        default: NSApp.appearance = nil // follow system
+        }
+    }
 
     private func save() { profileManager.save() }
     private func saveTimer() { profileManager.save(); timerEngine.loadSettings() }

@@ -46,21 +46,11 @@ struct DropdownRootView: View {
                 onDismiss: { showLevelUp = false }
             )
         }
-        .preferredColorScheme(colorSchemeOverride)
         .onChange(of: gamificationEngine.didLevelUp) { _, newValue in
             if newValue {
                 showLevelUp = true
                 gamificationEngine.resetLevelUpFlag()
             }
-        }
-    }
-
-    private var colorSchemeOverride: ColorScheme? {
-        guard let mode = profile?.appearanceMode else { return nil }
-        switch mode {
-        case 1: return .light
-        case 2: return .dark
-        default: return nil // system
         }
     }
 
