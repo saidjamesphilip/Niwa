@@ -3,11 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Niwa (庭) — Grow Your Productivity</title>
-    <meta name="description" content="A native macOS menu bar app combining Pomodoro timer, tasks, notes, clipboard history, and health reminders — with a gamified leveling system.">
+
+    <!-- Primary Meta -->
+    <title>Niwa (庭) — Grow Your Productivity | macOS Menu Bar App</title>
+    <meta name="description" content="Niwa is a free, open-source macOS menu bar app with a Pomodoro timer, task manager, quick notes, clipboard history, and health reminders — all with a gamified leveling system where your plant grows as you do.">
+    <meta name="keywords" content="Niwa, macOS app, menu bar app, Pomodoro timer, task manager, productivity app, gamification, SwiftUI, open source, focus timer, clipboard history, health reminders">
+    <meta name="author" content="James Said Philip">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="theme-color" content="#E07A5F">
+    <meta name="color-scheme" content="light">
+    <link rel="canonical" href="https://niwa-app.pages.dev/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://niwa-app.pages.dev/">
+    <meta property="og:title" content="Niwa (庭) — Grow Your Productivity">
+    <meta property="og:description" content="A free, open-source macOS menu bar app combining Pomodoro timer, tasks, notes, clipboard history, and health reminders — with a gamified leveling system.">
+    <meta property="og:image" content="https://niwa-app.pages.dev/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Niwa app icon with tagline: Grow Your Productivity — a native macOS menu bar productivity app">
+    <meta property="og:site_name" content="Niwa">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://niwa-app.pages.dev/">
+    <meta name="twitter:title" content="Niwa (庭) — Grow Your Productivity">
+    <meta name="twitter:description" content="A free, open-source macOS menu bar app combining Pomodoro timer, tasks, notes, clipboard history, and health reminders — with a gamified leveling system.">
+    <meta name="twitter:image" content="https://niwa-app.pages.dev/og-image.png">
+    <meta name="twitter:image:alt" content="Niwa app icon with tagline: Grow Your Productivity">
+
+    <!-- Favicons & Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="256x256" href="/icon-256.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="/icon-128.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Raleway:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Structured Data: SoftwareApplication -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Niwa",
+        "alternateName": "Niwa (庭)",
+        "description": "A native macOS menu bar app combining Pomodoro timer, tasks, notes, clipboard history, and health reminders with a gamified leveling system where your plant grows as you do.",
+        "url": "https://niwa-app.pages.dev/",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "macOS 15+",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "author": {
+            "@type": "Person",
+            "name": "James Said Philip",
+            "url": "https://github.com/saidjamesphilip"
+        },
+        "license": "https://opensource.org/licenses/MIT",
+        "codeRepository": "https://github.com/saidjamesphilip/Niwa",
+        "programmingLanguage": "Swift",
+        "screenshot": "https://niwa-app.pages.dev/og-image.png",
+        "softwareVersion": "1.0.0",
+        "featureList": [
+            "Pomodoro Timer with 25/5/15 minute cycles",
+            "Task Manager with drag-to-reorder",
+            "Quick Notes from the menu bar",
+            "Clipboard History (last 20 copies)",
+            "Health Reminders (water and standing)",
+            "Gamified leveling system with 8 plant growth stages",
+            "Floating mini-player window",
+            "100% offline — no analytics, no accounts",
+            "Light and Dark mode support"
+        ]
+    }
+    </script>
+
+    <!-- Structured Data: FAQ -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Does Niwa need an internet connection?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. Niwa is 100% offline. It stores everything in a local SwiftData database on your Mac. No servers, no accounts, no analytics."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How does the leveling system work?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "You earn XP by completing tasks (+15), finishing Pomodoro sessions (+25), creating notes (+5), and logging water/standing (+10 each). XP fills a progress bar — when it's full, you level up and your plant grows."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I customise the timer durations?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. Open Settings and adjust work, short break, and long break durations. You can also configure sessions before a long break."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What macOS versions are supported?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Niwa requires macOS 15 (Sequoia) or later. It is built with SwiftUI and SwiftData which require modern system APIs."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is Niwa open source?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes — MIT licensed. You can view the source, fork it, and contribute on GitHub."
+                }
+            }
+        ]
+    }
+    </script>
     <style>
         :root {
             --bg: #FAF6F1;
@@ -420,7 +547,7 @@
 <body>
 
 <!-- ── Nav ── -->
-<nav>
+<nav role="navigation" aria-label="Main navigation">
     <a href="#" class="nav-brand">
         <svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="4" y="4" width="120" height="120" rx="28" fill="#FAF6F1"/>
@@ -439,15 +566,16 @@
         <a href="#growth">Growth</a>
         <a href="#install">Install</a>
         <a href="#faq">FAQ</a>
-        <a href="https://github.com/saidjamesphilip/Niwa" class="nav-cta">
-            <svg width="14" height="14" viewBox="0 0 98 96" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z"/></svg>
+        <a href="https://github.com/saidjamesphilip/Niwa" class="nav-cta" aria-label="View Niwa on GitHub">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
             GitHub
         </a>
     </div>
 </nav>
 
 <!-- ── Hero ── -->
-<section class="hero">
+<main>
+<section class="hero" aria-label="Introduction">
     <div class="hero-badge"><span class="dot"></span> Native macOS &middot; SwiftUI &middot; Zero dependencies</div>
     <div class="hero-icon">
         <svg viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -470,15 +598,15 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
             Download
         </a>
-        <a href="https://github.com/saidjamesphilip/Niwa" class="btn-secondary">
-            <svg width="14" height="14" viewBox="0 0 98 96" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z"/></svg>
+        <a href="https://github.com/saidjamesphilip/Niwa" class="btn-secondary" aria-label="View source code on GitHub">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
             Source Code
         </a>
     </div>
 </section>
 
 <!-- ── Showcase ── -->
-<section class="showcase">
+<section class="showcase" aria-label="App screenshots and preview">
     <div class="showcase-inner">
         <div class="showcase-heading">
             <h2>See it in action</h2>
@@ -758,7 +886,7 @@
 </section>
 
 <!-- ── Features ── -->
-<section class="features" id="features">
+<section class="features" id="features" aria-label="Features">
     <h2>Everything in your menu bar</h2>
     <p>Six tools that earn you XP. Level up, grow your plant.</p>
 
@@ -818,7 +946,7 @@
 </section>
 
 <!-- ── Growth ── -->
-<section class="growth" id="growth">
+<section class="growth" id="growth" aria-label="Plant growth stages">
     <h2>Watch your garden grow</h2>
     <p>8 growth stages from seed to ancient tree. Your plant evolves as you level up.</p>
     <div style="max-width: 700px; margin: 0 auto; background: var(--bg-dark); border-radius: 12px; padding: 20px 12px; overflow-x: auto;">
@@ -920,7 +1048,7 @@
 </section>
 
 <!-- ── Install ── -->
-<section class="install" id="install">
+<section class="install" id="install" aria-label="Installation instructions">
     <h2>Get started</h2>
     <p>Clone, build, and run in under a minute.</p>
     <div class="install-card">
@@ -948,7 +1076,7 @@
 </section>
 
 <!-- ── Privacy ── -->
-<section class="privacy">
+<section class="privacy" aria-label="Privacy information">
     <h2>Your data stays on your Mac</h2>
     <p>Niwa makes zero network calls. No analytics, no accounts, no cloud sync. Everything lives in a local SwiftData store.</p>
     <div class="privacy-pills">
@@ -972,7 +1100,7 @@
 </section>
 
 <!-- ── FAQ ── -->
-<section class="faq" id="faq">
+<section class="faq" id="faq" aria-label="Frequently asked questions">
     <h2>FAQ</h2>
 
     <div class="faq-item">
@@ -1001,8 +1129,10 @@
     </div>
 </section>
 
+</main>
+
 <!-- ── Footer ── -->
-<footer>
+<footer role="contentinfo">
     <p>
         Niwa (庭) &middot; MIT License &middot;
         <a href="https://github.com/saidjamesphilip/Niwa">GitHub</a> &middot;
