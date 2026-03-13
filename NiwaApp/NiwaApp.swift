@@ -14,6 +14,7 @@ struct NiwaApp: App {
     let noteManager: NoteManager
     let profileManager: UserProfileManager
     let healthManager: HealthEventManager
+    let reminderTimerManager: ReminderTimerManager
     let soundManager: SoundManager
 
     init() {
@@ -60,12 +61,47 @@ struct NiwaApp: App {
 
         let profMgr = UserProfileManager(modelContext: context)
         profileManager = profMgr
-        healthManager = HealthEventManager(
+        let hm = HealthEventManager(
             modelContext: context,
             gamificationEngine: engine,
             profileManager: profMgr
         )
+        healthManager = hm
+        let rtm = ReminderTimerManager(profileManager: profMgr, healthManager: hm)
+        reminderTimerManager = rtm
         soundManager = SoundManager(modelContext: context)
+
+        // Wire ALL notification callbacks
+        let nm = NotificationManager.shared
+
+        // Water: Done = confirm water + reset timer
+        nm.onWaterDone = {
+            Task { @MainActor in hm.confirmWater(); rtm.waterDone() }
+        }
+        // Water: Snooze = snooze timer only
+        nm.onWaterSnooze = {
+            Task { @MainActor in rtm.waterSnoozed() }
+        }
+        // Water: Dismissed = reset timer (treat as acknowledged)
+        nm.onWaterDismissed = {
+            Task { @MainActor in rtm.waterDismissed() }
+        }
+        // Stand: Stand Up = start standing + reset timer
+        nm.onStandUp = {
+            Task { @MainActor in hm.startStanding(); rtm.standDone() }
+        }
+        // Stand: Snooze = snooze timer only
+        nm.onStandSnooze = {
+            Task { @MainActor in rtm.standSnoozed() }
+        }
+        // Stand: Dismissed = reset timer
+        nm.onStandDismissed = {
+            Task { @MainActor in rtm.standDismissed() }
+        }
+        // Stand: Sit Down = stop standing
+        nm.onSitDown = {
+            Task { @MainActor in hm.stopStanding() }
+        }
 
         // Apply saved appearance mode
         if let mode = profMgr.profile?.appearanceMode {

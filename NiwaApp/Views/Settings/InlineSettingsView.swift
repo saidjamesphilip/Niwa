@@ -489,7 +489,7 @@ struct InlineSettingsView: View {
 
     private func save() { profileManager.save() }
     private func saveTimer() { profileManager.save(); timerEngine.loadSettings() }
-    private func saveHealth() { profileManager.save(); healthManager.scheduleNextReminders() }
+    private func saveHealth() { profileManager.save() }
 
     private func exportData() {
         let panel = NSSavePanel()

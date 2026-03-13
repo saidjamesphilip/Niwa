@@ -80,7 +80,11 @@ struct DropdownRootView: View {
             }
         }
         .onAppear {
+            NotificationManager.shared.isDropdownVisible = true
             checkFirstLaunchAndGreeting()
+        }
+        .onDisappear {
+            NotificationManager.shared.isDropdownVisible = false
         }
         .onChange(of: profile?.totalXP) { oldXP, newXP in
             guard let oldXP, let newXP, newXP > oldXP else { return }
