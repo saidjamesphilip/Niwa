@@ -2,6 +2,8 @@ import SwiftUI
 import SwiftData
 
 struct TaskListView: View {
+    var contentMaxHeight: CGFloat = 600
+
     @EnvironmentObject var taskManager: TaskManager
 
     @State private var newTaskTitle = ""
@@ -144,7 +146,7 @@ struct TaskListView: View {
                     .padding(.horizontal, DesignTokens.Spacing.xs)
                     .padding(.vertical, DesignTokens.Spacing.xs)
                 }
-                .frame(maxHeight: 600)
+                .frame(maxHeight: contentMaxHeight)
             }
         }
     }

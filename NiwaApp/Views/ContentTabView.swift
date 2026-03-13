@@ -9,6 +9,8 @@ struct ContentTabView: View {
     @EnvironmentObject var taskManager: TaskManager
     @EnvironmentObject var noteManager: NoteManager
 
+    var contentMaxHeight: CGFloat = 600
+
     @State private var selectedTab: ContentTab = .tasks
 
     var body: some View {
@@ -49,9 +51,9 @@ struct ContentTabView: View {
             // Tab content
             switch selectedTab {
             case .tasks:
-                TaskListView()
+                TaskListView(contentMaxHeight: contentMaxHeight)
             case .notes:
-                NotesListView()
+                NotesListView(contentMaxHeight: contentMaxHeight)
             }
         }
     }

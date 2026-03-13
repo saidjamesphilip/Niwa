@@ -19,6 +19,9 @@ struct DropdownRootView: View {
     @State private var showGreeting = false
     @State private var greetingMessage = ""
     @State private var resetStatusMessage = ""
+    @State private var contentMaxHeight: CGFloat = CGFloat(
+        UserDefaults.standard.object(forKey: ResizeDragHandle.userDefaultsKey) as? Double ?? 600
+    )
 
     private var profile: UserProfile? { profileManager.profile }
 
@@ -52,6 +55,10 @@ struct DropdownRootView: View {
                     .background(DesignTokens.Colors.subtle)
 
                 bottomToolbar
+
+                if !showSettings && !showSounds {
+                    ResizeDragHandle(height: $contentMaxHeight)
+                }
             }
             .frame(width: 320)
             .background(DesignTokens.Colors.background)
@@ -81,6 +88,11 @@ struct DropdownRootView: View {
         .onAppear {
             NotificationManager.shared.isDropdownVisible = true
             checkFirstLaunchAndGreeting()
+            let screenMax = min((NSScreen.main?.visibleFrame.height ?? 900) - 300, 900)
+            if contentMaxHeight > screenMax {
+                contentMaxHeight = screenMax
+                UserDefaults.standard.set(Double(screenMax), forKey: ResizeDragHandle.userDefaultsKey)
+            }
         }
         .onDisappear {
             NotificationManager.shared.isDropdownVisible = false
@@ -143,7 +155,7 @@ struct DropdownRootView: View {
             Divider()
                 .background(DesignTokens.Colors.subtle)
 
-            ContentTabView()
+            ContentTabView(contentMaxHeight: contentMaxHeight)
 
             Divider()
                 .background(DesignTokens.Colors.subtle)
