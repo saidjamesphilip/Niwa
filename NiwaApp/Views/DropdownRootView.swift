@@ -60,7 +60,7 @@ struct DropdownRootView: View {
                     ResizeDragHandle(height: $contentMaxHeight)
                 }
             }
-            .frame(width: 320)
+            .frame(width: 380)
             .background(DesignTokens.Colors.background)
 
             LevelUpOverlay(
