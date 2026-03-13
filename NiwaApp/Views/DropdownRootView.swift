@@ -57,12 +57,10 @@ struct DropdownRootView: View {
             .background(DesignTokens.Colors.background)
 
             LevelUpOverlay(
-                level: profile?.currentLevel ?? 0,
+                level: profileManager.profile?.currentLevel ?? 1,
+                previousLevel: gamificationEngine.previousLevel,
                 isVisible: showLevelUp,
-                onDismiss: {
-                    showLevelUp = false
-                    soundManager.play(.levelUp)
-                }
+                onDismiss: { showLevelUp = false; soundManager.play(.levelUp) }
             )
 
             WelcomeOverlay(isVisible: $showWelcome) { name in
