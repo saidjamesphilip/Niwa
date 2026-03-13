@@ -164,15 +164,6 @@ struct HeroView: View {
     // MARK: - Plant Stage Name
 
     private var plantStageName: String {
-        switch level {
-        case 0: return "Seed"
-        case 1...3: return "Sprout"
-        case 4...7: return "Seedling"
-        case 8...12: return "Young Plant"
-        case 13...18: return "Bush"
-        case 19...25: return "Small Tree"
-        case 26...35: return "Full Tree"
-        default: return "Ancient Tree"
-        }
+        XPConstants.plantStageName(for: level)
     }
 }

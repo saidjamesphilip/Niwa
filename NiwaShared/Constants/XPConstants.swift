@@ -34,6 +34,41 @@ enum XPConstants {
     // Clipboard
     static let maxClipboardEntries: Int = 20
 
+    // Standing milestones — cumulative bonuses at time thresholds
+    static let standMilestones: [(minutes: Int, bonus: Int)] = [
+        (10, 5), (20, 10), (30, 15)
+    ]
+    static let standMaxXP: Int = 40
+
+    // Plant stage boundaries
+    enum PlantStage: String {
+        case seed = "Seed"
+        case sprout = "Sprout"
+        case seedling = "Seedling"
+        case youngPlant = "Young Plant"
+        case bush = "Bush"
+        case smallTree = "Small Tree"
+        case fullTree = "Full Tree"
+        case ancientTree = "Ancient Tree"
+    }
+
+    static func plantStage(for level: Int) -> PlantStage {
+        switch level {
+        case 0: return .seed
+        case 1...3: return .sprout
+        case 4...7: return .seedling
+        case 8...12: return .youngPlant
+        case 13...18: return .bush
+        case 19...25: return .smallTree
+        case 26...35: return .fullTree
+        default: return .ancientTree
+        }
+    }
+
+    static func plantStageName(for level: Int) -> String {
+        plantStage(for: level).rawValue
+    }
+
     /// Total XP required to reach a given level.
     /// Formula: 25N² + 75N (Level 1: 100, Level 2: 250, Level 3: 450, Level 4: 700, Level 5: 1000)
     static func totalXPForLevel(_ level: Int) -> Int {

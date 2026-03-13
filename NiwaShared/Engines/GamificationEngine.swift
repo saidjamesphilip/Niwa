@@ -8,6 +8,8 @@ import WidgetKit
 final class GamificationEngine {
     private let modelContext: ModelContext
     private(set) var didLevelUp: Bool = false
+    /// Stores the level before the most recent level-up, for the celebration overlay.
+    private(set) var previousLevel: Int = 0
 
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
@@ -20,7 +22,7 @@ final class GamificationEngine {
         let ctx = context ?? modelContext
         guard let profile = fetchProfile(from: ctx) else { return false }
 
-        let previousLevel = profile.currentLevel
+        let previousLevelLocal = profile.currentLevel
 
         // Create XP event
         let event = XPEvent(source: source, amount: amount)
@@ -36,9 +38,37 @@ final class GamificationEngine {
         // Update widgets
         WidgetCenter.shared.reloadAllTimelines()
 
-        let leveledUp = profile.currentLevel > previousLevel
+        let leveledUp = profile.currentLevel > previousLevelLocal
+        if leveledUp { self.previousLevel = previousLevelLocal }
         didLevelUp = leveledUp
         return leveledUp
+    }
+
+    @discardableResult
+    func deductXP(source: XPSource, amount: Int, context: ModelContext) -> Bool {
+        guard let profile = fetchProfile(from: context) else { return false }
+
+        profile.totalXP = max(0, profile.totalXP - amount)
+        profile.currentLevel = XPConstants.levelForTotalXP(profile.totalXP)
+        // Level-down is always silent — didLevelUp is NOT set
+
+        // Delete the most recent matching XPEvent from today
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: Date())
+        let sourceRaw = source.rawValue
+        let descriptor = FetchDescriptor<XPEvent>(
+            predicate: #Predicate<XPEvent> { event in
+                event.sourceRaw == sourceRaw && event.earnedAt >= startOfDay
+            },
+            sortBy: [SortDescriptor(\.earnedAt, order: .reverse)]
+        )
+        if let event = try? context.fetch(descriptor).first {
+            context.delete(event)
+        }
+
+        try? context.save()
+        WidgetCenter.shared.reloadAllTimelines()
+        return true
     }
 
     func resetLevelUpFlag() {
