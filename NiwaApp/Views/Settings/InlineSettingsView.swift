@@ -4,14 +4,12 @@ import AppKit
 
 struct InlineSettingsView: View {
     let profileManager: UserProfileManager
-    let timerEngine: PomodoroTimerEngine
+    let timerEngine: FocusTimerEngine
     let healthManager: HealthEventManager
     let onResetData: () -> Void
-    let onFullRestart: () -> Void
     let statusMessage: String
 
     @State private var confirmingReset = false
-    @State private var confirmingFullRestart = false
     @State private var exportMessage = ""
     @StateObject private var updateChecker = UpdateChecker()
 
@@ -41,20 +39,76 @@ struct InlineSettingsView: View {
                         .padding(.vertical, DesignTokens.Spacing.xs)
                     }
 
-                    // Timer
-                    settingsSection("\u{23F1}\u{FE0F}  Timer") {
-                        settingsStepper("Work", value: profile.pomoDurationMinutes, unit: "min", range: 1...120) {
-                            profile.pomoDurationMinutes = $0; saveTimer()
+                    // Focus Timer
+                    settingsSection("\u{23F1}\u{FE0F}  Focus Timer") {
+                        VStack(alignment: .leading, spacing: DesignTokens.Spacing.xs) {
+                            Text("Quick Pick Presets")
+                                .font(DesignTokens.Typography.bodyFont)
+                                .foregroundStyle(DesignTokens.Colors.textPrimary)
+
+                            HStack(spacing: 6) {
+                                ForEach(Array(profile.focusPresetMinutes.enumerated()), id: \.offset) { index, minutes in
+                                    HStack(spacing: 2) {
+                                        Button {
+                                            profile.focusPresetMinutes[index] = max(1, minutes - 5)
+                                            saveTimer()
+                                        } label: {
+                                            Image(systemName: "minus")
+                                                .font(.system(size: 8, weight: .bold))
+                                                .foregroundStyle(DesignTokens.Colors.textMuted)
+                                        }
+                                        .buttonStyle(.plain)
+
+                                        Text("\(minutes)")
+                                            .font(.system(size: 11, weight: .medium, design: .monospaced))
+                                            .foregroundStyle(DesignTokens.Colors.textSecondary)
+                                            .monospacedDigit()
+                                            .frame(minWidth: 24)
+
+                                        Button {
+                                            profile.focusPresetMinutes[index] = min(120, minutes + 5)
+                                            saveTimer()
+                                        } label: {
+                                            Image(systemName: "plus")
+                                                .font(.system(size: 8, weight: .bold))
+                                                .foregroundStyle(DesignTokens.Colors.textMuted)
+                                        }
+                                        .buttonStyle(.plain)
+
+                                        if profile.focusPresetMinutes.count > 1 {
+                                            Button {
+                                                profile.focusPresetMinutes.remove(at: index)
+                                                saveTimer()
+                                            } label: {
+                                                Image(systemName: "xmark")
+                                                    .font(.system(size: 7, weight: .bold))
+                                                    .foregroundStyle(DesignTokens.Colors.textMuted.opacity(0.5))
+                                            }
+                                            .buttonStyle(.plain)
+                                        }
+                                    }
+                                    .padding(.vertical, 4)
+                                    .padding(.horizontal, 6)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 6)
+                                            .fill(DesignTokens.Colors.backgroundSecondary)
+                                    )
+                                }
+
+                                if profile.focusPresetMinutes.count < 5 {
+                                    Button {
+                                        profile.focusPresetMinutes.append(30)
+                                        saveTimer()
+                                    } label: {
+                                        Image(systemName: "plus.circle")
+                                            .font(.system(size: 14))
+                                            .foregroundStyle(DesignTokens.Colors.primary.opacity(0.6))
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
                         }
-                        settingsStepper("Short Break", value: profile.shortBreakMinutes, unit: "min", range: 1...60) {
-                            profile.shortBreakMinutes = $0; saveTimer()
-                        }
-                        settingsStepper("Long Break", value: profile.longBreakMinutes, unit: "min", range: 1...60) {
-                            profile.longBreakMinutes = $0; saveTimer()
-                        }
-                        settingsStepper("Sessions before long break", value: profile.sessionsBeforeLongBreak, unit: "", range: 1...10) {
-                            profile.sessionsBeforeLongBreak = $0; saveTimer()
-                        }
+                        .padding(.vertical, DesignTokens.Spacing.xs)
                     }
 
                     // Health
@@ -129,8 +183,8 @@ struct InlineSettingsView: View {
                         // Reset
                         if confirmingReset {
                             confirmationRow(
-                                message: "Clear tasks, notes, clipboard, and XP? Settings will be kept.",
-                                confirmLabel: "Reset",
+                                message: "This will wipe everything — tasks, notes, XP, settings — and start fresh from Level 0. This cannot be undone.",
+                                confirmLabel: "Reset Everything",
                                 onConfirm: {
                                     confirmingReset = false
                                     onResetData()
@@ -138,32 +192,9 @@ struct InlineSettingsView: View {
                                 onCancel: { confirmingReset = false }
                             )
                         } else {
-                            dataRow(icon: "arrow.counterclockwise", label: "Reset All Data", color: DesignTokens.Colors.danger, description: "Clears tasks, notes, clipboard, XP. Keeps settings.") {
+                            dataRow(icon: "arrow.counterclockwise", label: "Reset All Data", color: DesignTokens.Colors.danger, description: "Wipes everything and starts fresh from Level 0.") {
                                 withAnimation(DesignTokens.Animation.viewTransition) {
                                     confirmingReset = true
-                                    confirmingFullRestart = false
-                                }
-                            }
-                        }
-
-                        Divider().background(DesignTokens.Colors.subtle)
-
-                        // Full restart
-                        if confirmingFullRestart {
-                            confirmationRow(
-                                message: "Wipe everything and start fresh from Level 0? This cannot be undone.",
-                                confirmLabel: "Full Restart",
-                                onConfirm: {
-                                    confirmingFullRestart = false
-                                    onFullRestart()
-                                },
-                                onCancel: { confirmingFullRestart = false }
-                            )
-                        } else {
-                            dataRow(icon: "leaf", label: "Full Restart \u{2014} Back to Seed", color: DesignTokens.Colors.danger, description: "Wipes everything and restarts fresh from Level 0. Cannot be undone.") {
-                                withAnimation(DesignTokens.Animation.viewTransition) {
-                                    confirmingFullRestart = true
-                                    confirmingReset = false
                                 }
                             }
                         }
@@ -199,7 +230,7 @@ struct InlineSettingsView: View {
                 }
             }
         }
-        .frame(maxHeight: 400)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     // MARK: - Components
@@ -284,7 +315,8 @@ struct InlineSettingsView: View {
             Spacer()
             HStack(spacing: DesignTokens.Spacing.xs) {
                 Button {
-                    onChange((hour - 1 + 24) % 24, minute)
+                    let totalMinutes = (hour * 60 + minute - 30 + 1440) % 1440
+                    onChange(totalMinutes / 60, totalMinutes % 60)
                 } label: {
                     Image(systemName: "minus.circle")
                         .font(.system(size: 16))
@@ -299,7 +331,8 @@ struct InlineSettingsView: View {
                     .frame(minWidth: 50, alignment: .center)
 
                 Button {
-                    onChange((hour + 1) % 24, minute)
+                    let totalMinutes = (hour * 60 + minute + 30) % 1440
+                    onChange(totalMinutes / 60, totalMinutes % 60)
                 } label: {
                     Image(systemName: "plus.circle")
                         .font(.system(size: 16))
@@ -421,7 +454,7 @@ struct InlineSettingsView: View {
     // MARK: - Update Row
 
     private var currentVersion: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.3.11"
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.3.12"
     }
 
     private var updateRow: some View {

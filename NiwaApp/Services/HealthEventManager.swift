@@ -14,6 +14,9 @@ final class HealthEventManager {
     private(set) var standingStartedAt: Date?
     private(set) var todayCreatineLogged: Bool = false
     private(set) var todayGymLogged: Bool = false
+    private(set) var todayCoffeeCount: Int = 0
+
+    private var dailyResetTimer: Timer?
 
     init(modelContext: ModelContext, gamificationEngine: GamificationEngine, profileManager: UserProfileManager) {
         self.modelContext = modelContext
@@ -22,6 +25,7 @@ final class HealthEventManager {
         loadTodayStats()
         resumeStandingSession()
         setupNotificationCallbacks()
+        scheduleDailyReset()
     }
 
     // MARK: - Water
@@ -101,12 +105,27 @@ final class HealthEventManager {
         todayGymLogged = true
     }
 
+    // MARK: - Coffee
+
+    func confirmCoffee() {
+        let event = HealthEvent(type: .coffee)
+        event.confirmedAt = Date()
+        modelContext.insert(event)
+        try? modelContext.save()
+
+        todayCoffeeCount += 1
+        if todayCoffeeCount <= XPConstants.coffeeMaxBeforePenalty {
+            gamificationEngine.awardXP(source: .coffee, amount: XPConstants.coffeeConfirm, context: modelContext)
+        } else {
+            gamificationEngine.deductXP(source: .coffee, amount: XPConstants.coffeePenalty, context: modelContext)
+        }
+    }
+
     // MARK: - Undo (once-daily items)
 
     func undoCreatine() {
         guard todayCreatineLogged else { return }
-        let calendar = Calendar.current
-        let startOfDay = calendar.startOfDay(for: Date())
+        let dayStart = Self.habitDayStart()
 
         let descriptor = FetchDescriptor<HealthEvent>(
             predicate: #Predicate<HealthEvent> { event in
@@ -115,7 +134,7 @@ final class HealthEventManager {
             sortBy: [SortDescriptor(\.confirmedAt, order: .reverse)]
         )
         if let events = try? modelContext.fetch(descriptor),
-           let event = events.first(where: { ($0.confirmedAt ?? .distantPast) >= startOfDay }) {
+           let event = events.first(where: { ($0.confirmedAt ?? .distantPast) >= dayStart }) {
             modelContext.delete(event)
             try? modelContext.save()
         }
@@ -126,8 +145,7 @@ final class HealthEventManager {
 
     func undoGym() {
         guard todayGymLogged else { return }
-        let calendar = Calendar.current
-        let startOfDay = calendar.startOfDay(for: Date())
+        let dayStart = Self.habitDayStart()
 
         let descriptor = FetchDescriptor<HealthEvent>(
             predicate: #Predicate<HealthEvent> { event in
@@ -136,7 +154,7 @@ final class HealthEventManager {
             sortBy: [SortDescriptor(\.confirmedAt, order: .reverse)]
         )
         if let events = try? modelContext.fetch(descriptor),
-           let event = events.first(where: { ($0.confirmedAt ?? .distantPast) >= startOfDay }) {
+           let event = events.first(where: { ($0.confirmedAt ?? .distantPast) >= dayStart }) {
             modelContext.delete(event)
             try? modelContext.save()
         }
@@ -147,9 +165,23 @@ final class HealthEventManager {
 
     // MARK: - Load/Resume
 
-    private func loadTodayStats() {
+    func reloadStats() {
+        loadTodayStats()
+    }
+
+    /// Daily habits reset at 7am, not midnight
+    static func habitDayStart(for date: Date = Date()) -> Date {
         let calendar = Calendar.current
-        let startOfDay = calendar.startOfDay(for: Date())
+        let startOfDay = calendar.startOfDay(for: date)
+        let sevenAM = calendar.date(byAdding: .hour, value: 7, to: startOfDay)!
+        // If it's before 7am, the habit day started yesterday at 7am
+        return date < sevenAM
+            ? calendar.date(byAdding: .day, value: -1, to: sevenAM)!
+            : sevenAM
+    }
+
+    private func loadTodayStats() {
+        let dayStart = Self.habitDayStart()
 
         let descriptor = FetchDescriptor<HealthEvent>(
             predicate: #Predicate<HealthEvent> { event in
@@ -160,12 +192,13 @@ final class HealthEventManager {
 
         let todayEvents = events.filter { event in
             guard let confirmed = event.confirmedAt else { return false }
-            return confirmed >= startOfDay
+            return confirmed >= dayStart
         }
 
         todayWaterCount = todayEvents.filter { $0.typeRaw == HealthEventType.water.rawValue }.count
         todayCreatineLogged = todayEvents.contains { $0.typeRaw == HealthEventType.creatine.rawValue }
         todayGymLogged = todayEvents.contains { $0.typeRaw == HealthEventType.gym.rawValue }
+        todayCoffeeCount = todayEvents.filter { $0.typeRaw == HealthEventType.coffee.rawValue }.count
     }
 
     private func resumeStandingSession() {
@@ -182,5 +215,29 @@ final class HealthEventManager {
     private func setupNotificationCallbacks() {
         // Callbacks are now wired in NiwaApp.init() to coordinate
         // between HealthEventManager and ReminderTimerManager
+    }
+
+    // MARK: - Daily Reset at 7am
+
+    private func scheduleDailyReset() {
+        dailyResetTimer?.invalidate()
+        let calendar = Calendar.current
+        let now = Date()
+        let startOfDay = calendar.startOfDay(for: now)
+        var next7am = calendar.date(byAdding: .hour, value: 7, to: startOfDay)!
+        if now >= next7am {
+            next7am = calendar.date(byAdding: .day, value: 1, to: next7am)!
+        }
+        let interval = next7am.timeIntervalSince(now)
+        dailyResetTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { [weak self] _ in
+            Task { @MainActor in
+                self?.performDailyReset()
+            }
+        }
+    }
+
+    private func performDailyReset() {
+        loadTodayStats()
+        scheduleDailyReset()
     }
 }

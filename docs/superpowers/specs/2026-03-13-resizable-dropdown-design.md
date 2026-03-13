@@ -1,12 +1,14 @@
 # Resizable Dropdown — Design Spec
 
+> **Status:** Implemented (revised). Original drag-handle approach replaced with expand/collapse toggle due to MenuBarExtra constraint crashes.
+
 ## Problem
 
 Niwa's dropdown has a fixed 600pt max height for the tasks/notes scroll area. Users with many tasks or long notes can't see enough content at once without scrolling.
 
-## Solution
+## Solution (Revised)
 
-Add a vertical-only drag handle at the bottom of the dropdown. Users drag down to reveal more content, drag up to shrink. Double-click to reset to default. Size persists across sessions via UserDefaults.
+Screen-percentage based heights with a simple expand/collapse toggle button in the bottom toolbar. Default: 30% of screen height. Expanded: 50%. The drag-to-resize handle was removed because animated constraint changes in `MenuBarExtra` windows caused `NSWindow._postWindowNeedsUpdateConstraints` crashes.
 
 ## Constraints
 

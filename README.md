@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  A native macOS menu bar app that combines a Pomodoro timer, task management, quick notes, clipboard history, and health reminders — all wrapped in a gamified leveling system where your virtual plant grows as you do.
+  A native macOS menu bar app that combines a focus timer, task management, quick notes, clipboard history, and health reminders — all wrapped in a gamified leveling system where your virtual plant grows as you do.
 </p>
 
 <p align="center">
@@ -55,13 +55,14 @@
 
 ## Features
 
-### Pomodoro Timer
-- Full state machine: Work → Short Break → Long Break → Idle
-- Configurable durations (1–120 min work, 1–60 min breaks)
+### Focus Timer
+- Simple commit-or-cancel focus sessions (no forced breaks or rounds)
+- Preset duration chips (default: 15 / 25 / 45 min) — customizable in settings
+- Custom duration stepper (1–120 min)
 - Date-based time tracking (no drift on sleep/wake)
-- Session counter ("2 of 4") with auto-progression
 - Circular progress ring with SF Mono countdown
-- **+25 XP** on work session completion
+- Daily focus streak dots
+- **+1 XP per minute** on session completion (e.g. 25 min = +25 XP)
 
 ### Task Management
 - Quick-add with Enter to submit
@@ -89,8 +90,12 @@
 - Smart scheduling: respects work hours and lunch breaks
 - Automatically pauses during lunch and outside work hours
 - Actionable macOS notifications with Done / Snooze (10 min)
-- Live standing timer with elapsed time tracking
-- **+10 XP** per health action completed
+- Live standing timer with elapsed time and milestone badges
+- Coffee tracking with penalty system (**+10 XP** per coffee, **-5 XP** after 3 per day)
+- Creatine and gym tracking (once daily, with undo)
+- **+10 XP** per water/stand/coffee, **+15 XP** creatine, **+30 XP** gym
+- Standing XP milestones: bonus XP at 10/20/30 min
+- All daily habits reset at 7am (not midnight)
 
 #### How Reminders Work
 
@@ -293,16 +298,16 @@ Settings are embedded inline in the dropdown — no separate window.
 
 | Section | Options |
 |---------|---------|
-| **⏱️ Timer** | Work duration, short break, long break, sessions before long break |
-| **💚 Health** | Water interval, standing interval |
+| **⏱️ Focus Timer** | Quick Pick Presets (editable list, 1–5 presets, 1–120 min each) |
+| **💚 Health** | Water interval, standing interval, reminders on/off |
 | **💼 Work Hours** | Start/end time (reminders only fire within) |
 | **🍜 Lunch** | Start/end time (reminders paused during) |
 | **🎨 Appearance** | System / Light / Dark theme |
 | **🪟 Window** | Always on top toggle |
-| **💾 Data** | Export JSON, Reset data, Full restart |
+| **💾 Data** | Export JSON, Reset All Data |
 
 > [!TIP]
-> **Full Restart** wipes everything and returns you to Level 0 with a fresh seed. Use **Reset All Data** to clear tasks/notes/XP while keeping your settings.
+> **Reset All Data** wipes everything — tasks, notes, XP, settings — and returns you to Level 0 with a fresh seed.
 
 ---
 
@@ -350,7 +355,10 @@ Niwa/
 │   │   ├── ClipboardMonitor.swift
 │   │   ├── HealthEventManager.swift
 │   │   ├── UserProfileManager.swift
-│   │   └── NotificationManager.swift
+│   │   ├── NotificationManager.swift
+│   │   ├── ReminderTimerManager.swift
+│   │   ├── SoundManager.swift
+│   │   └── UpdateChecker.swift
 │   ├── Views/                   # SwiftUI views
 │   │   ├── DropdownRootView.swift
 │   │   ├── Components/
@@ -370,8 +378,7 @@ Niwa/
 │   │   └── XPConstants.swift    # XP amounts, level formula
 │   ├── Engines/
 │   │   ├── GamificationEngine.swift
-│   │   ├── PomodoroTimerEngine.swift
-│   │   └── ReminderSchedulingEngine.swift
+│   │   └── FocusTimerEngine.swift
 │   └── Models/                  # SwiftData @Model entities
 │       ├── UserProfile.swift
 │       ├── NiwaTask.swift
@@ -392,7 +399,7 @@ Niwa/
 |----------|-----------|
 | **MenuBarExtra (.window)** | Native macOS menu bar dropdown, no Dock icon |
 | **SwiftData** | Modern persistence with @Query reactivity |
-| **Date-based timer** | No drift on sleep/wake — compares against wall clock |
+| **Date-based focus timer** | No drift on sleep/wake — compares against wall clock |
 | **Shared ModelContainer** | Single context across all managers prevents stale state |
 | **NSPanel floating window** | Non-activating, doesn't steal focus from other apps |
 | **XcodeGen** | Reproducible project file, clean diffs |

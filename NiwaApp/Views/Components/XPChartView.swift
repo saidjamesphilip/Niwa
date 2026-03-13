@@ -4,7 +4,7 @@ import SwiftData
 struct XPChartView: View {
     @Query private var xpEvents: [XPEvent]
 
-    private var last7DaysData: [(day: String, task: Int, timer: Int, note: Int, water: Int, stand: Int, creatine: Int, gym: Int)] {
+    private var last7DaysData: [(day: String, task: Int, timer: Int, note: Int, water: Int, coffee: Int, stand: Int, creatine: Int, gym: Int)] {
         let calendar = Calendar.current
         let startOfToday = calendar.startOfDay(for: Date())
 
@@ -24,6 +24,7 @@ struct XPChartView: View {
                 timer: dayEvents.filter { $0.source == .timer }.reduce(0) { $0 + $1.amount },
                 note: dayEvents.filter { $0.source == .note }.reduce(0) { $0 + $1.amount },
                 water: dayEvents.filter { $0.source == .water }.reduce(0) { $0 + $1.amount },
+                coffee: dayEvents.filter { $0.source == .coffee }.reduce(0) { $0 + $1.amount },
                 stand: dayEvents.filter { $0.source == .stand }.reduce(0) { $0 + $1.amount },
                 creatine: dayEvents.filter { $0.source == .creatine }.reduce(0) { $0 + $1.amount },
                 gym: dayEvents.filter { $0.source == .gym }.reduce(0) { $0 + $1.amount }
@@ -32,7 +33,7 @@ struct XPChartView: View {
     }
 
     private var maxDayTotal: Int {
-        max(last7DaysData.map { $0.task + $0.timer + $0.note + $0.water + $0.stand + $0.creatine + $0.gym }.max() ?? 1, 1)
+        max(last7DaysData.map { $0.task + $0.timer + $0.note + $0.water + $0.coffee + $0.stand + $0.creatine + $0.gym }.max() ?? 1, 1)
     }
 
     var body: some View {
@@ -50,6 +51,7 @@ struct XPChartView: View {
                             barSegment(value: day.creatine, color: Color(red: 224/255, green: 172/255, blue: 58/255))
                             barSegment(value: day.stand, color: DesignTokens.Colors.secondary.opacity(0.6))
                             barSegment(value: day.water, color: DesignTokens.Colors.secondary)
+                            barSegment(value: day.coffee, color: Color(red: 139/255, green: 90/255, blue: 43/255))
                             barSegment(value: day.note, color: DesignTokens.Colors.primary.opacity(0.5))
                             barSegment(value: day.timer, color: DesignTokens.Colors.primary.opacity(0.75))
                             barSegment(value: day.task, color: DesignTokens.Colors.primary.opacity(0.35))

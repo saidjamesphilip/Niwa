@@ -4,6 +4,43 @@ All notable changes to Niwa will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.3.12] — 2026-03-13
+
+### Added
+- Focus Timer replaces Pomodoro — pick a duration (preset or custom), commit or cancel, earn 1 XP per minute
+- Focus timer preset chips (default: 15/25/45 min) with custom duration stepper
+- Daily focus streak dots showing completed sessions
+- Coffee tracking habit (+10 XP per coffee, −5 XP penalty after 3 per day)
+- Demo tasks and note seeded on first launch and after reset
+- Garden Gate welcome screen with feature highlights and required name input
+- Zen-style level-up overlay (minimal, no confetti)
+- Editable Quick Pick Presets in settings (add/remove/adjust, max 5)
+- Icon-only health pills with info popover (? button explains each habit)
+- Standing XP milestones — bonus XP at 10/20/30 min thresholds
+- Creatine/gym undo with XP deduction (tap logged pill → confirm undo)
+- Expand/collapse button in bottom toolbar (+20% screen height)
+- Wider tab touch targets for Tasks/Notes switching
+
+### Changed
+- Dropdown height now uses percentage of screen height (30% default, 50% expanded) instead of fixed pixel values
+- Removed drag-to-resize handle — replaced with simple expand/collapse toggle
+- Settings and Sounds views now match main dashboard height exactly (using GeometryReader preference key)
+- Health pills redesigned as compact icon-only capsules (water, coffee, stand, creatine, gym)
+- Timer section in settings simplified from 4 Pomodoro fields to editable preset list
+- Reset consolidated into single "Reset All Data" function (removed separate Full Restart)
+- Notification system rewritten with timer-based polling (fixes spam bugs)
+- Daily habits now reset at 7am instead of midnight
+- Level-up overlay redesigned to zen minimal style (no confetti)
+- Welcome screen redesigned with feature highlights and torii gate icon
+- "Tap" terminology replaced with "click" throughout (macOS app)
+- Reset now fully stops timers, standing, and clears all state
+
+### Fixed
+- Settings and Sounds views no longer crash the app (removed withAnimation on MenuBarExtra view transitions)
+- Notification spam eliminated (replaced UNNotification scheduling with 60-second polling timer)
+- Note color cycling operator precedence bug
+- Reset now properly handles all timer states (focusing, complete, idle)
+
 ## [1.3.11] — 2026-03-13
 
 ### Added

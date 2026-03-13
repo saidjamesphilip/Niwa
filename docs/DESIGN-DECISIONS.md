@@ -4,6 +4,50 @@ Reference document for final design choices made during development. Use this wh
 
 ---
 
+## Focus Timer (improvements-and-qol)
+
+**Chosen: Simple commit-or-cancel focus sessions**
+
+- Replaced 5-state Pomodoro (idle/working/paused/shortBreak/longBreak) with 3-state focus timer (idle/focusing/complete)
+- Preset duration chips: configurable list (default 15/25/45 min), max 5 presets
+- Custom duration stepper: 1–120 min
+- No pausing, no breaks, no rounds — commit or cancel only
+- XP: 1 per minute of chosen duration (e.g. 25 min = +25 XP)
+- Auto-return to idle after 3 seconds on completion
+- Session persistence: resumes incomplete sessions across app restarts
+- Daily streak dots: one dot per completed session today
+
+**Rejected:** Keeping full Pomodoro — added complexity without value, users skipped breaks or found rigid structure frustrating.
+
+---
+
+## Dropdown Sizing (improvements-and-qol)
+
+**Chosen: Screen-percentage height with expand/collapse toggle**
+
+- Default height: 30% of visible screen height
+- Expanded height: 50% of visible screen height (toggle via chevron button in toolbar)
+- Settings and Sounds views match main dashboard height exactly via `GeometryReader` + `PreferenceKey`
+- Width fixed at 380pt
+
+**Rejected:** Drag-to-resize handle — caused constraint crashes in MenuBarExtra window during animated transitions. Replaced with simpler expand/collapse approach.
+
+---
+
+## MenuBarExtra Crash Fix (improvements-and-qol)
+
+**Problem:** Switching between main content ↔ settings/sounds views with `withAnimation` caused `NSWindow._postWindowNeedsUpdateConstraints` crash.
+
+**Fix:** Removed all `withAnimation` from settings/sounds view toggles. View transitions are now instant (no animation). The MenuBarExtra window style cannot handle animated constraint changes during view hierarchy swaps.
+
+---
+
+## Tab Touch Targets (improvements-and-qol)
+
+- Tasks/Notes segmented control now uses `md` vertical padding (up from `sm`) and `.contentShape(Rectangle())` for full-width tappable area
+
+---
+
 ## Task List (v1.3.11)
 
 **Chosen: Option F — Priority + Due Dates**
@@ -76,31 +120,32 @@ Sky:        rgb(100, 165, 210)
 
 ---
 
-## Health Status Pills (v1.3.11)
+## Health Status Pills (improvements-and-qol)
 
-**Layout:** Horizontal row of capsule-shaped pills in the dropdown
+**Layout:** Horizontal row of icon-only capsule pills with info popover
 
-| Pill | Icon | SF Symbol | Color | XP | Frequency |
-|------|------|-----------|-------|-----|-----------|
-| Water | Drop | `drop.fill` | Sage (#81B29A) | +10 | Multiple/day |
-| Stand | Figure | `figure.stand` | Sage (#81B29A) | +10 | Multiple/day |
-| Creatine | Bolt | `bolt.fill` | Amber (#E0AC3A) | +15 | Once/day |
-| Gym | Dumbbell | `dumbbell.fill` | Terracotta (#E07A5F) | +30 | Once/day |
+| Pill | SF Symbol | Color | XP | Frequency |
+|------|-----------|-------|-----|-----------|
+| Water | `drop.fill` | Sage (#81B29A) | +10 | Multiple/day |
+| Coffee | `cup.and.saucer.fill` | Brown (#8B5A2B) | +10 (−5 after 3) | Multiple/day |
+| Stand | `figure.stand` | Sage (#81B29A) | +10 + milestones | Multiple/day |
+| Creatine | `bolt.fill` | Amber (#E0AC3A) | +15 | Once/day |
+| Gym | `dumbbell.fill` | Terracotta (#E07A5F) | +30 | Once/day |
 
 **States:**
-- Available: full color, shows label text
-- Logged (once-daily items): dimmed (50% opacity), shows checkmark instead of label
-- Standing active: pulsing icon + elapsed timer + stop button
+- Water: icon only when 0, icon + count when > 0
+- Coffee: icon only when 0, icon + count when > 0. Pill turns terracotta after 3 (penalty warning)
+- Stand idle: icon only. Active: pulsing icon + elapsed timer + milestone badge
+- Creatine/Gym unlogged: icon only. Logged: icon dimmed (40% opacity)
+- Undo mode (creatine/gym): "Undo −XP" text, danger color, auto-dismiss after 3s
 
-**Tooltips (hover):**
-- Water: "Log water (+10 XP)"
-- Stand: "Start standing session (+10 XP)"
-- Creatine: "Log creatine (+15 XP) · Once daily" / "Creatine logged today"
-- Gym: "Log gym session (+30 XP) · Once daily" / "Gym logged today"
+**Standing milestones:** +5 XP at 10 min, +10 at 20 min, +15 at 30 min (cumulative badge shown)
 
-**Rejected icons:**
-- Creatine: pill capsule (pills.fill), flask (flask.fill)
-- Gym: runner (figure.run), flame (flame.fill)
+**Info popover:** "?" button reveals grid explaining each habit with XP values
+
+**Hover effects:** Lift 1px + brightness +15%, easeOut 0.2s
+
+**Undo flow:** Tap logged pill → shows "Undo −XP" confirmation → tap confirms → deducts XP and deletes event
 
 ---
 
@@ -130,7 +175,7 @@ Sky:        rgb(100, 165, 210)
 
 ---
 
-## XP Chart (v1.3.11)
+## XP Chart (v1.3.12)
 
 - Stacked bar chart, 7 days, 36px bar height
 - Source colors (top to bottom in stack):
@@ -138,6 +183,7 @@ Sky:        rgb(100, 165, 210)
   - Creatine: Amber
   - Stand: Sage (60% opacity)
   - Water: Sage
+  - Coffee: Brown (#8B5A2B)
   - Note: Primary (50% opacity)
   - Timer: Primary (75% opacity)
   - Task: Primary (35% opacity)
@@ -150,6 +196,57 @@ Sky:        rgb(100, 165, 210)
 - Inline confirmation: warning text + Cancel / Confirm buttons
 - In-place data reset without app restart
 - Success message banner with auto-navigate to dashboard after 1.5s
+
+---
+
+## Daily Habit Reset (v1.3.12)
+
+- All daily habits reset at **7am**, not midnight
+- Rationale: habits logged after midnight (e.g. 2am) should count toward the previous day
+- Timer fires at next 7am to auto-refresh stats while app is running
+- `HealthEventManager.habitDayStart()` calculates the boundary
+
+---
+
+## Welcome Screen (v1.3.12)
+
+**Chosen: Garden Gate (Option C)**
+
+- ⛩️ Torii gate icon as hero visual
+- Sage gradient header background
+- 4 feature highlights (timer, tasks, health, plant growth) with SF Symbol icons
+- Name field is **required** — button disabled until name entered
+- "Enter the garden" CTA in terracotta
+- No skip option, no `withAnimation` (MenuBarExtra safe)
+
+**Rejected:** Current (too minimal), Zen Minimal, Guided Onboarding (too heavy), Story Introduction
+
+---
+
+## Level-Up Overlay (v1.3.12)
+
+**Chosen: Zen Garden Minimal (Option C)**
+
+- Dark dimmed background (black 75% opacity)
+- Large plant (120pt) with subtle sage drop shadow
+- Thin horizontal rules framing the content
+- Light "LEVEL UP" label with 3pt letter spacing
+- Large thin-weight level number (48pt, light weight)
+- Sage-colored stage name
+- Fade-in entrance animation (easeOut 0.4s)
+- Plant stage evolution still animates on stage boundary crossings
+- Auto-dismiss after 3.5s or click anywhere
+
+**Rejected:** Sage Glow + Confetti (too busy), Warm Terracotta, Garden Bloom, Hanko Stamp
+
+---
+
+## Demo Content (v1.3.12)
+
+- 3 demo tasks seeded on first launch and after reset (no XP awarded)
+- 1 demo note with welcome text
+- Tasks show priority (high/medium/low) and due dates (today/tomorrow/next week)
+- Inserted directly into ModelContext, bypassing XP-awarding methods
 
 ---
 

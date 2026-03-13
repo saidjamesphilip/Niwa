@@ -19,9 +19,7 @@ struct ContentTabView: View {
             HStack(spacing: 0) {
                 ForEach(ContentTab.allCases, id: \.self) { tab in
                     Button {
-                        withAnimation(DesignTokens.Animation.viewTransition) {
-                            selectedTab = tab
-                        }
+                        selectedTab = tab
                     } label: {
                         Text(tab.rawValue)
                             .font(DesignTokens.Typography.captionFont)
@@ -31,13 +29,14 @@ struct ContentTabView: View {
                                     : DesignTokens.Colors.textSecondary
                             )
                             .frame(maxWidth: .infinity)
-                            .padding(.vertical, DesignTokens.Spacing.sm)
+                            .padding(.vertical, DesignTokens.Spacing.md)
                             .background(
                                 selectedTab == tab
                                     ? DesignTokens.Colors.backgroundSecondary
                                     : Color.clear
                             )
                             .clipShape(RoundedRectangle(cornerRadius: DesignTokens.CornerRadius.small))
+                            .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                 }

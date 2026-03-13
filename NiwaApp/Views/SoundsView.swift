@@ -76,7 +76,7 @@ struct SoundsView: View {
                 }
             }
         }
-        .frame(maxHeight: 400)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onAppear {
             soundsEnabled = profileManager.profile?.soundsEnabled ?? true
             volume = profileManager.profile?.soundVolume ?? 0.7

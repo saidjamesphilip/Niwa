@@ -24,11 +24,13 @@ final class UserProfile {
     var waterIntervalMinutes: Int
     var standIntervalMinutes: Int
 
-    // Pomodoro
-    var pomoDurationMinutes: Int
-    var shortBreakMinutes: Int
-    var longBreakMinutes: Int
-    var sessionsBeforeLongBreak: Int
+    // Focus Timer (stored as comma-separated string for SwiftData compatibility)
+    var focusPresetsRaw: String
+
+    var focusPresetMinutes: [Int] {
+        get { focusPresetsRaw.split(separator: ",").compactMap { Int($0) } }
+        set { focusPresetsRaw = newValue.map(String.init).joined(separator: ",") }
+    }
 
     // Floating window
     var floatingWindowEnabled: Bool
@@ -70,10 +72,7 @@ final class UserProfile {
         self.waterIntervalMinutes = XPConstants.defaultWaterIntervalMinutes
         self.standIntervalMinutes = XPConstants.defaultStandIntervalMinutes
 
-        self.pomoDurationMinutes = XPConstants.defaultWorkMinutes
-        self.shortBreakMinutes = XPConstants.defaultShortBreakMinutes
-        self.longBreakMinutes = XPConstants.defaultLongBreakMinutes
-        self.sessionsBeforeLongBreak = XPConstants.defaultSessionsBeforeLongBreak
+        self.focusPresetsRaw = XPConstants.defaultFocusPresets.map(String.init).joined(separator: ",")
 
         self.floatingWindowEnabled = false
         self.alwaysOnTop = false

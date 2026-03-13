@@ -2,19 +2,19 @@ import Foundation
 
 enum XPConstants {
     // XP award amounts per action
-    static let pomodoroComplete: Int = 25
+    static let focusXPPerMinute: Int = 1
     static let taskComplete: Int = 15
     static let noteCreate: Int = 5
     static let waterConfirm: Int = 10
     static let standComplete: Int = 10
     static let creatineConfirm: Int = 15
     static let gymConfirm: Int = 30
+    static let coffeeConfirm: Int = 10
+    static let coffeePenalty: Int = 5
+    static let coffeeMaxBeforePenalty: Int = 3
 
-    // Pomodoro defaults
-    static let defaultWorkMinutes: Int = 25
-    static let defaultShortBreakMinutes: Int = 5
-    static let defaultLongBreakMinutes: Int = 15
-    static let defaultSessionsBeforeLongBreak: Int = 4
+    // Focus timer defaults
+    static let defaultFocusPresets: [Int] = [15, 25, 45]
 
     // Health reminder defaults
     static let defaultWaterIntervalMinutes: Int = 30

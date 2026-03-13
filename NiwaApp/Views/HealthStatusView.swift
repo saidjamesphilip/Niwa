@@ -6,6 +6,7 @@ private enum PillColor {
     static let sage  = Color(red: 129/255, green: 178/255, blue: 154/255)
     static let amber = Color(red: 224/255, green: 172/255, blue: 58/255)
     static let terra = Color(red: 224/255, green: 122/255, blue: 95/255)
+    static let brown = Color(red: 139/255, green: 90/255, blue: 43/255)
 }
 
 // MARK: - Undo Target
@@ -34,7 +35,7 @@ struct HealthStatusView: View {
                     .tracking(0.8)
 
                 if !showInfo {
-                    Text("· tap to log")
+                    Text("· click to log")
                         .font(.system(size: 10))
                         .foregroundStyle(DesignTokens.Colors.textMuted.opacity(0.4))
                 }
@@ -76,11 +77,12 @@ struct HealthStatusView: View {
             }
             .padding(.horizontal, DesignTokens.Spacing.lg)
             .padding(.top, DesignTokens.Spacing.sm)
-            .padding(.bottom, 2)
+            .padding(.bottom, DesignTokens.Spacing.xs)
 
             // Pills row
             HStack(spacing: DesignTokens.Spacing.sm) {
                 waterPill
+                coffeePill
                 standPill
                 creatinePill
                 gymPill
@@ -121,6 +123,36 @@ struct HealthStatusView: View {
               ? "Water: \(healthManager.todayWaterCount) today · +\(XPConstants.waterConfirm) XP"
               : "Log water · +\(XPConstants.waterConfirm) XP · unlimited")
         .accessibilityLabel("Water: \(healthManager.todayWaterCount). Tap to log water.")
+    }
+
+    // MARK: - Coffee Pill
+
+    private var coffeePill: some View {
+        let count = healthManager.todayCoffeeCount
+        let overLimit = count >= XPConstants.coffeeMaxBeforePenalty
+        let pillColor = overLimit ? PillColor.terra : PillColor.brown
+
+        return IconPill(color: pillColor, action: { healthManager.confirmCoffee() }) {
+            if count > 0 {
+                HStack(spacing: 4) {
+                    Image(systemName: "cup.and.saucer.fill")
+                        .font(.system(size: 11))
+                    Text("\(count)")
+                        .font(.system(size: 11, weight: .semibold))
+                }
+            } else {
+                Image(systemName: "cup.and.saucer.fill")
+                    .font(.system(size: 11))
+            }
+        }
+        .help(
+            count == 0
+                ? "Log coffee · +\(XPConstants.coffeeConfirm) XP · max \(XPConstants.coffeeMaxBeforePenalty) before penalty"
+                : overLimit
+                    ? "Coffee: \(count) today · −\(XPConstants.coffeePenalty) XP per extra"
+                    : "Coffee: \(count) today · +\(XPConstants.coffeeConfirm) XP"
+        )
+        .accessibilityLabel("Coffee: \(count). Click to log coffee.")
     }
 
     // MARK: - Stand Pill
@@ -247,7 +279,7 @@ struct HealthStatusView: View {
                 .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(DesignTokens.Colors.textPrimary)
 
-            Text("Tap icons to log activities and earn XP. Build consistency to grow your plant.")
+            Text("Click icons to log activities and earn XP. Build consistency to grow your plant.")
                 .font(.system(size: 11))
                 .foregroundStyle(DesignTokens.Colors.textSecondary)
                 .lineSpacing(2)
@@ -261,6 +293,18 @@ struct HealthStatusView: View {
                         .font(.system(size: 11))
                         .foregroundStyle(DesignTokens.Colors.textSecondary)
                     Text("+\(XPConstants.waterConfirm) XP each")
+                        .font(.system(size: 11))
+                        .foregroundStyle(DesignTokens.Colors.textMuted)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                }
+                GridRow {
+                    Image(systemName: "cup.and.saucer.fill")
+                        .font(.system(size: 11))
+                        .foregroundStyle(PillColor.brown)
+                    Text("Coffee")
+                        .font(.system(size: 11))
+                        .foregroundStyle(DesignTokens.Colors.textSecondary)
+                    Text("+\(XPConstants.coffeeConfirm) XP · −\(XPConstants.coffeePenalty) after \(XPConstants.coffeeMaxBeforePenalty)")
                         .font(.system(size: 11))
                         .foregroundStyle(DesignTokens.Colors.textMuted)
                         .frame(maxWidth: .infinity, alignment: .trailing)
@@ -376,9 +420,9 @@ private struct IconPill<Label: View>: View {
         Button(action: action) {
             label()
                 .foregroundStyle(color)
-                .frame(minWidth: 20, minHeight: 16)
-                .padding(.vertical, 5)
-                .padding(.horizontal, 8)
+                .frame(minWidth: 28, minHeight: 24)
+                .padding(.vertical, 6)
+                .padding(.horizontal, 10)
                 .background(
                     Capsule()
                         .fill(color.opacity(0.12))
@@ -432,9 +476,9 @@ private struct UndoableIconPill: View {
             }
             .foregroundStyle(isUndoMode ? DesignTokens.Colors.danger : color)
             .opacity(logged && !isUndoMode ? 0.4 : 1.0)
-            .frame(minWidth: 20, minHeight: 16)
-            .padding(.vertical, 5)
-            .padding(.horizontal, isUndoMode ? 10 : 8)
+            .frame(minWidth: 28, minHeight: 24)
+            .padding(.vertical, 6)
+            .padding(.horizontal, isUndoMode ? 10 : 10)
             .background(
                 Capsule()
                     .fill(

@@ -10,7 +10,7 @@ struct NiwaApp: App {
     let appErrorState: AppErrorState
     let gamificationEngine: GamificationEngine
     let taskManager: TaskManager
-    let timerEngine: PomodoroTimerEngine
+    let timerEngine: FocusTimerEngine
     let noteManager: NoteManager
     let profileManager: UserProfileManager
     let healthManager: HealthEventManager
@@ -56,7 +56,7 @@ struct NiwaApp: App {
         let engine = GamificationEngine(modelContext: context)
         gamificationEngine = engine
         taskManager = TaskManager(modelContext: context, gamificationEngine: engine, appErrorState: errorState)
-        timerEngine = PomodoroTimerEngine(modelContext: context, gamificationEngine: engine)
+        timerEngine = FocusTimerEngine(modelContext: context, gamificationEngine: engine)
         noteManager = NoteManager(modelContext: context, gamificationEngine: engine, appErrorState: errorState)
 
         let profMgr = UserProfileManager(modelContext: context)
@@ -134,31 +134,17 @@ struct NiwaApp: App {
 }
 
 struct MenuBarIcon: View {
-    let timerEngine: PomodoroTimerEngine
+    let timerEngine: FocusTimerEngine
 
     private var isActive: Bool {
-        timerEngine.state != .idle
-    }
-
-    private var isPaused: Bool {
-        timerEngine.state == .paused
-    }
-
-    private var isBreak: Bool {
-        timerEngine.state == .shortBreak || timerEngine.state == .longBreak
-    }
-
-    private var isUrgent: Bool {
-        timerEngine.remainingSeconds < 180 && timerEngine.remainingSeconds > 0
+        timerEngine.state == .focusing
     }
 
     private var timerColor: Color {
-        if isUrgent {
-            return Color(red: 224/255, green: 122/255, blue: 95/255) // Niwa primary/terracotta
-        } else if isBreak {
-            return Color(red: 90/255, green: 200/255, blue: 250/255) // Break blue
+        if timerEngine.remainingSeconds < 180 && timerEngine.remainingSeconds > 0 {
+            return Color(red: 224/255, green: 122/255, blue: 95/255)
         } else {
-            return Color(red: 76/255, green: 217/255, blue: 100/255) // Focus green
+            return Color(red: 76/255, green: 217/255, blue: 100/255)
         }
     }
 
@@ -172,7 +158,6 @@ struct MenuBarIcon: View {
                     Text(timerEngine.formattedTime)
                         .font(.system(size: 10, weight: .medium, design: .monospaced))
                         .monospacedDigit()
-                        .foregroundStyle(isPaused ? .secondary : .primary)
 
                     GeometryReader { geo in
                         ZStack(alignment: .leading) {
