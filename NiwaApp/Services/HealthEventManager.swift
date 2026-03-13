@@ -61,7 +61,16 @@ final class HealthEventManager {
             try? modelContext.save()
         }
 
-        gamificationEngine.awardXP(source: .stand, amount: XPConstants.standComplete, context: modelContext)
+        let duration = Date().timeIntervalSince(startTime)
+        let minutes = Int(duration / 60)
+        var totalXP = XPConstants.standComplete  // base 10 XP
+        for milestone in XPConstants.standMilestones {
+            if minutes >= milestone.minutes {
+                totalXP += milestone.bonus
+            }
+        }
+        totalXP = min(totalXP, XPConstants.standMaxXP)
+        gamificationEngine.awardXP(source: .stand, amount: totalXP, context: modelContext)
         isStanding = false
         standingStartedAt = nil
     }
@@ -90,6 +99,50 @@ final class HealthEventManager {
 
         gamificationEngine.awardXP(source: .gym, amount: XPConstants.gymConfirm, context: modelContext)
         todayGymLogged = true
+    }
+
+    // MARK: - Undo (once-daily items)
+
+    func undoCreatine() {
+        guard todayCreatineLogged else { return }
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: Date())
+
+        let descriptor = FetchDescriptor<HealthEvent>(
+            predicate: #Predicate<HealthEvent> { event in
+                event.typeRaw == "creatine" && event.confirmedAt != nil
+            },
+            sortBy: [SortDescriptor(\.confirmedAt, order: .reverse)]
+        )
+        if let events = try? modelContext.fetch(descriptor),
+           let event = events.first(where: { ($0.confirmedAt ?? .distantPast) >= startOfDay }) {
+            modelContext.delete(event)
+            try? modelContext.save()
+        }
+
+        gamificationEngine.deductXP(source: .creatine, amount: XPConstants.creatineConfirm, context: modelContext)
+        todayCreatineLogged = false
+    }
+
+    func undoGym() {
+        guard todayGymLogged else { return }
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: Date())
+
+        let descriptor = FetchDescriptor<HealthEvent>(
+            predicate: #Predicate<HealthEvent> { event in
+                event.typeRaw == "gym" && event.confirmedAt != nil
+            },
+            sortBy: [SortDescriptor(\.confirmedAt, order: .reverse)]
+        )
+        if let events = try? modelContext.fetch(descriptor),
+           let event = events.first(where: { ($0.confirmedAt ?? .distantPast) >= startOfDay }) {
+            modelContext.delete(event)
+            try? modelContext.save()
+        }
+
+        gamificationEngine.deductXP(source: .gym, amount: XPConstants.gymConfirm, context: modelContext)
+        todayGymLogged = false
     }
 
     // MARK: - Load/Resume
