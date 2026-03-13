@@ -18,8 +18,8 @@ struct ResizeDragHandle: View {
 
     var body: some View {
         Rectangle()
-            .fill(isHovered ? DesignTokens.Colors.secondary.opacity(0.08) : Color.clear)
-            .frame(height: 8)
+            .fill(isHovered ? DesignTokens.Colors.secondary.opacity(0.1) : Color.clear)
+            .frame(height: 12)
             .overlay {
                 RoundedRectangle(cornerRadius: 1.5)
                     .fill(
@@ -38,7 +38,7 @@ struct ResizeDragHandle: View {
                     NSCursor.pop()
                 }
             }
-            .gesture(
+            .highPriorityGesture(
                 DragGesture()
                     .onChanged { value in
                         if dragStartHeight == nil {

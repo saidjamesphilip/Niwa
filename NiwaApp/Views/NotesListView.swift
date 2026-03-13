@@ -119,7 +119,7 @@ struct NotesListView: View {
                     .padding(.horizontal, DesignTokens.Spacing.xs)
                     .padding(.vertical, DesignTokens.Spacing.xs)
                 }
-                .frame(maxHeight: contentMaxHeight)
+                .frame(height: contentMaxHeight)
             }
         }
     }
