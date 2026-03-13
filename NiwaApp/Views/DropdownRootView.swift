@@ -2,6 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct DropdownRootView: View {
+    let appErrorState: AppErrorState
     let gamificationEngine: GamificationEngine
     let timerEngine: PomodoroTimerEngine
     let healthManager: HealthEventManager
@@ -128,6 +129,12 @@ struct DropdownRootView: View {
 
     private var mainContent: some View {
         VStack(spacing: 0) {
+            if let message = appErrorState.bannerMessage {
+                ErrorBannerView(message: message) {
+                    appErrorState.dismiss()
+                }
+            }
+
             HeroView(engine: timerEngine)
 
             Divider()

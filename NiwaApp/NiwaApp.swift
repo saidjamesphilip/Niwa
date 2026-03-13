@@ -7,6 +7,7 @@ struct NiwaApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     let modelContainer: ModelContainer
+    let appErrorState: AppErrorState
     let gamificationEngine: GamificationEngine
     let taskManager: TaskManager
     let timerEngine: PomodoroTimerEngine
@@ -31,15 +32,31 @@ struct NiwaApp: App {
         let profiles = (try? context.fetch(descriptor)) ?? []
         if profiles.isEmpty {
             context.insert(UserProfile())
-            try? context.save()
+            do {
+                try context.save()
+            } catch {
+                // Retry once
+                do {
+                    try context.save()
+                } catch {
+                    print("[NiwaApp] UserProfile seed failed: \(error)")
+                }
+            }
+            // Verify it persisted
+            let verify = (try? context.fetch(descriptor)) ?? []
+            if verify.isEmpty {
+                print("[NiwaApp] WARNING: UserProfile not persisted, running in degraded mode")
+            }
         }
 
         // Create all managers
+        let errorState = AppErrorState()
+        appErrorState = errorState
         let engine = GamificationEngine(modelContext: context)
         gamificationEngine = engine
-        taskManager = TaskManager(modelContext: context, gamificationEngine: engine)
+        taskManager = TaskManager(modelContext: context, gamificationEngine: engine, appErrorState: errorState)
         timerEngine = PomodoroTimerEngine(modelContext: context, gamificationEngine: engine)
-        noteManager = NoteManager(modelContext: context, gamificationEngine: engine)
+        noteManager = NoteManager(modelContext: context, gamificationEngine: engine, appErrorState: errorState)
 
         let profMgr = UserProfileManager(modelContext: context)
         profileManager = profMgr
@@ -63,6 +80,7 @@ struct NiwaApp: App {
     var body: some Scene {
         MenuBarExtra {
             DropdownRootView(
+                appErrorState: appErrorState,
                 gamificationEngine: gamificationEngine,
                 timerEngine: timerEngine,
                 healthManager: healthManager,
