@@ -18,7 +18,7 @@ final class NoteManager: ObservableObject {
     static let noteColorCount = 5
 
     func createNote(content: String = "") -> NiwaNote {
-        let nextColor = (notes.first?.colorIndex ?? -1 + 1) % Self.noteColorCount
+        let nextColor = ((notes.first?.colorIndex ?? -1) + 1) % Self.noteColorCount
         let note = NiwaNote(content: content, colorIndex: nextColor)
         modelContext.insert(note)
         save()
