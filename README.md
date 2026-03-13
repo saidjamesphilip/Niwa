@@ -177,6 +177,11 @@ brew install --cask saidjamesphilip/tap/niwa
 
 To update: `brew upgrade niwa`
 
+> **Upgrade error?** If you see "App source not there", run:
+> ```bash
+> brew uninstall --cask --force niwa && brew install --cask saidjamesphilip/tap/niwa
+> ```
+
 ### Quick Install via Terminal
 
 ```bash
