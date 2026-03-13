@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		007C30FD9EA0908C0B6CD860 /* FloatingWindowContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3C4CAADC04A7A9F337F14F /* FloatingWindowContentView.swift */; };
 		039CC0A32D3814BBA72EFF2A /* HealthEventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02AE0A8C96ED657C6985C00A /* HealthEventManager.swift */; };
 		083E765B3D38642F9C114927 /* HealthEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5DA083410BC36CE388B1062 /* HealthEvent.swift */; };
 		0A085FD70618F2083ACA865D /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D08A3FE8E59157A567F6491 /* TimerView.swift */; };
 		0DD85692C2B71305BBFD9B52 /* ReminderSchedulingEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB685F52334FDB495292915 /* ReminderSchedulingEngine.swift */; };
+		0ECDEE6D8B53E53954750147 /* TinyShimmer.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 3D8584FC2518EBF15E243EF1 /* TinyShimmer.aiff */; };
+		10156CF0FD0ADAEEFCA4769C /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB5902F76EA29378261E627 /* SoundManager.swift */; };
 		1AA23E73E7C8232162CCB78F /* NiwaTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80E86A5880D073343AF7E0E0 /* NiwaTask.swift */; };
 		1DB6E7DC76A0E5DBD31910B0 /* NiwaNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86F29BB508E5620DB33CC1A /* NiwaNote.swift */; };
 		1DEA2AE793DBE3D65CC14B13 /* HealthEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5DA083410BC36CE388B1062 /* HealthEvent.swift */; };
@@ -25,36 +26,50 @@
 		30358D0DEAC0C549F61711D4 /* NoteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50996E5D2B13383B3BF11C5 /* NoteManager.swift */; };
 		39A67A9F1426A4B03DBD42DA /* XPEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A20ACD99DF0FB0C70BC12F2 /* XPEvent.swift */; };
 		3C412664AB139F208F0458BB /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5E508CE0F53CD071839921 /* DesignTokens.swift */; };
+		3CBA84924326FDED817C083C /* SoundsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6595E9D29271F6D152F44035 /* SoundsView.swift */; };
 		41322B50BF4DF26DA410B0BD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44915DBBEF147EB80E365AE /* AppDelegate.swift */; };
 		428FA7ABB4AC460B36462C09 /* TimerSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077D9A2FEB38FB0CEE420C6B /* TimerSession.swift */; };
+		44CC329D27DAE17253F0F9BE /* GentleBell.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 5169BF3FF9BF2821128068DA /* GentleBell.aiff */; };
+		4D3F4A01C6392A209C624FFA /* GardenFanfare.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 902335D07DBA830B5CB63A58 /* GardenFanfare.aiff */; };
 		4D8046388C3122D2B112A0F1 /* WidgetXPSparkline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1D0AF11A5557C357D9DABD /* WidgetXPSparkline.swift */; };
+		4DED95F1EFA298C5936C13E8 /* SoftTick.aiff in Resources */ = {isa = PBXBuildFile; fileRef = EB6D2E85E995F04C6B5C927F /* SoftTick.aiff */; };
 		4F10543E5F4A02925B924966 /* UpdateChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FC73502E44C3C91CCA48FA /* UpdateChecker.swift */; };
 		4F4BBBB7BE3691A2EB5C2D98 /* PomodoroTimerEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115C2579873489427E00F0F9 /* PomodoroTimerEngine.swift */; };
 		520D0F70C39B2F83806A1485 /* NotesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57F556F494D0EC1C104F4F7 /* NotesListView.swift */; };
+		5631F270F1717E20335C2C30 /* RisingTone.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 0F875F0DDDC1DF0EB913AE81 /* RisingTone.aiff */; };
 		5DC7F4A04126CD65326D188F /* ContentTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA565B3DCF0E8FD3A5D3EA4 /* ContentTabView.swift */; };
+		5DD4C6B970123C460C37BAF8 /* DoubleChime.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 24C59A1EF691CBDE32D66B6D /* DoubleChime.aiff */; };
 		6256DE88BE1ED960BBB6A1F5 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC78BC81E3FF693C53D02C16 /* UserProfile.swift */; };
 		6832D447EFE2FF57E9251629 /* GamificationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CFC84AF338148B638DC065 /* GamificationEngine.swift */; };
 		6C89308B5A85479F30B3DEF1 /* TaskListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0B99115A2E9F236F56C66E /* TaskListView.swift */; };
-		7107CAA88559324CAADC6175 /* FloatingWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7A231F1358364A226B680E /* FloatingWindowController.swift */; };
 		72948E25DA91449D598BB1A6 /* ClipboardEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B5FDD9C0C7C67C98ED2434 /* ClipboardEntry.swift */; };
 		7451072E2FF24DC8CB54A1AB /* GamificationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CFC84AF338148B638DC065 /* GamificationEngine.swift */; };
+		74AEC4E923C162916D60F6FB /* WaterDrop.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 30AEC19C5C5C5758F565676E /* WaterDrop.aiff */; };
+		7B64F9D7267CC555A571198B /* SoftPop.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 4EE3DB9B4B33789E241414F8 /* SoftPop.aiff */; };
 		7E214006FFE25354701EE7A4 /* NiwaWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C68D4DE8A47D3694480CA399 /* NiwaWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8110C5D74F7CF71233AD7903 /* ModelContainerSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C5264BCDFD7880F7216D02 /* ModelContainerSetup.swift */; };
+		821A13338A58C3396BE8AFAF /* GardenBird.aiff in Resources */ = {isa = PBXBuildFile; fileRef = AAF8B4A08C641A26DC00804E /* GardenBird.aiff */; };
 		8370D1CBEEBA551D8F393742 /* HeroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED8905B142AE85F9D594B8B /* HeroView.swift */; };
+		8DB71070A59D0C74317105A9 /* Bloom.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 5E4EB15D22106089BB5975CA /* Bloom.aiff */; };
+		8DC06F7FC4DA87297CAACC7C /* GreetingBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9898728F25E9EE852B7689CF /* GreetingBanner.swift */; };
 		90454112D99E84A7E15E49A0 /* SmallWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA703A690F20CC57F0DCF5D0 /* SmallWidgetView.swift */; };
 		9421C1086727FED529B1CD93 /* InlineSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE26E8D30CCB1954D071CB58 /* InlineSettingsView.swift */; };
 		98BF570CD379907D7928C9CA /* NiwaWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E88D7F762A43CD227F102B3F /* NiwaWidgetBundle.swift */; };
 		9950D7C52D91B13FDA5422D9 /* PlantView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01FEF20F0630E3EC42E6F7D /* PlantView.swift */; };
+		9C83DCFFC8F172091C2402F8 /* WelcomeOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04B51BD1B239E8E8D907CBB /* WelcomeOverlay.swift */; };
 		9EB3FE90D8CE604EB1B67619 /* ClipboardEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B5FDD9C0C7C67C98ED2434 /* ClipboardEntry.swift */; };
 		A22C404F0D4ED5A62D2498CE /* NiwaWidgetEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B9594A73F5D1D20C5656B11 /* NiwaWidgetEntry.swift */; };
 		A5717DCDDF3A6B65E7B9F01E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E333EA4AD20CF39D23903B75 /* Assets.xcassets */; };
 		AF2A382E83B3FB0618EDA5F6 /* NiwaTimelineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A69D63225294540599FA9C6 /* NiwaTimelineProvider.swift */; };
 		B1CF432B0FFA67ECDFA681EC /* DropdownRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776AA5336122BCDB0E79033E /* DropdownRootView.swift */; };
+		B2C021C8D0279EA50E987782 /* MicroDing.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 32E51A01E310EF668BE39B89 /* MicroDing.aiff */; };
+		B30D444653FDFA8F7659AA5C /* WoodBlock.aiff in Resources */ = {isa = PBXBuildFile; fileRef = F43873D8700EB8C1C148F73A /* WoodBlock.aiff */; };
 		B6693D40728580E571C672D2 /* MediumWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C32A65BF7B5F815F0E6EFD /* MediumWidgetView.swift */; };
 		BA5C975A65038EB6EC557BBA /* PomodoroTimerEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115C2579873489427E00F0F9 /* PomodoroTimerEngine.swift */; };
 		BC4C6582D2B4269DA83FDCF3 /* TimerSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077D9A2FEB38FB0CEE420C6B /* TimerSession.swift */; };
 		BE65F536C86CE728E1473A48 /* NoteEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873ED7C152B18D4246C2EFFE /* NoteEditorView.swift */; };
 		C0236E3C10232FD174A68E12 /* UserProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E6D1A1506A6845C9574C8A /* UserProfileManager.swift */; };
+		C1120376BAD08DD4DC6879C9 /* SoftDoubleTap.aiff in Resources */ = {isa = PBXBuildFile; fileRef = F56F0921717681A5A0E2BF39 /* SoftDoubleTap.aiff */; };
 		C29712DC891D37C39B53C650 /* XPBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A97994EAE89153B1FD0429 /* XPBarView.swift */; };
 		C60600581E0E6C7B1E8C010D /* NiwaTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80E86A5880D073343AF7E0E0 /* NiwaTask.swift */; };
 		C7C460BBBC4FBA295EAE0EEF /* XPConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89825B6502E06090F6AEBC28 /* XPConstants.swift */; };
@@ -65,6 +80,7 @@
 		DCEBE36E2FF853A299A73376 /* XPEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A20ACD99DF0FB0C70BC12F2 /* XPEvent.swift */; };
 		DEE1DC523DBCF6AAF2CB0B5B /* ClipboardMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1EC0D515E4A6E9C77C26456 /* ClipboardMonitor.swift */; };
 		E511BD7573FE0AD26F313884 /* ClipboardHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8237E4B7E3520ED8D75418DB /* ClipboardHistoryView.swift */; };
+		EA6BCE707D14F951F86696A1 /* StringPluck.aiff in Resources */ = {isa = PBXBuildFile; fileRef = CC035467AC2EDECA083F30B6 /* StringPluck.aiff */; };
 		EE573789BE75E865FE59601A /* TaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B5EC57DA88D66031E4AF60 /* TaskManager.swift */; };
 		F02C8A541653229490E5EBAD /* LevelUpOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616A470092FAF68F68E1AB6F /* LevelUpOverlay.swift */; };
 		F319F2680CE5FBA62D4E9E90 /* LargeWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE41CAF16405364AF6DAE9CB /* LargeWidgetView.swift */; };
@@ -100,20 +116,28 @@
 		02AE0A8C96ED657C6985C00A /* HealthEventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthEventManager.swift; sourceTree = "<group>"; };
 		077D9A2FEB38FB0CEE420C6B /* TimerSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerSession.swift; sourceTree = "<group>"; };
 		0C1D0AF11A5557C357D9DABD /* WidgetXPSparkline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetXPSparkline.swift; sourceTree = "<group>"; };
+		0F875F0DDDC1DF0EB913AE81 /* RisingTone.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = RisingTone.aiff; sourceTree = "<group>"; };
 		100414349BC7E0D1374CEE51 /* HealthStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthStatusView.swift; sourceTree = "<group>"; };
 		111E9AB4204A7A5CDFB699AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		115C2579873489427E00F0F9 /* PomodoroTimerEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PomodoroTimerEngine.swift; sourceTree = "<group>"; };
 		246B3802807C6345CF8E8AED /* NiwaWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NiwaWidget.entitlements; sourceTree = "<group>"; };
+		24C59A1EF691CBDE32D66B6D /* DoubleChime.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = DoubleChime.aiff; sourceTree = "<group>"; };
 		2E87A5920DB12AE735E192E0 /* NiwaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiwaApp.swift; sourceTree = "<group>"; };
+		30AEC19C5C5C5758F565676E /* WaterDrop.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = WaterDrop.aiff; sourceTree = "<group>"; };
+		32E51A01E310EF668BE39B89 /* MicroDing.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = MicroDing.aiff; sourceTree = "<group>"; };
 		3A69D63225294540599FA9C6 /* NiwaTimelineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiwaTimelineProvider.swift; sourceTree = "<group>"; };
 		3D08A3FE8E59157A567F6491 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
-		3D3C4CAADC04A7A9F337F14F /* FloatingWindowContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingWindowContentView.swift; sourceTree = "<group>"; };
-		3E7A231F1358364A226B680E /* FloatingWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingWindowController.swift; sourceTree = "<group>"; };
+		3D8584FC2518EBF15E243EF1 /* TinyShimmer.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = TinyShimmer.aiff; sourceTree = "<group>"; };
+		4AB5902F76EA29378261E627 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
 		4B9594A73F5D1D20C5656B11 /* NiwaWidgetEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiwaWidgetEntry.swift; sourceTree = "<group>"; };
+		4EE3DB9B4B33789E241414F8 /* SoftPop.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = SoftPop.aiff; sourceTree = "<group>"; };
+		5169BF3FF9BF2821128068DA /* GentleBell.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = GentleBell.aiff; sourceTree = "<group>"; };
 		58B5FDD9C0C7C67C98ED2434 /* ClipboardEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardEntry.swift; sourceTree = "<group>"; };
 		59712553F7C61E9507E1A609 /* NiwaApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NiwaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B5E508CE0F53CD071839921 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
+		5E4EB15D22106089BB5975CA /* Bloom.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = Bloom.aiff; sourceTree = "<group>"; };
 		616A470092FAF68F68E1AB6F /* LevelUpOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelUpOverlay.swift; sourceTree = "<group>"; };
+		6595E9D29271F6D152F44035 /* SoundsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundsView.swift; sourceTree = "<group>"; };
 		776AA5336122BCDB0E79033E /* DropdownRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownRootView.swift; sourceTree = "<group>"; };
 		7A0B99115A2E9F236F56C66E /* TaskListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListView.swift; sourceTree = "<group>"; };
 		7A20ACD99DF0FB0C70BC12F2 /* XPEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPEvent.swift; sourceTree = "<group>"; };
@@ -123,18 +147,23 @@
 		873ED7C152B18D4246C2EFFE /* NoteEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteEditorView.swift; sourceTree = "<group>"; };
 		89825B6502E06090F6AEBC28 /* XPConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPConstants.swift; sourceTree = "<group>"; };
 		8DB685F52334FDB495292915 /* ReminderSchedulingEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderSchedulingEngine.swift; sourceTree = "<group>"; };
+		902335D07DBA830B5CB63A58 /* GardenFanfare.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = GardenFanfare.aiff; sourceTree = "<group>"; };
 		96C32A65BF7B5F815F0E6EFD /* MediumWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediumWidgetView.swift; sourceTree = "<group>"; };
+		9898728F25E9EE852B7689CF /* GreetingBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreetingBanner.swift; sourceTree = "<group>"; };
 		9ED8905B142AE85F9D594B8B /* HeroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroView.swift; sourceTree = "<group>"; };
 		A01FEF20F0630E3EC42E6F7D /* PlantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlantView.swift; sourceTree = "<group>"; };
 		A51BF51CE1E12AE07442E25E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		A5A97994EAE89153B1FD0429 /* XPBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPBarView.swift; sourceTree = "<group>"; };
 		AA703A690F20CC57F0DCF5D0 /* SmallWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallWidgetView.swift; sourceTree = "<group>"; };
+		AAF8B4A08C641A26DC00804E /* GardenBird.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = GardenBird.aiff; sourceTree = "<group>"; };
 		B50996E5D2B13383B3BF11C5 /* NoteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteManager.swift; sourceTree = "<group>"; };
 		B86F29BB508E5620DB33CC1A /* NiwaNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiwaNote.swift; sourceTree = "<group>"; };
 		C5DA083410BC36CE388B1062 /* HealthEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthEvent.swift; sourceTree = "<group>"; };
 		C68D4DE8A47D3694480CA399 /* NiwaWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NiwaWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC035467AC2EDECA083F30B6 /* StringPluck.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = StringPluck.aiff; sourceTree = "<group>"; };
 		CC236069B01E13626AA524FF /* NiwaApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NiwaApp.entitlements; sourceTree = "<group>"; };
 		CE41CAF16405364AF6DAE9CB /* LargeWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeWidgetView.swift; sourceTree = "<group>"; };
+		D04B51BD1B239E8E8D907CBB /* WelcomeOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeOverlay.swift; sourceTree = "<group>"; };
 		D1EC0D515E4A6E9C77C26456 /* ClipboardMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardMonitor.swift; sourceTree = "<group>"; };
 		D2C5264BCDFD7880F7216D02 /* ModelContainerSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelContainerSetup.swift; sourceTree = "<group>"; };
 		D44915DBBEF147EB80E365AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -144,8 +173,11 @@
 		E1FC73502E44C3C91CCA48FA /* UpdateChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateChecker.swift; sourceTree = "<group>"; };
 		E333EA4AD20CF39D23903B75 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E88D7F762A43CD227F102B3F /* NiwaWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiwaWidgetBundle.swift; sourceTree = "<group>"; };
+		EB6D2E85E995F04C6B5C927F /* SoftTick.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = SoftTick.aiff; sourceTree = "<group>"; };
 		EC78BC81E3FF693C53D02C16 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		EE26E8D30CCB1954D071CB58 /* InlineSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InlineSettingsView.swift; sourceTree = "<group>"; };
+		F43873D8700EB8C1C148F73A /* WoodBlock.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = WoodBlock.aiff; sourceTree = "<group>"; };
+		F56F0921717681A5A0E2BF39 /* SoftDoubleTap.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = SoftDoubleTap.aiff; sourceTree = "<group>"; };
 		FAA565B3DCF0E8FD3A5D3EA4 /* ContentTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentTabView.swift; sourceTree = "<group>"; };
 		FE220B79D48654F793D84391 /* TaskRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskRowView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -160,10 +192,10 @@
 				100414349BC7E0D1374CEE51 /* HealthStatusView.swift */,
 				873ED7C152B18D4246C2EFFE /* NoteEditorView.swift */,
 				D57F556F494D0EC1C104F4F7 /* NotesListView.swift */,
+				6595E9D29271F6D152F44035 /* SoundsView.swift */,
 				7A0B99115A2E9F236F56C66E /* TaskListView.swift */,
 				3D08A3FE8E59157A567F6491 /* TimerView.swift */,
 				A52729A3F5B54970EE759882 /* Components */,
-				784182DBACD2FE68EA65757A /* FloatingWindow */,
 				C974BD51446D84C06DABEE51 /* Settings */,
 			);
 			path = Views;
@@ -176,11 +208,41 @@
 				02AE0A8C96ED657C6985C00A /* HealthEventManager.swift */,
 				B50996E5D2B13383B3BF11C5 /* NoteManager.swift */,
 				DC1D13CB664B1C0ECE331F20 /* NotificationManager.swift */,
+				4AB5902F76EA29378261E627 /* SoundManager.swift */,
 				D6B5EC57DA88D66031E4AF60 /* TaskManager.swift */,
 				E1FC73502E44C3C91CCA48FA /* UpdateChecker.swift */,
 				01E6D1A1506A6845C9574C8A /* UserProfileManager.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		33CE8298F622732BF86D3936 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				51363C50EBBD9D4F1EE415F6 /* Sounds */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		51363C50EBBD9D4F1EE415F6 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				5E4EB15D22106089BB5975CA /* Bloom.aiff */,
+				24C59A1EF691CBDE32D66B6D /* DoubleChime.aiff */,
+				AAF8B4A08C641A26DC00804E /* GardenBird.aiff */,
+				902335D07DBA830B5CB63A58 /* GardenFanfare.aiff */,
+				5169BF3FF9BF2821128068DA /* GentleBell.aiff */,
+				32E51A01E310EF668BE39B89 /* MicroDing.aiff */,
+				0F875F0DDDC1DF0EB913AE81 /* RisingTone.aiff */,
+				F56F0921717681A5A0E2BF39 /* SoftDoubleTap.aiff */,
+				4EE3DB9B4B33789E241414F8 /* SoftPop.aiff */,
+				EB6D2E85E995F04C6B5C927F /* SoftTick.aiff */,
+				CC035467AC2EDECA083F30B6 /* StringPluck.aiff */,
+				3D8584FC2518EBF15E243EF1 /* TinyShimmer.aiff */,
+				30AEC19C5C5C5758F565676E /* WaterDrop.aiff */,
+				F43873D8700EB8C1C148F73A /* WoodBlock.aiff */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 		66B12E57755E09EE977E42CB /* Constants */ = {
@@ -190,15 +252,6 @@
 				89825B6502E06090F6AEBC28 /* XPConstants.swift */,
 			);
 			path = Constants;
-			sourceTree = "<group>";
-		};
-		784182DBACD2FE68EA65757A /* FloatingWindow */ = {
-			isa = PBXGroup;
-			children = (
-				3D3C4CAADC04A7A9F337F14F /* FloatingWindowContentView.swift */,
-				3E7A231F1358364A226B680E /* FloatingWindowController.swift */,
-			);
-			path = FloatingWindow;
 			sourceTree = "<group>";
 		};
 		7B0675D310FDACB1202221DB /* Engines */ = {
@@ -224,10 +277,12 @@
 		A52729A3F5B54970EE759882 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				9898728F25E9EE852B7689CF /* GreetingBanner.swift */,
 				9ED8905B142AE85F9D594B8B /* HeroView.swift */,
 				616A470092FAF68F68E1AB6F /* LevelUpOverlay.swift */,
 				A01FEF20F0630E3EC42E6F7D /* PlantView.swift */,
 				FE220B79D48654F793D84391 /* TaskRowView.swift */,
+				D04B51BD1B239E8E8D907CBB /* WelcomeOverlay.swift */,
 				A5A97994EAE89153B1FD0429 /* XPBarView.swift */,
 				7E0F76F0CFA25AEE4B3A7F09 /* XPChartView.swift */,
 			);
@@ -269,6 +324,7 @@
 				111E9AB4204A7A5CDFB699AB /* Info.plist */,
 				CC236069B01E13626AA524FF /* NiwaApp.entitlements */,
 				2E87A5920DB12AE735E192E0 /* NiwaApp.swift */,
+				33CE8298F622732BF86D3936 /* Resources */,
 				2DF1B60404A437AE7B8082FE /* Services */,
 				1BC97A50A32208BC23B688D6 /* Views */,
 			);
@@ -389,6 +445,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				A5717DCDDF3A6B65E7B9F01E /* Assets.xcassets in Resources */,
+				8DB71070A59D0C74317105A9 /* Bloom.aiff in Resources */,
+				5DD4C6B970123C460C37BAF8 /* DoubleChime.aiff in Resources */,
+				821A13338A58C3396BE8AFAF /* GardenBird.aiff in Resources */,
+				4D3F4A01C6392A209C624FFA /* GardenFanfare.aiff in Resources */,
+				44CC329D27DAE17253F0F9BE /* GentleBell.aiff in Resources */,
+				B2C021C8D0279EA50E987782 /* MicroDing.aiff in Resources */,
+				5631F270F1717E20335C2C30 /* RisingTone.aiff in Resources */,
+				C1120376BAD08DD4DC6879C9 /* SoftDoubleTap.aiff in Resources */,
+				7B64F9D7267CC555A571198B /* SoftPop.aiff in Resources */,
+				4DED95F1EFA298C5936C13E8 /* SoftTick.aiff in Resources */,
+				EA6BCE707D14F951F86696A1 /* StringPluck.aiff in Resources */,
+				0ECDEE6D8B53E53954750147 /* TinyShimmer.aiff in Resources */,
+				74AEC4E923C162916D60F6FB /* WaterDrop.aiff in Resources */,
+				B30D444653FDFA8F7659AA5C /* WoodBlock.aiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -406,9 +476,8 @@
 				5DC7F4A04126CD65326D188F /* ContentTabView.swift in Sources */,
 				3C412664AB139F208F0458BB /* DesignTokens.swift in Sources */,
 				B1CF432B0FFA67ECDFA681EC /* DropdownRootView.swift in Sources */,
-				007C30FD9EA0908C0B6CD860 /* FloatingWindowContentView.swift in Sources */,
-				7107CAA88559324CAADC6175 /* FloatingWindowController.swift in Sources */,
 				6832D447EFE2FF57E9251629 /* GamificationEngine.swift in Sources */,
+				8DC06F7FC4DA87297CAACC7C /* GreetingBanner.swift in Sources */,
 				1DEA2AE793DBE3D65CC14B13 /* HealthEvent.swift in Sources */,
 				039CC0A32D3814BBA72EFF2A /* HealthEventManager.swift in Sources */,
 				2FBA563C4C46BF979A346F85 /* HealthStatusView.swift in Sources */,
@@ -426,6 +495,8 @@
 				9950D7C52D91B13FDA5422D9 /* PlantView.swift in Sources */,
 				4F4BBBB7BE3691A2EB5C2D98 /* PomodoroTimerEngine.swift in Sources */,
 				D3446D1D11F514DD24C34F12 /* ReminderSchedulingEngine.swift in Sources */,
+				10156CF0FD0ADAEEFCA4769C /* SoundManager.swift in Sources */,
+				3CBA84924326FDED817C083C /* SoundsView.swift in Sources */,
 				6C89308B5A85479F30B3DEF1 /* TaskListView.swift in Sources */,
 				EE573789BE75E865FE59601A /* TaskManager.swift in Sources */,
 				1E805E088347FB5267EE401F /* TaskRowView.swift in Sources */,
@@ -434,6 +505,7 @@
 				4F10543E5F4A02925B924966 /* UpdateChecker.swift in Sources */,
 				6256DE88BE1ED960BBB6A1F5 /* UserProfile.swift in Sources */,
 				C0236E3C10232FD174A68E12 /* UserProfileManager.swift in Sources */,
+				9C83DCFFC8F172091C2402F8 /* WelcomeOverlay.swift in Sources */,
 				C29712DC891D37C39B53C650 /* XPBarView.swift in Sources */,
 				225506DAD6DAEBD4A9585E51 /* XPChartView.swift in Sources */,
 				C7C460BBBC4FBA295EAE0EEF /* XPConstants.swift in Sources */,
@@ -485,7 +557,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NiwaApp/NiwaApp.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NiwaApp/Info.plist;
 				INFOPLIST_KEY_LSUIElement = YES;
@@ -493,7 +565,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.3.10;
+				MARKETING_VERSION = 1.3.11;
 				PRODUCT_BUNDLE_IDENTIFIER = com.niwa.app;
 				PRODUCT_NAME = Niwa;
 				SDKROOT = macosx;
@@ -571,7 +643,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NiwaApp/NiwaApp.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NiwaApp/Info.plist;
 				INFOPLIST_KEY_LSUIElement = YES;
@@ -579,7 +651,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.3.10;
+				MARKETING_VERSION = 1.3.11;
 				PRODUCT_BUNDLE_IDENTIFIER = com.niwa.app;
 				PRODUCT_NAME = Niwa;
 				SDKROOT = macosx;
@@ -649,7 +721,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = NiwaWidget/NiwaWidget.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NiwaWidget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -657,7 +729,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MARKETING_VERSION = 1.3.10;
+				MARKETING_VERSION = 1.3.11;
 				PRODUCT_BUNDLE_IDENTIFIER = com.niwa.app.widget;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -669,7 +741,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = NiwaWidget/NiwaWidget.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NiwaWidget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -677,7 +749,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MARKETING_VERSION = 1.3.10;
+				MARKETING_VERSION = 1.3.11;
 				PRODUCT_BUNDLE_IDENTIFIER = com.niwa.app.widget;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;

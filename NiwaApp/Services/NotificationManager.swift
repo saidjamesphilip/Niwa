@@ -21,6 +21,9 @@ final class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
     var onStandUp: (() -> Void)?
     var onStandSnooze: (() -> Void)?
     var onSitDown: (() -> Void)?
+    // Called when a reminder is dismissed without action — so the next one gets scheduled
+    var onWaterDismissed: (() -> Void)?
+    var onStandDismissed: (() -> Void)?
 
     private override init() {
         super.init()
@@ -49,7 +52,14 @@ final class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
     }
 
+    // Stable identifiers — scheduling a new one automatically replaces the old one
+    private static let waterRequestID = "niwa-water-reminder"
+    private static let standRequestID = "niwa-stand-reminder"
+
     func scheduleWaterReminder(at date: Date) {
+        let interval = date.timeIntervalSinceNow
+        guard interval > 1 else { return } // Don't schedule if in the past
+
         let content = UNMutableNotificationContent()
         content.title = "Time for Water"
         content.body = "Stay hydrated! Have a glass of water."
@@ -57,14 +67,17 @@ final class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
         content.sound = .default
 
         let trigger = UNTimeIntervalNotificationTrigger(
-            timeInterval: max(1, date.timeIntervalSinceNow),
+            timeInterval: interval,
             repeats: false
         )
-        let request = UNNotificationRequest(identifier: "water-\(UUID().uuidString)", content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: Self.waterRequestID, content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
     }
 
     func scheduleStandReminder(at date: Date) {
+        let interval = date.timeIntervalSinceNow
+        guard interval > 1 else { return } // Don't schedule if in the past
+
         let content = UNMutableNotificationContent()
         content.title = "Time to Stand"
         content.body = "Take a break and stand up for a few minutes."
@@ -72,10 +85,10 @@ final class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
         content.sound = .default
 
         let trigger = UNTimeIntervalNotificationTrigger(
-            timeInterval: max(1, date.timeIntervalSinceNow),
+            timeInterval: interval,
             repeats: false
         )
-        let request = UNNotificationRequest(identifier: "stand-\(UUID().uuidString)", content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: Self.standRequestID, content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
     }
 
@@ -88,12 +101,18 @@ final class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
+        let category = response.notification.request.content.categoryIdentifier
+
         switch response.actionIdentifier {
         case Self.waterDoneAction: onWaterDone?()
         case Self.waterSnoozeAction: onWaterSnooze?()
         case Self.standUpAction: onStandUp?()
         case Self.standSnoozeAction: onStandSnooze?()
         case Self.sitDownAction: onSitDown?()
+        case UNNotificationDefaultActionIdentifier, UNNotificationDismissActionIdentifier:
+            // User tapped or dismissed without choosing an action — reschedule next reminder
+            if category == Self.waterCategory { onWaterDismissed?() }
+            else if category == Self.standCategory { onStandDismissed?() }
         default: break
         }
         completionHandler()

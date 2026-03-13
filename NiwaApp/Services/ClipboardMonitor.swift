@@ -2,6 +2,7 @@ import AppKit
 import SwiftData
 import Observation
 
+@MainActor
 @Observable
 final class ClipboardMonitor {
     private let modelContext: ModelContext
@@ -16,9 +17,13 @@ final class ClipboardMonitor {
 
     func startMonitoring() {
         stopMonitoring()
-        pollTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
-            self?.checkClipboard()
+        let timer = Timer(timeInterval: 0.5, repeats: true) { [weak self] _ in
+            Task { @MainActor in
+                self?.checkClipboard()
+            }
         }
+        RunLoop.main.add(timer, forMode: .common)
+        pollTimer = timer
     }
 
     func stopMonitoring() {
@@ -58,7 +63,4 @@ final class ClipboardMonitor {
         lastChangeCount = NSPasteboard.general.changeCount
     }
 
-    deinit {
-        pollTimer?.invalidate()
-    }
 }

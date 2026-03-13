@@ -1,33 +1,55 @@
 import Foundation
 import SwiftData
-import Observation
+import Combine
 
-@Observable
-final class NoteManager {
+@MainActor
+final class NoteManager: ObservableObject {
     private let modelContext: ModelContext
     private let gamificationEngine: GamificationEngine
+
+    @Published private(set) var notes: [NiwaNote] = []
 
     init(modelContext: ModelContext, gamificationEngine: GamificationEngine) {
         self.modelContext = modelContext
         self.gamificationEngine = gamificationEngine
+        refreshNotes()
     }
 
+    static let noteColorCount = 5
+
     func createNote(content: String = "") -> NiwaNote {
-        let note = NiwaNote(content: content)
+        let nextColor = (notes.first?.colorIndex ?? -1 + 1) % Self.noteColorCount
+        let note = NiwaNote(content: content, colorIndex: nextColor)
         modelContext.insert(note)
-        try? modelContext.save()
+        save()
         gamificationEngine.awardXP(source: .note, amount: XPConstants.noteCreate, context: modelContext)
+        refreshNotes()
         return note
     }
 
     func updateNote(_ note: NiwaNote, content: String) {
         note.content = content
         note.updatedAt = Date()
-        try? modelContext.save()
+        save()
+        refreshNotes()
     }
 
     func deleteNote(_ note: NiwaNote) {
         modelContext.delete(note)
-        try? modelContext.save()
+        save()
+        refreshNotes()
+    }
+
+    func refreshNotes() {
+        let descriptor = FetchDescriptor<NiwaNote>(sortBy: [SortDescriptor(\.updatedAt, order: .reverse)])
+        notes = (try? modelContext.fetch(descriptor)) ?? []
+    }
+
+    private func save() {
+        do {
+            try modelContext.save()
+        } catch {
+            print("[NoteManager] Save failed: \(error)")
+        }
     }
 }

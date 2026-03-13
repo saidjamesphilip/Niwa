@@ -7,6 +7,8 @@ enum XPConstants {
     static let noteCreate: Int = 5
     static let waterConfirm: Int = 10
     static let standComplete: Int = 10
+    static let creatineConfirm: Int = 15
+    static let gymConfirm: Int = 30
 
     // Pomodoro defaults
     static let defaultWorkMinutes: Int = 25

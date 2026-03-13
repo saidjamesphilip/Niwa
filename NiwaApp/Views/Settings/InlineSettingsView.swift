@@ -6,16 +6,40 @@ struct InlineSettingsView: View {
     let profileManager: UserProfileManager
     let timerEngine: PomodoroTimerEngine
     let healthManager: HealthEventManager
+    let onResetData: () -> Void
+    let onFullRestart: () -> Void
+    let statusMessage: String
 
-    @State private var showResetConfirmation = false
-    @State private var showFullResetConfirmation = false
-    @State private var statusMessage = ""
+    @State private var confirmingReset = false
+    @State private var confirmingFullRestart = false
+    @State private var exportMessage = ""
     @StateObject private var updateChecker = UpdateChecker()
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 if let profile = profileManager.profile {
+
+                    // Profile
+                    settingsSection("\u{1F331}  Profile") {
+                        HStack {
+                            Text("Name")
+                                .font(DesignTokens.Typography.bodyFont)
+                                .foregroundStyle(DesignTokens.Colors.textPrimary)
+                            Spacer()
+                            TextField("Your name", text: Binding(
+                                get: { profile.displayName },
+                                set: { profile.displayName = $0; profileManager.save() }
+                            ))
+                            .textFieldStyle(.plain)
+                            .font(DesignTokens.Typography.bodyFont)
+                            .foregroundStyle(DesignTokens.Colors.textSecondary)
+                            .multilineTextAlignment(.trailing)
+                            .frame(maxWidth: 150)
+                        }
+                        .padding(.horizontal, DesignTokens.Spacing.lg)
+                        .padding(.vertical, DesignTokens.Spacing.xs)
+                    }
 
                     // Timer
                     settingsSection("\u{23F1}\u{FE0F}  Timer") {
@@ -35,12 +59,34 @@ struct InlineSettingsView: View {
 
                     // Health
                     settingsSection("\u{1F49A}  Health Reminders") {
-                        settingsStepper("\u{1F4A7} Water every", value: profile.waterIntervalMinutes, unit: "min", range: 5...120, step: 5) {
-                            profile.waterIntervalMinutes = $0; saveHealth()
+                        settingsToggle("Enable Reminders", isOn: profile.healthRemindersEnabled) {
+                            profile.healthRemindersEnabled = $0; saveHealth()
                         }
-                        settingsStepper("\u{1F9CD} Stand every", value: profile.standIntervalMinutes, unit: "min", range: 5...120, step: 5) {
-                            profile.standIntervalMinutes = $0; saveHealth()
+
+                        if profile.healthRemindersEnabled {
+                            settingsStepper("\u{1F4A7} Water every", value: profile.waterIntervalMinutes, unit: "min", range: 5...120, step: 5) {
+                                profile.waterIntervalMinutes = $0; saveHealth()
+                            }
+                            settingsStepper("\u{1F9CD} Stand every", value: profile.standIntervalMinutes, unit: "min", range: 5...120, step: 5) {
+                                profile.standIntervalMinutes = $0; saveHealth()
+                            }
                         }
+
+                        Button {
+                            NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.Notifications-Settings")!)
+                        } label: {
+                            HStack(spacing: DesignTokens.Spacing.xs) {
+                                Image(systemName: "bell.badge")
+                                    .font(.system(size: 11))
+                                Text("Manage in System Settings")
+                                    .font(.system(size: 11))
+                                Image(systemName: "arrow.up.right")
+                                    .font(.system(size: 8))
+                            }
+                            .foregroundStyle(DesignTokens.Colors.textSecondary)
+                        }
+                        .buttonStyle(.plain)
+                        .padding(.vertical, DesignTokens.Spacing.xs)
                     }
 
                     // Work Hours
@@ -71,13 +117,6 @@ struct InlineSettingsView: View {
                         }
                     }
 
-                    // Window
-                    settingsSection("\u{1FA9F}  Floating Window") {
-                        settingsToggle("Always on top", isOn: profile.alwaysOnTop) {
-                            profile.alwaysOnTop = $0; save()
-                        }
-                    }
-
                     // Data
                     settingsSection("\u{1F4BE}  Data") {
                         // Export
@@ -88,59 +127,70 @@ struct InlineSettingsView: View {
                         Divider().background(DesignTokens.Colors.subtle)
 
                         // Reset
-                        dataRow(icon: "arrow.counterclockwise", label: "Reset All Data", color: DesignTokens.Colors.danger, description: "Clears tasks, notes, clipboard, XP. Keeps settings.") {
-                            showResetConfirmation = true
+                        if confirmingReset {
+                            confirmationRow(
+                                message: "Clear tasks, notes, clipboard, and XP? Settings will be kept.",
+                                confirmLabel: "Reset",
+                                onConfirm: {
+                                    confirmingReset = false
+                                    onResetData()
+                                },
+                                onCancel: { confirmingReset = false }
+                            )
+                        } else {
+                            dataRow(icon: "arrow.counterclockwise", label: "Reset All Data", color: DesignTokens.Colors.danger, description: "Clears tasks, notes, clipboard, XP. Keeps settings.") {
+                                withAnimation(DesignTokens.Animation.viewTransition) {
+                                    confirmingReset = true
+                                    confirmingFullRestart = false
+                                }
+                            }
                         }
 
                         Divider().background(DesignTokens.Colors.subtle)
 
                         // Full restart
-                        dataRow(icon: "leaf", label: "Full Restart \u{2014} Back to Seed", color: DesignTokens.Colors.danger, description: "Wipes everything and restarts fresh from Level 0. Cannot be undone.") {
-                            showFullResetConfirmation = true
-                        }
-                    }
-
-                    // About & Updates
-                    settingsSection("\u{2139}\u{FE0F}  About") {
-                        HStack {
-                            Image(systemName: "arrow.triangle.2.circlepath")
-                                .font(.system(size: 12))
-                                .foregroundStyle(DesignTokens.Colors.secondary)
-                                .frame(width: 20)
-
-                            if updateChecker.isChecking {
-                                Text("Checking...")
-                                    .font(DesignTokens.Typography.bodyFont)
-                                    .foregroundStyle(DesignTokens.Colors.textSecondary)
-                            } else if updateChecker.updateAvailable, let version = updateChecker.latestVersion {
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text("v\(version) available")
-                                        .font(DesignTokens.Typography.bodyFont)
-                                        .foregroundStyle(DesignTokens.Colors.primary)
-                                    Button("Download update") {
-                                        updateChecker.openDownloadPage()
-                                    }
-                                    .buttonStyle(.plain)
-                                    .font(.system(size: 11, weight: .medium))
-                                    .foregroundStyle(DesignTokens.Colors.primary)
-                                    .underline()
+                        if confirmingFullRestart {
+                            confirmationRow(
+                                message: "Wipe everything and start fresh from Level 0? This cannot be undone.",
+                                confirmLabel: "Full Restart",
+                                onConfirm: {
+                                    confirmingFullRestart = false
+                                    onFullRestart()
+                                },
+                                onCancel: { confirmingFullRestart = false }
+                            )
+                        } else {
+                            dataRow(icon: "leaf", label: "Full Restart \u{2014} Back to Seed", color: DesignTokens.Colors.danger, description: "Wipes everything and restarts fresh from Level 0. Cannot be undone.") {
+                                withAnimation(DesignTokens.Animation.viewTransition) {
+                                    confirmingFullRestart = true
+                                    confirmingReset = false
                                 }
-                            } else {
-                                Button("Check for updates") {
-                                    Task { await updateChecker.checkForUpdates() }
-                                }
-                                .buttonStyle(.plain)
-                                .font(DesignTokens.Typography.bodyFont)
-                                .foregroundStyle(DesignTokens.Colors.textSecondary)
                             }
-
-                            Spacer()
                         }
-                        .padding(.vertical, 4)
+
+                        Divider().background(DesignTokens.Colors.subtle)
+
+                        // Updates (integrated)
+                        updateRow
                     }
 
+                    // Status messages
                     if !statusMessage.isEmpty {
-                        Text(statusMessage)
+                        HStack(spacing: DesignTokens.Spacing.sm) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundStyle(DesignTokens.Colors.primary)
+                            Text(statusMessage)
+                                .font(DesignTokens.Typography.captionFont)
+                                .foregroundStyle(DesignTokens.Colors.textPrimary)
+                        }
+                        .padding(.horizontal, DesignTokens.Spacing.lg)
+                        .padding(.vertical, DesignTokens.Spacing.sm)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(DesignTokens.Colors.primary.opacity(0.1))
+                    }
+
+                    if !exportMessage.isEmpty {
+                        Text(exportMessage)
                             .font(DesignTokens.Typography.captionFont)
                             .foregroundStyle(DesignTokens.Colors.textMuted)
                             .padding(.horizontal, DesignTokens.Spacing.lg)
@@ -150,18 +200,6 @@ struct InlineSettingsView: View {
             }
         }
         .frame(maxHeight: 400)
-        .alert("Reset All Data?", isPresented: $showResetConfirmation) {
-            Button("Cancel", role: .cancel) {}
-            Button("Reset", role: .destructive) { resetAllData() }
-        } message: {
-            Text("This will permanently delete all tasks, notes, clipboard history, timer sessions, health events, and XP. Your settings will be kept. The app will restart.")
-        }
-        .alert("Full Restart \u{2014} Back to Seed?", isPresented: $showFullResetConfirmation) {
-            Button("Cancel", role: .cancel) {}
-            Button("Restart from Seed", role: .destructive) { fullRestart() }
-        } message: {
-            Text("This will wipe everything and return you to Level 0 with a fresh seed. All data, XP, and settings will be permanently deleted. The app will restart.")
-        }
     }
 
     // MARK: - Components
@@ -340,6 +378,105 @@ struct InlineSettingsView: View {
         .padding(.vertical, DesignTokens.Spacing.sm)
     }
 
+    // MARK: - Confirmation Row
+
+    private func confirmationRow(message: String, confirmLabel: String, onConfirm: @escaping () -> Void, onCancel: @escaping () -> Void) -> some View {
+        VStack(spacing: DesignTokens.Spacing.sm) {
+            Text(message)
+                .font(.system(size: 11))
+                .foregroundStyle(DesignTokens.Colors.textSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+
+            HStack(spacing: DesignTokens.Spacing.sm) {
+                Button {
+                    withAnimation(DesignTokens.Animation.viewTransition) { onCancel() }
+                } label: {
+                    Text("Cancel")
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(DesignTokens.Colors.textSecondary)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 6)
+                        .background(DesignTokens.Colors.backgroundSecondary)
+                        .clipShape(RoundedRectangle(cornerRadius: DesignTokens.CornerRadius.small))
+                }
+                .buttonStyle(.plain)
+
+                Button {
+                    onConfirm()
+                } label: {
+                    Text(confirmLabel)
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 6)
+                        .background(DesignTokens.Colors.danger)
+                        .clipShape(RoundedRectangle(cornerRadius: DesignTokens.CornerRadius.small))
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(.vertical, DesignTokens.Spacing.sm)
+    }
+
+    // MARK: - Update Row
+
+    private var currentVersion: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.3.11"
+    }
+
+    private var updateRow: some View {
+        HStack(spacing: DesignTokens.Spacing.sm) {
+            Image(systemName: "arrow.triangle.2.circlepath")
+                .font(.system(size: 13))
+                .foregroundStyle(updateChecker.updateAvailable ? Color.orange : DesignTokens.Colors.primary)
+                .frame(width: 20)
+
+            if updateChecker.isChecking {
+                Text("Checking for updates...")
+                    .font(DesignTokens.Typography.bodyFont)
+                    .foregroundStyle(DesignTokens.Colors.textSecondary)
+                Spacer()
+                ProgressView()
+                    .scaleEffect(0.6)
+            } else if updateChecker.updateAvailable, let version = updateChecker.latestVersion {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("v\(version) available")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(.orange)
+                }
+                Spacer()
+                Button("Download") {
+                    updateChecker.openDownloadPage()
+                }
+                .buttonStyle(.plain)
+                .font(.system(size: 11, weight: .semibold))
+                .foregroundStyle(.orange)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 3)
+                .background(Color.orange.opacity(0.15))
+                .clipShape(RoundedRectangle(cornerRadius: DesignTokens.CornerRadius.small))
+            } else {
+                Button {
+                    Task { await updateChecker.checkForUpdates() }
+                } label: {
+                    Text("Check for updates")
+                        .font(DesignTokens.Typography.bodyFont)
+                        .foregroundStyle(DesignTokens.Colors.textSecondary)
+                }
+                .buttonStyle(.plain)
+                Spacer()
+                Text("v\(currentVersion)")
+                    .font(.system(size: 11, weight: .medium, design: .monospaced))
+                    .foregroundStyle(DesignTokens.Colors.textMuted)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+                    .background(DesignTokens.Colors.backgroundSecondary)
+                    .clipShape(RoundedRectangle(cornerRadius: DesignTokens.CornerRadius.small))
+            }
+        }
+        .padding(.vertical, DesignTokens.Spacing.sm)
+    }
+
     // MARK: - Actions
 
     private func applyAppearance(_ mode: Int) {
@@ -353,57 +490,6 @@ struct InlineSettingsView: View {
     private func save() { profileManager.save() }
     private func saveTimer() { profileManager.save(); timerEngine.loadSettings() }
     private func saveHealth() { profileManager.save(); healthManager.scheduleNextReminders() }
-
-    private func resetAllData() {
-        let context = profileManager.context
-        do {
-            try context.delete(model: NiwaTask.self)
-            try context.delete(model: NiwaNote.self)
-            try context.delete(model: ClipboardEntry.self)
-            try context.delete(model: TimerSession.self)
-            try context.delete(model: HealthEvent.self)
-            try context.delete(model: XPEvent.self)
-            if let profile = profileManager.profile {
-                profile.totalXP = 0
-                profile.currentLevel = 0
-            }
-            try context.save()
-            NotificationManager.shared.cancelAllPending()
-            restartApp()
-        } catch {
-            statusMessage = "Error: \(error.localizedDescription)"
-        }
-    }
-
-    private func fullRestart() {
-        let context = profileManager.context
-        do {
-            try context.delete(model: NiwaTask.self)
-            try context.delete(model: NiwaNote.self)
-            try context.delete(model: ClipboardEntry.self)
-            try context.delete(model: TimerSession.self)
-            try context.delete(model: HealthEvent.self)
-            try context.delete(model: XPEvent.self)
-            try context.delete(model: UserProfile.self)
-            context.insert(UserProfile())
-            try context.save()
-            NotificationManager.shared.cancelAllPending()
-            restartApp()
-        } catch {
-            statusMessage = "Error: \(error.localizedDescription)"
-        }
-    }
-
-    private func restartApp() {
-        let url = Bundle.main.bundleURL
-        let task = Process()
-        task.executableURL = URL(fileURLWithPath: "/usr/bin/open")
-        task.arguments = ["-n", url.path]
-        try? task.run()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            NSApplication.shared.terminate(nil)
-        }
-    }
 
     private func exportData() {
         let panel = NSSavePanel()
@@ -426,9 +512,9 @@ struct InlineSettingsView: View {
             }
             let data = try JSONSerialization.data(withJSONObject: export, options: [.prettyPrinted, .sortedKeys])
             try data.write(to: url)
-            statusMessage = "Exported to \(url.lastPathComponent)"
+            exportMessage = "Exported to \(url.lastPathComponent)"
         } catch {
-            statusMessage = "Export failed: \(error.localizedDescription)"
+            exportMessage = "Export failed: \(error.localizedDescription)"
         }
     }
 }

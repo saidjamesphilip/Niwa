@@ -11,9 +11,9 @@ struct NiwaApp: App {
     let taskManager: TaskManager
     let timerEngine: PomodoroTimerEngine
     let noteManager: NoteManager
-    let clipboardMonitor: ClipboardMonitor
     let profileManager: UserProfileManager
     let healthManager: HealthEventManager
+    let soundManager: SoundManager
 
     init() {
         do {
@@ -22,7 +22,9 @@ struct NiwaApp: App {
             fatalError("Failed to create ModelContainer: \(error)")
         }
 
-        let context = ModelContext(modelContainer)
+        let context = modelContainer.mainContext
+        print("[NiwaApp] Using mainContext: \(context)")
+        print("[NiwaApp] Store URL: \(modelContainer.configurations.first?.url.path ?? "unknown")")
 
         // Seed default UserProfile on first launch
         let descriptor = FetchDescriptor<UserProfile>()
@@ -38,7 +40,6 @@ struct NiwaApp: App {
         taskManager = TaskManager(modelContext: context, gamificationEngine: engine)
         timerEngine = PomodoroTimerEngine(modelContext: context, gamificationEngine: engine)
         noteManager = NoteManager(modelContext: context, gamificationEngine: engine)
-        clipboardMonitor = ClipboardMonitor(modelContext: context)
 
         let profMgr = UserProfileManager(modelContext: context)
         profileManager = profMgr
@@ -47,6 +48,7 @@ struct NiwaApp: App {
             gamificationEngine: engine,
             profileManager: profMgr
         )
+        soundManager = SoundManager(modelContext: context)
 
         // Apply saved appearance mode
         if let mode = profMgr.profile?.appearanceMode {
@@ -62,36 +64,76 @@ struct NiwaApp: App {
         MenuBarExtra {
             DropdownRootView(
                 gamificationEngine: gamificationEngine,
-                taskManager: taskManager,
                 timerEngine: timerEngine,
-                noteManager: noteManager,
-                clipboardMonitor: clipboardMonitor,
                 healthManager: healthManager,
-                profileManager: profileManager
+                profileManager: profileManager,
+                soundManager: soundManager
             )
+            .environmentObject(taskManager)
+            .environmentObject(noteManager)
             .modelContainer(modelContainer)
         } label: {
-            MenuBarIcon()
-                .modelContainer(modelContainer)
+            MenuBarIcon(timerEngine: timerEngine)
         }
         .menuBarExtraStyle(.window)
     }
 }
 
 struct MenuBarIcon: View {
-    @Query private var profiles: [UserProfile]
+    let timerEngine: PomodoroTimerEngine
 
-    private var iconName: String {
-        let level = profiles.first?.currentLevel ?? 0
-        switch level {
-        case 0...5: return "leaf.circle"
-        case 6...15: return "leaf"
-        case 16...30: return "leaf.fill"
-        default: return "tree"
+    private var isActive: Bool {
+        timerEngine.state != .idle
+    }
+
+    private var isPaused: Bool {
+        timerEngine.state == .paused
+    }
+
+    private var isBreak: Bool {
+        timerEngine.state == .shortBreak || timerEngine.state == .longBreak
+    }
+
+    private var isUrgent: Bool {
+        timerEngine.remainingSeconds < 180 && timerEngine.remainingSeconds > 0
+    }
+
+    private var timerColor: Color {
+        if isUrgent {
+            return Color(red: 224/255, green: 122/255, blue: 95/255) // Niwa primary/terracotta
+        } else if isBreak {
+            return Color(red: 90/255, green: 200/255, blue: 250/255) // Break blue
+        } else {
+            return Color(red: 76/255, green: 217/255, blue: 100/255) // Focus green
         }
     }
 
     var body: some View {
-        Image(systemName: iconName)
+        HStack(spacing: 3) {
+            Image("MenuBarIcon")
+                .renderingMode(.template)
+
+            if isActive {
+                VStack(spacing: 1) {
+                    Text(timerEngine.formattedTime)
+                        .font(.system(size: 10, weight: .medium, design: .monospaced))
+                        .monospacedDigit()
+                        .foregroundStyle(isPaused ? .secondary : .primary)
+
+                    GeometryReader { geo in
+                        ZStack(alignment: .leading) {
+                            RoundedRectangle(cornerRadius: 1)
+                                .fill(.white.opacity(0.15))
+                                .frame(height: 2)
+
+                            RoundedRectangle(cornerRadius: 1)
+                                .fill(timerColor)
+                                .frame(width: max(0, geo.size.width * (1.0 - timerEngine.progress)), height: 2)
+                        }
+                    }
+                    .frame(width: 40, height: 2)
+                }
+            }
+        }
     }
 }

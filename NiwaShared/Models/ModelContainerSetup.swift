@@ -30,6 +30,16 @@ enum ModelContainerSetup {
             url: storeURL
         )
 
-        return try ModelContainer(for: schema, configurations: [config])
+        do {
+            return try ModelContainer(for: schema, configurations: [config])
+        } catch {
+            // Schema migration failed — remove old store and recreate
+            let fm = FileManager.default
+            let storeFiles = try fm.contentsOfDirectory(at: niwaDir, includingPropertiesForKeys: nil)
+            for file in storeFiles where file.lastPathComponent.hasPrefix("niwa.store") {
+                try? fm.removeItem(at: file)
+            }
+            return try ModelContainer(for: schema, configurations: [config])
+        }
     }
 }

@@ -3,6 +3,7 @@ import SwiftData
 import Observation
 import WidgetKit
 
+@MainActor
 @Observable
 final class GamificationEngine {
     private let modelContext: ModelContext

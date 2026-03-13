@@ -2,20 +2,31 @@ import SwiftUI
 import SwiftData
 
 struct TaskListView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query(sort: \NiwaTask.sortOrder) private var tasks: [NiwaTask]
-
-    let taskManager: TaskManager
+    @EnvironmentObject var taskManager: TaskManager
 
     @State private var newTaskTitle = ""
+    @State private var showAllTasks = false
     @FocusState private var isAddFieldFocused: Bool
 
+    private let visibleLimit = 10
+
     private var incompleteTasks: [NiwaTask] {
-        tasks.filter { !$0.isCompleted }
+        taskManager.tasks.filter { !$0.isCompleted }
     }
 
     private var completedTasks: [NiwaTask] {
-        tasks.filter { $0.isCompleted }
+        taskManager.tasks.filter { $0.isCompleted }
+    }
+
+    private var visibleIncompleteTasks: [NiwaTask] {
+        if showAllTasks || incompleteTasks.count <= visibleLimit {
+            return incompleteTasks
+        }
+        return Array(incompleteTasks.prefix(visibleLimit))
+    }
+
+    private var hiddenCount: Int {
+        max(0, incompleteTasks.count - visibleLimit)
     }
 
     var body: some View {
@@ -44,22 +55,63 @@ struct TaskListView: View {
                 .padding(.horizontal, DesignTokens.Spacing.md)
 
             // Content
-            if tasks.isEmpty {
+            if taskManager.tasks.isEmpty {
                 emptyState
             } else {
                 ScrollView {
                     LazyVStack(spacing: 2) {
-                        ForEach(incompleteTasks, id: \.id) { task in
+                        ForEach(Array(visibleIncompleteTasks.enumerated()), id: \.element.id) { index, task in
                             TaskRowView(
                                 task: task,
                                 onToggle: { taskManager.toggleComplete(task) },
-                                onDelete: { taskManager.deleteTask(task) }
+                                onDelete: { taskManager.deleteTask(task) },
+                                onMoveUp: { taskManager.moveUp(task) },
+                                onMoveDown: { taskManager.moveDown(task) },
+                                onSetPriority: { taskManager.setPriority(task, priority: $0) },
+                                onSetDueDate: { taskManager.setDueDate(task, date: $0) },
+                                isFirst: index == 0,
+                                isLast: index == incompleteTasks.count - 1
                             )
                         }
-                        .onMove { source, destination in
-                            var mutable = incompleteTasks
-                            mutable.move(fromOffsets: source, toOffset: destination)
-                            taskManager.reorder(tasks: mutable)
+
+                        // Show more button
+                        if !showAllTasks && hiddenCount > 0 {
+                            Button {
+                                withAnimation(DesignTokens.Animation.viewTransition) {
+                                    showAllTasks = true
+                                }
+                            } label: {
+                                HStack(spacing: DesignTokens.Spacing.xs) {
+                                    Image(systemName: "chevron.down")
+                                        .font(.system(size: 9))
+                                    Text("Show \(hiddenCount) more")
+                                        .font(DesignTokens.Typography.captionFont)
+                                }
+                                .foregroundStyle(DesignTokens.Colors.primary)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, DesignTokens.Spacing.xs)
+                            }
+                            .buttonStyle(.plain)
+                        }
+
+                        // Show less button
+                        if showAllTasks && incompleteTasks.count > visibleLimit {
+                            Button {
+                                withAnimation(DesignTokens.Animation.viewTransition) {
+                                    showAllTasks = false
+                                }
+                            } label: {
+                                HStack(spacing: DesignTokens.Spacing.xs) {
+                                    Image(systemName: "chevron.up")
+                                        .font(.system(size: 9))
+                                    Text("Show less")
+                                        .font(DesignTokens.Typography.captionFont)
+                                }
+                                .foregroundStyle(DesignTokens.Colors.textSecondary)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, DesignTokens.Spacing.xs)
+                            }
+                            .buttonStyle(.plain)
                         }
 
                         if !completedTasks.isEmpty {
@@ -92,17 +144,19 @@ struct TaskListView: View {
                     .padding(.horizontal, DesignTokens.Spacing.xs)
                     .padding(.vertical, DesignTokens.Spacing.xs)
                 }
-                .frame(maxHeight: 300)
+                .frame(maxHeight: 600)
             }
         }
     }
 
     private var emptyState: some View {
         VStack(spacing: DesignTokens.Spacing.sm) {
-            Image(systemName: "leaf")
-                .font(.system(size: 24))
-                .foregroundStyle(DesignTokens.Colors.secondary.opacity(0.5))
-            Text("Add your first task to start growing")
+            PlantView(level: 0)
+                .scaleEffect(0.45)
+                .frame(width: 40, height: 40)
+                .opacity(0.6)
+
+            Text("Plant a seed — add your first task")
                 .font(DesignTokens.Typography.captionFont)
                 .foregroundStyle(DesignTokens.Colors.textMuted)
                 .multilineTextAlignment(.center)

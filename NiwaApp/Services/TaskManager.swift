@@ -1,29 +1,32 @@
 import Foundation
 import SwiftData
-import Observation
+import Combine
 import WidgetKit
 
-@Observable
-final class TaskManager {
+@MainActor
+final class TaskManager: ObservableObject {
     private let modelContext: ModelContext
     private let gamificationEngine: GamificationEngine
+
+    @Published private(set) var tasks: [NiwaTask] = []
 
     init(modelContext: ModelContext, gamificationEngine: GamificationEngine) {
         self.modelContext = modelContext
         self.gamificationEngine = gamificationEngine
+        refreshTasks()
     }
 
     func addTask(title: String) {
         guard !title.trimmingCharacters(in: .whitespaces).isEmpty else { return }
 
-        // Get current max sortOrder
         var descriptor = FetchDescriptor<NiwaTask>(sortBy: [SortDescriptor(\.sortOrder, order: .reverse)])
         descriptor.fetchLimit = 1
         let maxOrder = (try? modelContext.fetch(descriptor).first?.sortOrder) ?? -1
 
         let task = NiwaTask(title: title.trimmingCharacters(in: .whitespaces), sortOrder: maxOrder + 1)
         modelContext.insert(task)
-        try? modelContext.save()
+        save()
+        refreshTasks()
     }
 
     func toggleComplete(_ task: NiwaTask) {
@@ -34,20 +37,57 @@ final class TaskManager {
         } else {
             task.completedAt = nil
         }
-        try? modelContext.save()
+        save()
+        refreshTasks()
         WidgetCenter.shared.reloadAllTimelines()
     }
 
     func deleteTask(_ task: NiwaTask) {
         modelContext.delete(task)
-        try? modelContext.save()
+        save()
+        refreshTasks()
     }
 
     func reorder(tasks: [NiwaTask]) {
         for (index, task) in tasks.enumerated() {
             task.sortOrder = index
         }
-        try? modelContext.save()
+        save()
+        refreshTasks()
+    }
+
+    func setPriority(_ task: NiwaTask, priority: TaskPriority) {
+        task.priority = priority
+        save()
+        refreshTasks()
+    }
+
+    func setDueDate(_ task: NiwaTask, date: Date?) {
+        task.dueDate = date
+        save()
+        refreshTasks()
+    }
+
+    func moveUp(_ task: NiwaTask) {
+        let incomplete = tasks.filter { !$0.isCompleted }
+        guard let index = incomplete.firstIndex(where: { $0.id == task.id }), index > 0 else { return }
+        let other = incomplete[index - 1]
+        let temp = task.sortOrder
+        task.sortOrder = other.sortOrder
+        other.sortOrder = temp
+        save()
+        refreshTasks()
+    }
+
+    func moveDown(_ task: NiwaTask) {
+        let incomplete = tasks.filter { !$0.isCompleted }
+        guard let index = incomplete.firstIndex(where: { $0.id == task.id }), index < incomplete.count - 1 else { return }
+        let other = incomplete[index + 1]
+        let temp = task.sortOrder
+        task.sortOrder = other.sortOrder
+        other.sortOrder = temp
+        save()
+        refreshTasks()
     }
 
     func clearCompleted() {
@@ -56,6 +96,24 @@ final class TaskManager {
         for task in completed {
             modelContext.delete(task)
         }
-        try? modelContext.save()
+        save()
+        refreshTasks()
+    }
+
+    func refreshTasks() {
+        let descriptor = FetchDescriptor<NiwaTask>(sortBy: [SortDescriptor(\.sortOrder)])
+        do {
+            tasks = try modelContext.fetch(descriptor)
+        } catch {
+            tasks = []
+        }
+    }
+
+    private func save() {
+        do {
+            try modelContext.save()
+        } catch {
+            print("TaskManager save failed: \(error)")
+        }
     }
 }

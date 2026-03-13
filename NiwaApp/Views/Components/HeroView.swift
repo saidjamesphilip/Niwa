@@ -1,7 +1,7 @@
 import SwiftUI
 import SwiftData
 
-/// Combined top section: plant visualization, XP bar, and compact timer side-by-side
+/// Combined top section: plant with XP ring, and compact timer side-by-side
 struct HeroView: View {
     @Query private var profiles: [UserProfile]
     let engine: PomodoroTimerEngine
@@ -21,64 +21,82 @@ struct HeroView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            // Top row: Plant + Timer
-            HStack(alignment: .center, spacing: DesignTokens.Spacing.md) {
-                // Plant + level info
-                VStack(spacing: DesignTokens.Spacing.xs) {
-                    PlantView(level: level)
-
-                    Text("Level \(level)")
-                        .font(DesignTokens.Typography.headingFont)
-                        .foregroundStyle(DesignTokens.Colors.textPrimary)
-
-                    Text(plantStageName)
-                        .font(.system(size: 10, weight: .medium))
-                        .foregroundStyle(DesignTokens.Colors.textMuted)
-                }
+        HStack(alignment: .center, spacing: 0) {
+            // Plant with XP ring
+            plantWithXPRing
                 .frame(maxWidth: .infinity)
 
-                // Divider line
-                Rectangle()
-                    .fill(DesignTokens.Colors.subtle)
-                    .frame(width: 1, height: 100)
+            // Divider line
+            Rectangle()
+                .fill(DesignTokens.Colors.subtle)
+                .frame(width: 1, height: 110)
 
-                // Compact timer
-                compactTimer
-                    .frame(maxWidth: .infinity)
-            }
-            .padding(.horizontal, DesignTokens.Spacing.lg)
-            .padding(.top, DesignTokens.Spacing.md)
-            .padding(.bottom, DesignTokens.Spacing.sm)
-
-            // XP Bar (full width, bigger)
-            xpBar
-                .padding(.horizontal, DesignTokens.Spacing.lg)
-                .padding(.bottom, DesignTokens.Spacing.md)
+            // Compact timer
+            compactTimer
+                .frame(maxWidth: .infinity)
         }
+        .padding(.horizontal, DesignTokens.Spacing.sm)
+        .padding(.vertical, DesignTokens.Spacing.sm)
         .background(DesignTokens.Colors.backgroundSecondary.opacity(0.5))
+    }
+
+    // MARK: - Plant with XP Ring
+
+    private var plantWithXPRing: some View {
+        VStack(spacing: 4) {
+            ZStack {
+                // XP ring track
+                Circle()
+                    .stroke(DesignTokens.Colors.subtle, lineWidth: 3)
+                    .frame(width: 80, height: 80)
+
+                // XP ring fill
+                Circle()
+                    .trim(from: 0, to: fillFraction)
+                    .stroke(
+                        DesignTokens.Colors.primary,
+                        style: StrokeStyle(lineWidth: 3, lineCap: .round)
+                    )
+                    .frame(width: 80, height: 80)
+                    .rotationEffect(.degrees(-90))
+                    .animation(DesignTokens.Animation.xpBarFill, value: fillFraction)
+
+                // Plant inside the ring
+                PlantView(level: level)
+                    .scaleEffect(0.75)
+            }
+
+            // Level + XP info
+            Text("Level \(level)")
+                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                .foregroundStyle(DesignTokens.Colors.textPrimary)
+
+            Text("\(progress.current)/\(progress.needed) XP")
+                .font(.system(size: 10, weight: .medium, design: .monospaced))
+                .foregroundStyle(DesignTokens.Colors.textMuted)
+        }
     }
 
     // MARK: - Compact Timer
 
     private var compactTimer: some View {
-        VStack(spacing: DesignTokens.Spacing.sm) {
+        VStack(spacing: DesignTokens.Spacing.xs) {
             // Timer ring
             ZStack {
                 Circle()
                     .stroke(DesignTokens.Colors.subtle, lineWidth: 3)
-                    .frame(width: 80, height: 80)
+                    .frame(width: 72, height: 72)
 
                 Circle()
                     .trim(from: 0, to: engine.progress)
                     .stroke(DesignTokens.Colors.primary, style: StrokeStyle(lineWidth: 3, lineCap: .round))
-                    .frame(width: 80, height: 80)
+                    .frame(width: 72, height: 72)
                     .rotationEffect(.degrees(-90))
                     .animation(DesignTokens.Animation.viewTransition, value: engine.progress)
 
                 VStack(spacing: 0) {
                     Text(engine.formattedTime)
-                        .font(.system(size: 20, weight: .medium, design: .monospaced))
+                        .font(.system(size: 18, weight: .medium, design: .monospaced))
                         .foregroundStyle(
                             engine.state == .paused
                                 ? DesignTokens.Colors.textMuted
@@ -95,7 +113,7 @@ struct HeroView: View {
             }
 
             // Controls
-            HStack(spacing: DesignTokens.Spacing.md) {
+            HStack(spacing: DesignTokens.Spacing.sm) {
                 switch engine.state {
                 case .idle:
                     compactButton(icon: "play.fill", label: "Start") { engine.start() }
@@ -133,55 +151,14 @@ struct HeroView: View {
     private func compactButton(icon: String, label: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Image(systemName: icon)
-                .font(.system(size: 14))
+                .font(.system(size: 13))
                 .foregroundStyle(DesignTokens.Colors.primary)
-                .frame(width: 32, height: 32)
+                .frame(width: 28, height: 28)
                 .background(DesignTokens.Colors.primary.opacity(0.1))
                 .clipShape(Circle())
         }
         .buttonStyle(.plain)
         .accessibilityLabel(label)
-    }
-
-    // MARK: - XP Bar
-
-    private var xpBar: some View {
-        VStack(spacing: DesignTokens.Spacing.xs) {
-            HStack {
-                Text("\(progress.current) / \(progress.needed) XP")
-                    .font(DesignTokens.Typography.captionFont)
-                    .foregroundStyle(DesignTokens.Colors.textSecondary)
-
-                Spacer()
-
-                Text("\(Int(fillFraction * 100))%")
-                    .font(.system(size: 11, weight: .semibold, design: .monospaced))
-                    .foregroundStyle(DesignTokens.Colors.primary)
-            }
-
-            GeometryReader { geo in
-                ZStack(alignment: .leading) {
-                    Capsule()
-                        .fill(DesignTokens.Colors.subtle)
-                        .frame(height: 12)
-
-                    Capsule()
-                        .fill(
-                            LinearGradient(
-                                colors: [
-                                    DesignTokens.Colors.primary,
-                                    DesignTokens.Colors.primary.opacity(0.7),
-                                ],
-                                startPoint: .leading,
-                                endPoint: .trailing
-                            )
-                        )
-                        .frame(width: max(0, geo.size.width * fillFraction), height: 12)
-                        .animation(DesignTokens.Animation.xpBarFill, value: fillFraction)
-                }
-            }
-            .frame(height: 12)
-        }
     }
 
     // MARK: - Plant Stage Name

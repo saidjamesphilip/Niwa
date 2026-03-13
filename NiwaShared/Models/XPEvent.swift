@@ -7,6 +7,8 @@ enum XPSource: String, Codable {
     case note
     case water
     case stand
+    case creatine
+    case gym
 }
 
 @Model
