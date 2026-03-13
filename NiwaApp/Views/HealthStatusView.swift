@@ -42,13 +42,75 @@ struct HealthStatusView: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel("Start standing")
-                .help("Start standing session")
+                .help("Start standing session (+10 XP)")
             }
+
+            // Creatine pill (once daily)
+            Button { healthManager.confirmCreatine() } label: {
+                HStack(spacing: DesignTokens.Spacing.xs) {
+                    Image(systemName: "bolt.fill")
+                        .font(.system(size: 11))
+                    if healthManager.todayCreatineLogged {
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 9, weight: .bold))
+                    } else {
+                        Text("Creatine")
+                            .font(DesignTokens.Typography.captionFont)
+                    }
+                }
+                .foregroundStyle(creatineColor)
+                .padding(.horizontal, DesignTokens.Spacing.sm)
+                .padding(.vertical, DesignTokens.Spacing.xs)
+                .background(creatineColor.opacity(0.15))
+                .clipShape(Capsule())
+            }
+            .buttonStyle(.plain)
+            .disabled(healthManager.todayCreatineLogged)
+            .accessibilityLabel(healthManager.todayCreatineLogged ? "Creatine logged today" : "Log creatine")
+            .help(healthManager.todayCreatineLogged ? "Creatine logged today" : "Log creatine (+15 XP) · Once daily")
+
+            // Gym pill (once daily)
+            Button { healthManager.confirmGym() } label: {
+                HStack(spacing: DesignTokens.Spacing.xs) {
+                    Image(systemName: "dumbbell.fill")
+                        .font(.system(size: 11))
+                    if healthManager.todayGymLogged {
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 9, weight: .bold))
+                    } else {
+                        Text("Gym")
+                            .font(DesignTokens.Typography.captionFont)
+                    }
+                }
+                .foregroundStyle(gymColor)
+                .padding(.horizontal, DesignTokens.Spacing.sm)
+                .padding(.vertical, DesignTokens.Spacing.xs)
+                .background(gymColor.opacity(0.15))
+                .clipShape(Capsule())
+            }
+            .buttonStyle(.plain)
+            .disabled(healthManager.todayGymLogged)
+            .accessibilityLabel(healthManager.todayGymLogged ? "Gym logged today" : "Log gym session")
+            .help(healthManager.todayGymLogged ? "Gym logged today" : "Log gym session (+30 XP) · Once daily")
 
             Spacer()
         }
         .padding(.horizontal, DesignTokens.Spacing.lg)
         .padding(.vertical, DesignTokens.Spacing.sm)
+    }
+
+    // MARK: - Colors
+
+    private var creatineColor: Color {
+        healthManager.todayCreatineLogged
+            ? Color(red: 224/255, green: 172/255, blue: 58/255).opacity(0.5)
+            : Color(red: 224/255, green: 172/255, blue: 58/255) // Amber
+    }
+
+    private var gymColor: Color {
+        healthManager.todayGymLogged
+            ? DesignTokens.Colors.primary.opacity(0.5)
+            : DesignTokens.Colors.primary // Terracotta
     }
 
     // Live-updating standing timer using TimelineView

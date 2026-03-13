@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Niwa Sound Preview</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            background: #FAF6F1;
+            color: #3D3229;
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 { font-size: 24px; font-weight: 600; margin-bottom: 8px; }
+        .subtitle { color: #7A6E63; font-size: 14px; margin-bottom: 32px; }
+        .section { margin-bottom: 32px; }
+        .section h2 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+        .section p { font-size: 13px; color: #7A6E63; margin-bottom: 12px; }
+        .options { display: flex; flex-direction: column; gap: 8px; }
+        .sound-btn {
+            display: flex; align-items: center; gap: 12px;
+            background: #F0EAE0; border: 1px solid #E8DED1; border-radius: 10px;
+            padding: 14px 18px; cursor: pointer; transition: all 0.2s;
+            font-size: 14px; color: #3D3229;
+        }
+        .sound-btn:hover { border-color: #E07A5F; background: #fff; }
+        .sound-btn:active { transform: scale(0.98); }
+        .sound-btn .icon { font-size: 20px; width: 32px; text-align: center; }
+        .sound-btn .label { font-weight: 500; }
+        .sound-btn .desc { font-size: 12px; color: #7A6E63; margin-top: 2px; }
+        .playing { border-color: #E07A5F; background: #fff; box-shadow: 0 0 0 2px rgba(224,122,95,0.2); }
+        .divider { height: 1px; background: #E8DED1; margin: 32px 0; }
+        .note { background: #F0EAE0; border-radius: 8px; padding: 14px 18px; font-size: 13px; color: #7A6E63; line-height: 1.5; }
+    </style>
+</head>
+<body>
+    <h1>Niwa Sound Preview</h1>
+    <p class="subtitle">Click each option to hear it. These are synthesized previews — final sounds will be polished audio files.</p>
+
+    <div class="section">
+        <h2>Timer: Work Session Complete</h2>
+        <p>Marks the transition from focus to break. Should feel rewarding but gentle.</p>
+        <div class="options">
+            <button class="sound-btn" onclick="playSound('bell_gentle', this)">
+                <span class="icon">1</span>
+                <div><div class="label">Gentle Bell</div><div class="desc">Single warm bell, slow fade — like a meditation bowl</div></div>
+            </button>
+            <button class="sound-btn" onclick="playSound('bell_double', this)">
+                <span class="icon">2</span>
+                <div><div class="label">Double Chime</div><div class="desc">Two soft ascending notes — signals completion</div></div>
+            </button>
+            <button class="sound-btn" onclick="playSound('bell_wood', this)">
+                <span class="icon">3</span>
+                <div><div class="label">Wood Block</div><div class="desc">Warm wooden "tok" — Japanese temple style</div></div>
+            </button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Timer: Break Complete</h2>
+        <p>Signals return to work. Slightly more energizing than the work-done sound.</p>
+        <div class="options">
+            <button class="sound-btn" onclick="playSound('break_tap', this)">
+                <span class="icon">1</span>
+                <div><div class="label">Soft Double Tap</div><div class="desc">Two quick gentle taps — "time to return"</div></div>
+            </button>
+            <button class="sound-btn" onclick="playSound('break_rise', this)">
+                <span class="icon">2</span>
+                <div><div class="label">Rising Tone</div><div class="desc">Soft ascending note — uplifting, energizing</div></div>
+            </button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Task Completed</h2>
+        <p>Quick satisfying feedback when you check off a task.</p>
+        <div class="options">
+            <button class="sound-btn" onclick="playSound('task_pop', this)">
+                <span class="icon">1</span>
+                <div><div class="label">Soft Pop</div><div class="desc">Quick bubble pop — light and satisfying</div></div>
+            </button>
+            <button class="sound-btn" onclick="playSound('task_pluck', this)">
+                <span class="icon">2</span>
+                <div><div class="label">String Pluck</div><div class="desc">Short plucked string — like picking a leaf</div></div>
+            </button>
+            <button class="sound-btn" onclick="playSound('task_ding', this)">
+                <span class="icon">3</span>
+                <div><div class="label">Micro Ding</div><div class="desc">Tiny bright chime — minimal but clear</div></div>
+            </button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Level Up</h2>
+        <p>Celebration moment — your plant grew! Should feel special.</p>
+        <div class="options">
+            <button class="sound-btn" onclick="playSound('levelup_fanfare', this)">
+                <span class="icon">1</span>
+                <div><div class="label">Garden Fanfare</div><div class="desc">Warm ascending chord — triumphant but zen</div></div>
+            </button>
+            <button class="sound-btn" onclick="playSound('levelup_bloom', this)">
+                <span class="icon">2</span>
+                <div><div class="label">Bloom</div><div class="desc">Sparkling ascending notes — like petals opening</div></div>
+            </button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Health Reminder (Water / Standing)</h2>
+        <p>Non-intrusive nudge. Plays alongside the notification.</p>
+        <div class="options">
+            <button class="sound-btn" onclick="playSound('health_drop', this)">
+                <span class="icon">1</span>
+                <div><div class="label">Water Drop</div><div class="desc">Single droplet sound — natural, calming</div></div>
+            </button>
+            <button class="sound-btn" onclick="playSound('health_bird', this)">
+                <span class="icon">2</span>
+                <div><div class="label">Garden Bird</div><div class="desc">Short soft chirp — gentle nature reminder</div></div>
+            </button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>XP Earned</h2>
+        <p>Background reinforcement. Should be very subtle — you'll hear it often.</p>
+        <div class="options">
+            <button class="sound-btn" onclick="playSound('xp_tick', this)">
+                <span class="icon">1</span>
+                <div><div class="label">Soft Tick</div><div class="desc">Barely-there tick — registers without distracting</div></div>
+            </button>
+            <button class="sound-btn" onclick="playSound('xp_shimmer', this)">
+                <span class="icon">2</span>
+                <div><div class="label">Tiny Shimmer</div><div class="desc">Quick sparkle — like collecting a coin</div></div>
+            </button>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="note">
+        These are Web Audio API approximations. The final app will use polished audio files with the same character. Pick the style you prefer for each — the exact sound will be refined during implementation.
+    </div>
+
+<script>
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function playSound(type, btn) {
+    document.querySelectorAll('.sound-btn').forEach(b => b.classList.remove('playing'));
+    btn.classList.add('playing');
+    setTimeout(() => btn.classList.remove('playing'), 1500);
+
+    switch(type) {
+        case 'bell_gentle': bellGentle(); break;
+        case 'bell_double': bellDouble(); break;
+        case 'bell_wood': bellWood(); break;
+        case 'break_tap': breakTap(); break;
+        case 'break_rise': breakRise(); break;
+        case 'task_pop': taskPop(); break;
+        case 'task_pluck': taskPluck(); break;
+        case 'task_ding': taskDing(); break;
+        case 'levelup_fanfare': levelupFanfare(); break;
+        case 'levelup_bloom': levelupBloom(); break;
+        case 'health_drop': healthDrop(); break;
+        case 'health_bird': healthBird(); break;
+        case 'xp_tick': xpTick(); break;
+        case 'xp_shimmer': xpShimmer(); break;
+    }
+}
+
+function bellGentle() {
+    const t = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(528, t);
+    osc.frequency.exponentialRampToValueAtTime(520, t + 2);
+    gain.gain.setValueAtTime(0.3, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 2);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(t); osc.stop(t + 2);
+    // Add harmonic
+    const osc2 = audioCtx.createOscillator();
+    const gain2 = audioCtx.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(1056, t);
+    gain2.gain.setValueAtTime(0.1, t);
+    gain2.gain.exponentialRampToValueAtTime(0.001, t + 1.5);
+    osc2.connect(gain2); gain2.connect(audioCtx.destination);
+    osc2.start(t); osc2.stop(t + 1.5);
+}
+
+function bellDouble() {
+    const t = audioCtx.currentTime;
+    [0, 0.2].forEach((offset, i) => {
+        const freq = i === 0 ? 600 : 800;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, t + offset);
+        gain.gain.setValueAtTime(0, t + offset);
+        gain.gain.linearRampToValueAtTime(0.25, t + offset + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + offset + 1.2);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(t + offset); osc.stop(t + offset + 1.2);
+    });
+}
+
+function bellWood() {
+    const t = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(800, t);
+    osc.frequency.exponentialRampToValueAtTime(300, t + 0.08);
+    gain.gain.setValueAtTime(0.4, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(t); osc.stop(t + 0.3);
+    // Body resonance
+    const osc2 = audioCtx.createOscillator();
+    const gain2 = audioCtx.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(220, t);
+    gain2.gain.setValueAtTime(0.15, t);
+    gain2.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+    osc2.connect(gain2); gain2.connect(audioCtx.destination);
+    osc2.start(t); osc2.stop(t + 0.5);
+}
+
+function breakTap() {
+    const t = audioCtx.currentTime;
+    [0, 0.12].forEach(offset => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(600, t + offset);
+        osc.frequency.exponentialRampToValueAtTime(400, t + offset + 0.05);
+        gain.gain.setValueAtTime(0.2, t + offset);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + offset + 0.15);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(t + offset); osc.stop(t + offset + 0.15);
+    });
+}
+
+function breakRise() {
+    const t = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(400, t);
+    osc.frequency.exponentialRampToValueAtTime(700, t + 0.4);
+    gain.gain.setValueAtTime(0.25, t);
+    gain.gain.setValueAtTime(0.25, t + 0.3);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.8);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(t); osc.stop(t + 0.8);
+}
+
+function taskPop() {
+    const t = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1200, t);
+    osc.frequency.exponentialRampToValueAtTime(600, t + 0.05);
+    gain.gain.setValueAtTime(0.3, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(t); osc.stop(t + 0.12);
+}
+
+function taskPluck() {
+    const t = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(880, t);
+    osc.frequency.exponentialRampToValueAtTime(440, t + 0.15);
+    gain.gain.setValueAtTime(0.3, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(t); osc.stop(t + 0.3);
+}
+
+function taskDing() {
+    const t = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1400, t);
+    gain.gain.setValueAtTime(0.2, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(t); osc.stop(t + 0.2);
+    // Harmonic
+    const osc2 = audioCtx.createOscillator();
+    const gain2 = audioCtx.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(2800, t);
+    gain2.gain.setValueAtTime(0.06, t);
+    gain2.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
+    osc2.connect(gain2); gain2.connect(audioCtx.destination);
+    osc2.start(t); osc2.stop(t + 0.15);
+}
+
+function levelupFanfare() {
+    const t = audioCtx.currentTime;
+    const notes = [523, 659, 784, 1047];
+    notes.forEach((freq, i) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, t + i * 0.15);
+        gain.gain.setValueAtTime(0, t + i * 0.15);
+        gain.gain.linearRampToValueAtTime(0.2, t + i * 0.15 + 0.02);
+        gain.gain.setValueAtTime(0.2, t + i * 0.15 + 0.2);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.15 + (i === 3 ? 1.2 : 0.4));
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(t + i * 0.15); osc.stop(t + i * 0.15 + (i === 3 ? 1.2 : 0.4));
+    });
+}
+
+function levelupBloom() {
+    const t = audioCtx.currentTime;
+    const notes = [523, 784, 1047, 1319, 1568];
+    notes.forEach((freq, i) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, t + i * 0.1);
+        gain.gain.setValueAtTime(0, t + i * 0.1);
+        gain.gain.linearRampToValueAtTime(0.15, t + i * 0.1 + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.1 + 0.8);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(t + i * 0.1); osc.stop(t + i * 0.1 + 0.8);
+        // Add shimmer
+        const osc2 = audioCtx.createOscillator();
+        const gain2 = audioCtx.createGain();
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(freq * 2, t + i * 0.1);
+        gain2.gain.setValueAtTime(0, t + i * 0.1);
+        gain2.gain.linearRampToValueAtTime(0.04, t + i * 0.1 + 0.02);
+        gain2.gain.exponentialRampToValueAtTime(0.001, t + i * 0.1 + 0.5);
+        osc2.connect(gain2); gain2.connect(audioCtx.destination);
+        osc2.start(t + i * 0.1); osc2.stop(t + i * 0.1 + 0.5);
+    });
+}
+
+function healthDrop() {
+    const t = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1800, t);
+    osc.frequency.exponentialRampToValueAtTime(400, t + 0.15);
+    gain.gain.setValueAtTime(0.2, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(t); osc.stop(t + 0.4);
+    // Ripple
+    const osc2 = audioCtx.createOscillator();
+    const gain2 = audioCtx.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(600, t + 0.1);
+    osc2.frequency.exponentialRampToValueAtTime(300, t + 0.5);
+    gain2.gain.setValueAtTime(0.08, t + 0.1);
+    gain2.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
+    osc2.connect(gain2); gain2.connect(audioCtx.destination);
+    osc2.start(t + 0.1); osc2.stop(t + 0.6);
+}
+
+function healthBird() {
+    const t = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(2000, t);
+    osc.frequency.linearRampToValueAtTime(2800, t + 0.06);
+    osc.frequency.linearRampToValueAtTime(2200, t + 0.12);
+    osc.frequency.linearRampToValueAtTime(3000, t + 0.18);
+    osc.frequency.linearRampToValueAtTime(2400, t + 0.25);
+    gain.gain.setValueAtTime(0.15, t);
+    gain.gain.setValueAtTime(0.15, t + 0.2);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(t); osc.stop(t + 0.35);
+}
+
+function xpTick() {
+    const t = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1000, t);
+    gain.gain.setValueAtTime(0.1, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(t); osc.stop(t + 0.06);
+}
+
+function xpShimmer() {
+    const t = audioCtx.currentTime;
+    [1200, 1600, 2000].forEach((freq, i) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, t + i * 0.03);
+        gain.gain.setValueAtTime(0.08, t + i * 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.03 + 0.15);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(t + i * 0.03); osc.stop(t + i * 0.03 + 0.15);
+    });
+}
+</script>
+</body>
+</html>

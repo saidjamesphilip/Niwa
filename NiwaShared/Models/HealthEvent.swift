@@ -4,6 +4,8 @@ import SwiftData
 enum HealthEventType: String, Codable {
     case water
     case stand
+    case creatine
+    case gym
 }
 
 @Model

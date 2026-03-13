@@ -10,6 +10,7 @@ enum TimerState: Equatable {
     case longBreak
 }
 
+@MainActor
 @Observable
 final class PomodoroTimerEngine {
     private let modelContext: ModelContext
@@ -151,7 +152,9 @@ final class PomodoroTimerEngine {
     private func startDisplayTimer() {
         stopDisplayTimer()
         displayTimer = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { [weak self] _ in
-            self?.updateRemainingTime()
+            Task { @MainActor in
+                self?.updateRemainingTime()
+            }
         }
     }
 
@@ -219,7 +222,4 @@ final class PomodoroTimerEngine {
         sessionsBeforeLongBreak = profile.sessionsBeforeLongBreak
     }
 
-    deinit {
-        displayTimer?.invalidate()
-    }
 }

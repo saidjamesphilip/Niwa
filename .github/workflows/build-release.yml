@@ -27,8 +27,15 @@ jobs:
             -configuration Release \
             -derivedDataPath build \
             CODE_SIGN_IDENTITY="-" \
-            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_ALLOWED=YES \
             build
+
+      - name: Sign app bundle
+        run: |
+          APP_PATH="build/Build/Products/Release/Niwa.app"
+          codesign --force --deep --sign - "$APP_PATH"
+          echo "=== Signature check ==="
+          codesign -dv --verbose=2 "$APP_PATH" 2>&1
 
       - name: Package app
         run: |
@@ -55,14 +62,13 @@ jobs:
 
             **Homebrew (recommended):**
             ```bash
-            brew tap saidjamesphilip/niwa
-            brew install niwa
+            brew install --cask saidjamesphilip/tap/niwa
             ```
 
             **Manual download:**
             1. Download `Niwa-${{ env.VERSION }}-mac.zip` below
             2. Unzip and drag `Niwa.app` to your Applications folder
-            3. Right-click → Open (first time only, to bypass Gatekeeper)
+            3. Right-click → Open (first time only)
 
             **Requirements:** macOS 15 (Sequoia) or later
 

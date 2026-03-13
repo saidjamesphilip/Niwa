@@ -3,13 +3,11 @@ import SwiftUI
 enum ContentTab: String, CaseIterable {
     case tasks = "Tasks"
     case notes = "Notes"
-    case clipboard = "Clipboard"
 }
 
 struct ContentTabView: View {
-    let taskManager: TaskManager
-    let noteManager: NoteManager
-    let clipboardMonitor: ClipboardMonitor
+    @EnvironmentObject var taskManager: TaskManager
+    @EnvironmentObject var noteManager: NoteManager
 
     @State private var selectedTab: ContentTab = .tasks
 
@@ -51,11 +49,9 @@ struct ContentTabView: View {
             // Tab content
             switch selectedTab {
             case .tasks:
-                TaskListView(taskManager: taskManager)
+                TaskListView()
             case .notes:
-                NotesListView(noteManager: noteManager)
-            case .clipboard:
-                ClipboardHistoryView(clipboardMonitor: clipboardMonitor)
+                NotesListView()
             }
         }
     }

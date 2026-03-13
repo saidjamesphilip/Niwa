@@ -87,9 +87,42 @@
 ### Health Reminders
 - Water and standing reminders on configurable intervals
 - Smart scheduling: respects work hours and lunch breaks
-- Actionable notifications with Done / Snooze
-- Live standing timer with pulse animation
+- Automatically pauses during lunch and outside work hours
+- Actionable macOS notifications with Done / Snooze (10 min)
+- Live standing timer with elapsed time tracking
 - **+10 XP** per health action completed
+
+#### How Reminders Work
+
+```
+┌─ Settings ──────────────────────────────────────────────┐
+│  Water every: 30 min  │  Stand every: 45 min            │
+│  Work hours: 9 AM – 5 PM  │  Lunch: 12 – 1 PM          │
+└─────────────────────────────────────────────────────────┘
+        │
+        ▼
+┌─ Smart Scheduling ──────────────────────────────────────┐
+│  • Before work hours → schedules at work start          │
+│  • During work → fires at your set interval             │
+│  • During lunch → reschedules to after lunch ends        │
+│  • After work hours → schedules for tomorrow morning     │
+│  • Snoozed → delays by 10 minutes (lunch-aware)         │
+└─────────────────────────────────────────────────────────┘
+        │
+        ▼
+┌─ macOS Notification ────────────────────────────────────┐
+│  🔔 Niwa                                                │
+│  Time for Water / Time to Stand                         │
+│  [ Done / Stand Up ]  [ Snooze 10 min ]                 │
+└─────────────────────────────────────────────────────────┘
+        │
+        ▼
+┌─ In-App Tracking ───────────────────────────────────────┐
+│  💧 3 waters today (+10 XP each)                        │
+│  🧍 Standing 2:34 (+10 XP when you sit down)            │
+│  → All activity feeds into the XP chart & leveling      │
+└─────────────────────────────────────────────────────────┘
+```
 
 ### XP & Leveling
 - Earn XP from every productive action
@@ -139,11 +172,16 @@ Your virtual plant grows as you level up — a visual representation of your pro
 ### Homebrew (recommended)
 
 ```bash
-brew tap saidjamesphilip/niwa
-brew install niwa
+brew install --cask saidjamesphilip/tap/niwa
 ```
 
 To update: `brew upgrade niwa`
+
+### Quick Install via Terminal
+
+```bash
+curl -sL https://niwa-app.pages.dev/install.sh | bash
+```
 
 ### Manual Download
 
