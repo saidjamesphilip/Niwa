@@ -60,7 +60,7 @@ struct DropdownRootView: View {
                 level: profileManager.profile?.currentLevel ?? 1,
                 previousLevel: gamificationEngine.previousLevel,
                 isVisible: showLevelUp,
-                onDismiss: { showLevelUp = false; soundManager.play(.levelUp) }
+                onDismiss: { showLevelUp = false }
             )
 
             WelcomeOverlay(isVisible: $showWelcome) { name in
@@ -74,6 +74,7 @@ struct DropdownRootView: View {
         .onChange(of: gamificationEngine.didLevelUp) { _, newValue in
             if newValue {
                 showLevelUp = true
+                soundManager.play(.levelUp)
                 gamificationEngine.resetLevelUpFlag()
             }
         }

@@ -22,6 +22,8 @@ struct HealthStatusView: View {
 
     @State private var showUndoTooltip: UndoTarget?
     @State private var undoDismissTask: Task<Void, Never>?
+    @State private var creatineHovered = false
+    @State private var gymHovered = false
 
     var body: some View {
         HStack(spacing: DesignTokens.Spacing.sm) {
@@ -165,9 +167,13 @@ struct HealthStatusView: View {
             )
         }
         .buttonStyle(.plain)
+        .onHover { creatineHovered = $0 }
+        .offset(y: creatineHovered ? -1 : 0)
+        .brightness(creatineHovered ? 0.15 : 0)
+        .animation(SwiftUI.Animation.easeOut(duration: 0.2), value: creatineHovered)
         .overlay(alignment: Alignment.top) {
             if showUndoTooltip == .creatine {
-                undoTooltip(label: "Undo creatine?") {
+                undoTooltip(label: "Undo Creatine? −\(XPConstants.creatineConfirm) XP", color: PillColor.amber) {
                     healthManager.undoCreatine()
                     withAnimation(SwiftUI.Animation.easeOut(duration: 0.15)) {
                         showUndoTooltip = nil
@@ -223,9 +229,13 @@ struct HealthStatusView: View {
             )
         }
         .buttonStyle(.plain)
+        .onHover { gymHovered = $0 }
+        .offset(y: gymHovered ? -1 : 0)
+        .brightness(gymHovered ? 0.15 : 0)
+        .animation(SwiftUI.Animation.easeOut(duration: 0.2), value: gymHovered)
         .overlay(alignment: Alignment.top) {
             if showUndoTooltip == .gym {
-                undoTooltip(label: "Undo gym?") {
+                undoTooltip(label: "Undo Gym? −\(XPConstants.gymConfirm) XP", color: PillColor.terra) {
                     healthManager.undoGym()
                     withAnimation(SwiftUI.Animation.easeOut(duration: 0.15)) {
                         showUndoTooltip = nil
@@ -248,22 +258,22 @@ struct HealthStatusView: View {
     // MARK: - Undo Tooltip
 
     @ViewBuilder
-    private func undoTooltip(label: String, action: @escaping () -> Void) -> some View {
+    private func undoTooltip(label: String, color: Color, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Text(label)
                 .font(.system(size: 11, weight: .medium))
-                .foregroundStyle(DesignTokens.Colors.textPrimary)
+                .foregroundStyle(color)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 5)
                 .background(
                     RoundedRectangle(cornerRadius: 8)
-                        .fill(DesignTokens.Colors.background)
+                        .fill(Color(red: 0x3D/255, green: 0x34/255, blue: 0x29/255))
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
-                        .strokeBorder(DesignTokens.Colors.subtle.opacity(0.5), lineWidth: 1)
+                        .strokeBorder(color.opacity(0.4), lineWidth: 1)
                 )
-                .shadow(color: Color.black.opacity(0.12), radius: 6, y: 2)
+                .shadow(color: Color.black.opacity(0.3), radius: 6, y: 2)
         }
         .buttonStyle(.plain)
         .zIndex(10)
@@ -302,7 +312,8 @@ struct HealthStatusView: View {
     private func milestoneBadge(from start: Date, to now: Date) -> Int? {
         let elapsedMinutes = Int(max(0, now.timeIntervalSince(start))) / 60
         let reached = XPConstants.standMilestones.filter { elapsedMinutes >= $0.minutes }
-        return reached.last.map { $0.bonus }
+        guard !reached.isEmpty else { return nil }
+        return reached.reduce(0) { $0 + $1.bonus }
     }
 }
 
