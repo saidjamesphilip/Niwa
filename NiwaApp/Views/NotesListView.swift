@@ -2,6 +2,8 @@ import SwiftUI
 import SwiftData
 
 struct NotesListView: View {
+    var contentMaxHeight: CGFloat = 600
+
     @EnvironmentObject var noteManager: NoteManager
 
     @State private var expandedNoteId: UUID?
@@ -117,7 +119,7 @@ struct NotesListView: View {
                     .padding(.horizontal, DesignTokens.Spacing.xs)
                     .padding(.vertical, DesignTokens.Spacing.xs)
                 }
-                .frame(maxHeight: 600)
+                .frame(height: contentMaxHeight)
             }
         }
     }

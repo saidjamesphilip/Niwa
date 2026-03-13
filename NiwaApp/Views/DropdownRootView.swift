@@ -2,8 +2,9 @@ import SwiftUI
 import SwiftData
 
 struct DropdownRootView: View {
+    let appErrorState: AppErrorState
     let gamificationEngine: GamificationEngine
-    let timerEngine: PomodoroTimerEngine
+    let timerEngine: FocusTimerEngine
     let healthManager: HealthEventManager
     let profileManager: UserProfileManager
     let soundManager: SoundManager
@@ -18,6 +19,11 @@ struct DropdownRootView: View {
     @State private var showGreeting = false
     @State private var greetingMessage = ""
     @State private var resetStatusMessage = ""
+    @State private var isExpanded = false
+    @State private var mainContentHeight: CGFloat = 0
+
+    private var screenHeight: CGFloat { NSScreen.main?.visibleFrame.height ?? 900 }
+    private var contentMaxHeight: CGFloat { isExpanded ? screenHeight * 0.5 : screenHeight * 0.3 }
 
     private var profile: UserProfile? { profileManager.profile }
 
@@ -31,20 +37,29 @@ struct DropdownRootView: View {
                         timerEngine: timerEngine,
                         healthManager: healthManager,
                         onResetData: { resetAllData() },
-                        onFullRestart: { fullRestart() },
                         statusMessage: resetStatusMessage
                     )
+                    .frame(height: mainContentHeight > 0 ? mainContentHeight : contentMaxHeight)
                 } else if showSounds {
                     soundsHeader
                     SoundsView(
                         soundManager: soundManager,
                         profileManager: profileManager
                     )
+                    .frame(height: mainContentHeight > 0 ? mainContentHeight : contentMaxHeight)
                 } else {
                     if showGreeting {
                         GreetingBanner(message: greetingMessage, isVisible: $showGreeting)
                     }
                     mainContent
+                        .background(
+                            GeometryReader { geo in
+                                Color.clear.preference(key: MainContentHeightKey.self, value: geo.size.height)
+                            }
+                        )
+                        .onPreferenceChange(MainContentHeightKey.self) { height in
+                            mainContentHeight = height
+                        }
                 }
 
                 Divider()
@@ -52,16 +67,14 @@ struct DropdownRootView: View {
 
                 bottomToolbar
             }
-            .frame(width: 320)
+            .frame(width: 380)
             .background(DesignTokens.Colors.background)
 
             LevelUpOverlay(
-                level: profile?.currentLevel ?? 0,
+                level: profileManager.profile?.currentLevel ?? 1,
+                previousLevel: gamificationEngine.previousLevel,
                 isVisible: showLevelUp,
-                onDismiss: {
-                    showLevelUp = false
-                    soundManager.play(.levelUp)
-                }
+                onDismiss: { showLevelUp = false }
             )
 
             WelcomeOverlay(isVisible: $showWelcome) { name in
@@ -75,11 +88,16 @@ struct DropdownRootView: View {
         .onChange(of: gamificationEngine.didLevelUp) { _, newValue in
             if newValue {
                 showLevelUp = true
+                soundManager.play(.levelUp)
                 gamificationEngine.resetLevelUpFlag()
             }
         }
         .onAppear {
+            NotificationManager.shared.isDropdownVisible = true
             checkFirstLaunchAndGreeting()
+        }
+        .onDisappear {
+            NotificationManager.shared.isDropdownVisible = false
         }
         .onChange(of: profile?.totalXP) { oldXP, newXP in
             guard let oldXP, let newXP, newXP > oldXP else { return }
@@ -87,14 +105,9 @@ struct DropdownRootView: View {
                 soundManager.play(.xpEarned)
             }
         }
-        .onChange(of: timerEngine.state) { oldState, newState in
-            // Work session just completed → moved to break
-            if oldState == .working && (newState == .shortBreak || newState == .longBreak) {
+        .onChange(of: timerEngine.state) { _, newState in
+            if newState == .complete {
                 soundManager.play(.timerComplete)
-            }
-            // Break just completed → back to idle
-            if (oldState == .shortBreak || oldState == .longBreak) && newState == .idle {
-                soundManager.play(.breakComplete)
             }
         }
     }
@@ -102,8 +115,13 @@ struct DropdownRootView: View {
     private func checkFirstLaunchAndGreeting() {
         guard let profile = profile else { return }
 
-        // First launch — show welcome
+        // First launch — show welcome and seed demo content
         if profile.displayName.isEmpty && profile.lastGreetingDate == nil {
+            if taskManager.tasks.isEmpty {
+                seedDemoContent(context: profileManager.context)
+                taskManager.refreshTasks()
+                noteManager.refreshNotes()
+            }
             showWelcome = true
             return
         }
@@ -117,9 +135,7 @@ struct DropdownRootView: View {
 
         // Show greeting
         greetingMessage = GreetingMessages.randomGreeting(name: profile.displayName)
-        withAnimation(DesignTokens.Animation.viewTransition) {
-            showGreeting = true
-        }
+        showGreeting = true
         profile.lastGreetingDate = Date()
         profileManager.save()
     }
@@ -128,12 +144,18 @@ struct DropdownRootView: View {
 
     private var mainContent: some View {
         VStack(spacing: 0) {
+            if let message = appErrorState.bannerMessage {
+                ErrorBannerView(message: message) {
+                    appErrorState.dismiss()
+                }
+            }
+
             HeroView(engine: timerEngine)
 
             Divider()
                 .background(DesignTokens.Colors.subtle)
 
-            ContentTabView()
+            ContentTabView(contentMaxHeight: contentMaxHeight)
 
             Divider()
                 .background(DesignTokens.Colors.subtle)
@@ -152,9 +174,7 @@ struct DropdownRootView: View {
     private var settingsHeader: some View {
         HStack {
             Button {
-                withAnimation(DesignTokens.Animation.viewTransition) {
-                    showSettings = false
-                }
+                showSettings = false
             } label: {
                 HStack(spacing: DesignTokens.Spacing.xs) {
                     Image(systemName: "chevron.left")
@@ -193,9 +213,7 @@ struct DropdownRootView: View {
     private var soundsHeader: some View {
         HStack {
             Button {
-                withAnimation(DesignTokens.Animation.viewTransition) {
-                    showSounds = false
-                }
+                showSounds = false
             } label: {
                 HStack(spacing: DesignTokens.Spacing.xs) {
                     Image(systemName: "chevron.left")
@@ -248,6 +266,17 @@ struct DropdownRootView: View {
             Spacer()
 
             Button {
+                isExpanded.toggle()
+            } label: {
+                Image(systemName: isExpanded ? "chevron.up.2" : "chevron.down.2")
+                    .font(.system(size: 12))
+                    .foregroundStyle(DesignTokens.Colors.textSecondary)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(isExpanded ? "Show Less" : "Show More")
+            .help(isExpanded ? "Show Less" : "Show More")
+
+            Button {
                 restartApp()
             } label: {
                 Image(systemName: "arrow.clockwise")
@@ -259,10 +288,8 @@ struct DropdownRootView: View {
             .help("Restart Niwa")
 
             Button {
-                withAnimation(DesignTokens.Animation.viewTransition) {
-                    showSounds.toggle()
-                    showSettings = false
-                }
+                showSounds.toggle()
+                showSettings = false
             } label: {
                 Image(systemName: showSounds ? "speaker.wave.2.fill" : "speaker.wave.2")
                     .font(.system(size: 14))
@@ -273,10 +300,8 @@ struct DropdownRootView: View {
             .help("Sounds")
 
             Button {
-                withAnimation(DesignTokens.Animation.viewTransition) {
-                    showSettings.toggle()
-                    showSounds = false
-                }
+                showSettings.toggle()
+                showSounds = false
             } label: {
                 Image(systemName: showSettings ? "gear.circle.fill" : "gear")
                     .font(.system(size: 14))
@@ -323,53 +348,51 @@ struct DropdownRootView: View {
             try context.delete(model: TimerSession.self)
             try context.delete(model: HealthEvent.self)
             try context.delete(model: XPEvent.self)
-            if let profile = profileManager.profile {
-                profile.totalXP = 0
-                profile.currentLevel = 0
-            }
+            try context.delete(model: UserProfile.self)
+            context.insert(UserProfile())
             try context.save()
             NotificationManager.shared.cancelAllPending()
-            timerEngine.skip()
+            timerEngine.forceReset()
+            healthManager.stopStanding()
+            healthManager.reloadStats()
+            seedDemoContent(context: context)
             taskManager.refreshTasks()
             noteManager.refreshNotes()
-            resetStatusMessage = "Data reset successfully!"
+            resetStatusMessage = "All data reset. Fresh start!"
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                withAnimation(DesignTokens.Animation.viewTransition) {
-                    showSettings = false
-                    resetStatusMessage = ""
-                }
+                showSettings = false
+                showWelcome = true
+                resetStatusMessage = ""
             }
         } catch {
             resetStatusMessage = "Reset failed: \(error.localizedDescription)"
         }
     }
 
-    private func fullRestart() {
-        let context = profileManager.context
-        do {
-            try context.delete(model: NiwaTask.self)
-            try context.delete(model: NiwaNote.self)
-            try context.delete(model: ClipboardEntry.self)
-            try context.delete(model: TimerSession.self)
-            try context.delete(model: HealthEvent.self)
-            try context.delete(model: XPEvent.self)
-            try context.delete(model: UserProfile.self)
-            context.insert(UserProfile())
-            try context.save()
-            NotificationManager.shared.cancelAllPending()
-            timerEngine.skip()
-            taskManager.refreshTasks()
-            noteManager.refreshNotes()
-            resetStatusMessage = "Fresh start! Back to seed."
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                withAnimation(DesignTokens.Animation.viewTransition) {
-                    showSettings = false
-                    showWelcome = true
-                    resetStatusMessage = ""
-                }
-            }
-        } catch {
-            resetStatusMessage = "Restart failed: \(error.localizedDescription)"
-        }
+    private func seedDemoContent(context: ModelContext) {
+        let today = Calendar.current.startOfDay(for: Date())
+        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)
+        let nextWeek = Calendar.current.date(byAdding: .day, value: 7, to: today)
+
+        let task1 = NiwaTask(title: "Try completing a task for +15 XP", sortOrder: 0, priority: .high, dueDate: today)
+        let task2 = NiwaTask(title: "Start a focus timer to earn XP", sortOrder: 1, priority: .medium, dueDate: tomorrow)
+        let task3 = NiwaTask(title: "Log a health habit below", sortOrder: 2, priority: .low, dueDate: nextWeek)
+        context.insert(task1)
+        context.insert(task2)
+        context.insert(task3)
+
+        let demoNote = NiwaNote(
+            content: "Welcome to Niwa! Use notes to jot down quick thoughts. Your garden grows as you stay productive.",
+            colorIndex: 0
+        )
+        context.insert(demoNote)
+        try? context.save()
+    }
+}
+
+private struct MainContentHeightKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
     }
 }

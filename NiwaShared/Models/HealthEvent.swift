@@ -6,6 +6,7 @@ enum HealthEventType: String, Codable {
     case stand
     case creatine
     case gym
+    case coffee
 }
 
 @Model

@@ -6,19 +6,21 @@ import Combine
 final class NoteManager: ObservableObject {
     private let modelContext: ModelContext
     private let gamificationEngine: GamificationEngine
+    private var appErrorState: AppErrorState?
 
     @Published private(set) var notes: [NiwaNote] = []
 
-    init(modelContext: ModelContext, gamificationEngine: GamificationEngine) {
+    init(modelContext: ModelContext, gamificationEngine: GamificationEngine, appErrorState: AppErrorState) {
         self.modelContext = modelContext
         self.gamificationEngine = gamificationEngine
+        self.appErrorState = appErrorState
         refreshNotes()
     }
 
     static let noteColorCount = 5
 
     func createNote(content: String = "") -> NiwaNote {
-        let nextColor = (notes.first?.colorIndex ?? -1 + 1) % Self.noteColorCount
+        let nextColor = ((notes.first?.colorIndex ?? -1) + 1) % Self.noteColorCount
         let note = NiwaNote(content: content, colorIndex: nextColor)
         modelContext.insert(note)
         save()
@@ -49,7 +51,13 @@ final class NoteManager: ObservableObject {
         do {
             try modelContext.save()
         } catch {
-            print("[NoteManager] Save failed: \(error)")
+            // Retry once
+            do {
+                try modelContext.save()
+            } catch {
+                appErrorState?.showError("Unable to save notes. Please restart Niwa.")
+                print("[NoteManager] Save failed after retry: \(error)")
+            }
         }
     }
 }

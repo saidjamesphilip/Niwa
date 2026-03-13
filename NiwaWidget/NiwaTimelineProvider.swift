@@ -59,7 +59,7 @@ struct NiwaTimelineProvider: TimelineProvider {
                 timerStartDate = session.startedAt
                 timerEndDate = session.startedAt.addingTimeInterval(session.duration)
                 switch session.type {
-                case .work: sessionLabel = "Focus"
+                case .work, .focus: sessionLabel = "Focus"
                 case .shortBreak: sessionLabel = "Short Break"
                 case .longBreak: sessionLabel = "Long Break"
                 }

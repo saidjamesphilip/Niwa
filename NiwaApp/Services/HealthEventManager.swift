@@ -14,11 +14,9 @@ final class HealthEventManager {
     private(set) var standingStartedAt: Date?
     private(set) var todayCreatineLogged: Bool = false
     private(set) var todayGymLogged: Bool = false
+    private(set) var todayCoffeeCount: Int = 0
 
-    // Track when the last reminder-triggering action happened
-    // so we schedule the next one at lastAction + interval, not now + interval
-    private var lastWaterActionDate: Date?
-    private var lastStandActionDate: Date?
+    private var dailyResetTimer: Timer?
 
     init(modelContext: ModelContext, gamificationEngine: GamificationEngine, profileManager: UserProfileManager) {
         self.modelContext = modelContext
@@ -27,7 +25,7 @@ final class HealthEventManager {
         loadTodayStats()
         resumeStandingSession()
         setupNotificationCallbacks()
-        scheduleNextReminders()
+        scheduleDailyReset()
     }
 
     // MARK: - Water
@@ -40,13 +38,6 @@ final class HealthEventManager {
 
         gamificationEngine.awardXP(source: .water, amount: XPConstants.waterConfirm, context: modelContext)
         todayWaterCount += 1
-        lastWaterActionDate = Date()
-        scheduleNextWaterReminder()
-    }
-
-    func snoozeWater() {
-        lastWaterActionDate = Date()
-        scheduleNextWaterReminder(snoozed: true)
     }
 
     // MARK: - Standing
@@ -74,16 +65,18 @@ final class HealthEventManager {
             try? modelContext.save()
         }
 
-        gamificationEngine.awardXP(source: .stand, amount: XPConstants.standComplete, context: modelContext)
+        let duration = Date().timeIntervalSince(startTime)
+        let minutes = Int(duration / 60)
+        var totalXP = XPConstants.standComplete  // base 10 XP
+        for milestone in XPConstants.standMilestones {
+            if minutes >= milestone.minutes {
+                totalXP += milestone.bonus
+            }
+        }
+        totalXP = min(totalXP, XPConstants.standMaxXP)
+        gamificationEngine.awardXP(source: .stand, amount: totalXP, context: modelContext)
         isStanding = false
         standingStartedAt = nil
-        lastStandActionDate = Date()
-        scheduleNextStandReminder()
-    }
-
-    func snoozeStand() {
-        lastStandActionDate = Date()
-        scheduleNextStandReminder(snoozed: true)
     }
 
     // MARK: - Creatine (once daily)
@@ -112,117 +105,83 @@ final class HealthEventManager {
         todayGymLogged = true
     }
 
-    // MARK: - Scheduling
+    // MARK: - Coffee
 
-    func scheduleNextReminders() {
-        // Cancel any existing pending notifications first
-        NotificationManager.shared.cancelAllPending()
+    func confirmCoffee() {
+        let event = HealthEvent(type: .coffee)
+        event.confirmedAt = Date()
+        modelContext.insert(event)
+        try? modelContext.save()
 
-        guard profileManager.profile?.healthRemindersEnabled == true else { return }
-
-        scheduleNextWaterReminder()
-        scheduleNextStandReminder()
+        todayCoffeeCount += 1
+        if todayCoffeeCount <= XPConstants.coffeeMaxBeforePenalty {
+            gamificationEngine.awardXP(source: .coffee, amount: XPConstants.coffeeConfirm, context: modelContext)
+        } else {
+            gamificationEngine.deductXP(source: .coffee, amount: XPConstants.coffeePenalty, context: modelContext)
+        }
     }
 
-    private func scheduleNextWaterReminder(snoozed: Bool = false) {
-        guard let profile = profileManager.profile else { return }
+    // MARK: - Undo (once-daily items)
 
-        let snoozedUntil: Date? = snoozed
-            ? Date().addingTimeInterval(TimeInterval(XPConstants.snoozeDurationMinutes * 60))
-            : nil
+    func undoCreatine() {
+        guard todayCreatineLogged else { return }
+        let dayStart = Self.habitDayStart()
 
-        // Use last action time as the base so the full interval is respected
-        let baseTime = lastWaterActionDate ?? Date()
-
-        let nextDate = ReminderSchedulingEngine.nextFireDate(
-            now: baseTime,
-            intervalMinutes: profile.waterIntervalMinutes,
-            workStartHour: profile.workHoursStartHour,
-            workStartMinute: profile.workHoursStartMinute,
-            workEndHour: profile.workHoursEndHour,
-            workEndMinute: profile.workHoursEndMinute,
-            lunchStartHour: profile.lunchStartHour,
-            lunchStartMinute: profile.lunchStartMinute,
-            lunchEndHour: profile.lunchEndHour,
-            lunchEndMinute: profile.lunchEndMinute,
-            snoozedUntil: snoozedUntil
+        let descriptor = FetchDescriptor<HealthEvent>(
+            predicate: #Predicate<HealthEvent> { event in
+                event.typeRaw == "creatine" && event.confirmedAt != nil
+            },
+            sortBy: [SortDescriptor(\.confirmedAt, order: .reverse)]
         )
-
-        // Only schedule if the fire date is in the future
-        guard nextDate > Date() else {
-            // If the computed date is in the past (e.g. app was closed for a while),
-            // schedule from now instead
-            let fallback = ReminderSchedulingEngine.nextFireDate(
-                now: Date(),
-                intervalMinutes: profile.waterIntervalMinutes,
-                workStartHour: profile.workHoursStartHour,
-                workStartMinute: profile.workHoursStartMinute,
-                workEndHour: profile.workHoursEndHour,
-                workEndMinute: profile.workHoursEndMinute,
-                lunchStartHour: profile.lunchStartHour,
-                lunchStartMinute: profile.lunchStartMinute,
-                lunchEndHour: profile.lunchEndHour,
-                lunchEndMinute: profile.lunchEndMinute,
-                snoozedUntil: nil
-            )
-            NotificationManager.shared.scheduleWaterReminder(at: fallback)
-            return
+        if let events = try? modelContext.fetch(descriptor),
+           let event = events.first(where: { ($0.confirmedAt ?? .distantPast) >= dayStart }) {
+            modelContext.delete(event)
+            try? modelContext.save()
         }
 
-        NotificationManager.shared.scheduleWaterReminder(at: nextDate)
+        gamificationEngine.deductXP(source: .creatine, amount: XPConstants.creatineConfirm, context: modelContext)
+        todayCreatineLogged = false
     }
 
-    private func scheduleNextStandReminder(snoozed: Bool = false) {
-        guard let profile = profileManager.profile, !isStanding else { return }
+    func undoGym() {
+        guard todayGymLogged else { return }
+        let dayStart = Self.habitDayStart()
 
-        let snoozedUntil: Date? = snoozed
-            ? Date().addingTimeInterval(TimeInterval(XPConstants.snoozeDurationMinutes * 60))
-            : nil
-
-        // Use last action time as the base so the full interval is respected
-        let baseTime = lastStandActionDate ?? Date()
-
-        let nextDate = ReminderSchedulingEngine.nextFireDate(
-            now: baseTime,
-            intervalMinutes: profile.standIntervalMinutes,
-            workStartHour: profile.workHoursStartHour,
-            workStartMinute: profile.workHoursStartMinute,
-            workEndHour: profile.workHoursEndHour,
-            workEndMinute: profile.workHoursEndMinute,
-            lunchStartHour: profile.lunchStartHour,
-            lunchStartMinute: profile.lunchStartMinute,
-            lunchEndHour: profile.lunchEndHour,
-            lunchEndMinute: profile.lunchEndMinute,
-            snoozedUntil: snoozedUntil
+        let descriptor = FetchDescriptor<HealthEvent>(
+            predicate: #Predicate<HealthEvent> { event in
+                event.typeRaw == "gym" && event.confirmedAt != nil
+            },
+            sortBy: [SortDescriptor(\.confirmedAt, order: .reverse)]
         )
-
-        // Only schedule if the fire date is in the future
-        guard nextDate > Date() else {
-            let fallback = ReminderSchedulingEngine.nextFireDate(
-                now: Date(),
-                intervalMinutes: profile.standIntervalMinutes,
-                workStartHour: profile.workHoursStartHour,
-                workStartMinute: profile.workHoursStartMinute,
-                workEndHour: profile.workHoursEndHour,
-                workEndMinute: profile.workHoursEndMinute,
-                lunchStartHour: profile.lunchStartHour,
-                lunchStartMinute: profile.lunchStartMinute,
-                lunchEndHour: profile.lunchEndHour,
-                lunchEndMinute: profile.lunchEndMinute,
-                snoozedUntil: nil
-            )
-            NotificationManager.shared.scheduleStandReminder(at: fallback)
-            return
+        if let events = try? modelContext.fetch(descriptor),
+           let event = events.first(where: { ($0.confirmedAt ?? .distantPast) >= dayStart }) {
+            modelContext.delete(event)
+            try? modelContext.save()
         }
 
-        NotificationManager.shared.scheduleStandReminder(at: nextDate)
+        gamificationEngine.deductXP(source: .gym, amount: XPConstants.gymConfirm, context: modelContext)
+        todayGymLogged = false
     }
 
     // MARK: - Load/Resume
 
-    private func loadTodayStats() {
+    func reloadStats() {
+        loadTodayStats()
+    }
+
+    /// Daily habits reset at 7am, not midnight
+    static func habitDayStart(for date: Date = Date()) -> Date {
         let calendar = Calendar.current
-        let startOfDay = calendar.startOfDay(for: Date())
+        let startOfDay = calendar.startOfDay(for: date)
+        let sevenAM = calendar.date(byAdding: .hour, value: 7, to: startOfDay)!
+        // If it's before 7am, the habit day started yesterday at 7am
+        return date < sevenAM
+            ? calendar.date(byAdding: .day, value: -1, to: sevenAM)!
+            : sevenAM
+    }
+
+    private func loadTodayStats() {
+        let dayStart = Self.habitDayStart()
 
         let descriptor = FetchDescriptor<HealthEvent>(
             predicate: #Predicate<HealthEvent> { event in
@@ -233,22 +192,13 @@ final class HealthEventManager {
 
         let todayEvents = events.filter { event in
             guard let confirmed = event.confirmedAt else { return false }
-            return confirmed >= startOfDay
+            return confirmed >= dayStart
         }
 
         todayWaterCount = todayEvents.filter { $0.typeRaw == HealthEventType.water.rawValue }.count
         todayCreatineLogged = todayEvents.contains { $0.typeRaw == HealthEventType.creatine.rawValue }
         todayGymLogged = todayEvents.contains { $0.typeRaw == HealthEventType.gym.rawValue }
-
-        // Load last action dates so reminders respect the interval from the last event
-        lastWaterActionDate = events
-            .filter { $0.typeRaw == HealthEventType.water.rawValue }
-            .compactMap { $0.confirmedAt }
-            .max()
-        lastStandActionDate = events
-            .filter { $0.typeRaw == HealthEventType.stand.rawValue }
-            .compactMap { $0.confirmedAt }
-            .max()
+        todayCoffeeCount = todayEvents.filter { $0.typeRaw == HealthEventType.coffee.rawValue }.count
     }
 
     private func resumeStandingSession() {
@@ -263,34 +213,31 @@ final class HealthEventManager {
     }
 
     private func setupNotificationCallbacks() {
-        let manager = NotificationManager.shared
-        manager.onWaterDone = { [weak self] in
-            DispatchQueue.main.async { self?.confirmWater() }
+        // Callbacks are now wired in NiwaApp.init() to coordinate
+        // between HealthEventManager and ReminderTimerManager
+    }
+
+    // MARK: - Daily Reset at 7am
+
+    private func scheduleDailyReset() {
+        dailyResetTimer?.invalidate()
+        let calendar = Calendar.current
+        let now = Date()
+        let startOfDay = calendar.startOfDay(for: now)
+        var next7am = calendar.date(byAdding: .hour, value: 7, to: startOfDay)!
+        if now >= next7am {
+            next7am = calendar.date(byAdding: .day, value: 1, to: next7am)!
         }
-        manager.onWaterSnooze = { [weak self] in
-            DispatchQueue.main.async { self?.snoozeWater() }
-        }
-        manager.onStandUp = { [weak self] in
-            DispatchQueue.main.async { self?.startStanding() }
-        }
-        manager.onStandSnooze = { [weak self] in
-            DispatchQueue.main.async { self?.snoozeStand() }
-        }
-        manager.onSitDown = { [weak self] in
-            DispatchQueue.main.async { self?.stopStanding() }
-        }
-        // When user dismisses/taps without action, reschedule from now
-        manager.onWaterDismissed = { [weak self] in
-            DispatchQueue.main.async {
-                self?.lastWaterActionDate = Date()
-                self?.scheduleNextWaterReminder()
+        let interval = next7am.timeIntervalSince(now)
+        dailyResetTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { [weak self] _ in
+            Task { @MainActor in
+                self?.performDailyReset()
             }
         }
-        manager.onStandDismissed = { [weak self] in
-            DispatchQueue.main.async {
-                self?.lastStandActionDate = Date()
-                self?.scheduleNextStandReminder()
-            }
-        }
+    }
+
+    private func performDailyReset() {
+        loadTodayStats()
+        scheduleDailyReset()
     }
 }

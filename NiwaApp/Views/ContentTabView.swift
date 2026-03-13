@@ -9,6 +9,8 @@ struct ContentTabView: View {
     @EnvironmentObject var taskManager: TaskManager
     @EnvironmentObject var noteManager: NoteManager
 
+    var contentMaxHeight: CGFloat = 600
+
     @State private var selectedTab: ContentTab = .tasks
 
     var body: some View {
@@ -17,9 +19,7 @@ struct ContentTabView: View {
             HStack(spacing: 0) {
                 ForEach(ContentTab.allCases, id: \.self) { tab in
                     Button {
-                        withAnimation(DesignTokens.Animation.viewTransition) {
-                            selectedTab = tab
-                        }
+                        selectedTab = tab
                     } label: {
                         Text(tab.rawValue)
                             .font(DesignTokens.Typography.captionFont)
@@ -29,13 +29,14 @@ struct ContentTabView: View {
                                     : DesignTokens.Colors.textSecondary
                             )
                             .frame(maxWidth: .infinity)
-                            .padding(.vertical, DesignTokens.Spacing.sm)
+                            .padding(.vertical, DesignTokens.Spacing.md)
                             .background(
                                 selectedTab == tab
                                     ? DesignTokens.Colors.backgroundSecondary
                                     : Color.clear
                             )
                             .clipShape(RoundedRectangle(cornerRadius: DesignTokens.CornerRadius.small))
+                            .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                 }
@@ -49,9 +50,9 @@ struct ContentTabView: View {
             // Tab content
             switch selectedTab {
             case .tasks:
-                TaskListView()
+                TaskListView(contentMaxHeight: contentMaxHeight)
             case .notes:
-                NotesListView()
+                NotesListView(contentMaxHeight: contentMaxHeight)
             }
         }
     }

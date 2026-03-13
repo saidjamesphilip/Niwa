@@ -7,12 +7,14 @@ import WidgetKit
 final class TaskManager: ObservableObject {
     private let modelContext: ModelContext
     private let gamificationEngine: GamificationEngine
+    private var appErrorState: AppErrorState?
 
     @Published private(set) var tasks: [NiwaTask] = []
 
-    init(modelContext: ModelContext, gamificationEngine: GamificationEngine) {
+    init(modelContext: ModelContext, gamificationEngine: GamificationEngine, appErrorState: AppErrorState) {
         self.modelContext = modelContext
         self.gamificationEngine = gamificationEngine
+        self.appErrorState = appErrorState
         refreshTasks()
     }
 
@@ -113,7 +115,13 @@ final class TaskManager: ObservableObject {
         do {
             try modelContext.save()
         } catch {
-            print("TaskManager save failed: \(error)")
+            // Retry once
+            do {
+                try modelContext.save()
+            } catch {
+                appErrorState?.showError("Unable to save tasks. Please restart Niwa.")
+                print("[TaskManager] Save failed after retry: \(error)")
+            }
         }
     }
 }
