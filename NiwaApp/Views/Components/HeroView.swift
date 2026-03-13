@@ -99,8 +99,8 @@ struct HeroView: View {
                         Text("\(minutes)")
                             .font(.system(size: 11, weight: .medium))
                             .foregroundStyle(DesignTokens.Colors.primary)
-                            .frame(minWidth: 28, minHeight: 24)
-                            .padding(.horizontal, 4)
+                            .frame(minWidth: 32, minHeight: 32)
+                            .padding(.horizontal, 6)
                             .background(
                                 Capsule()
                                     .fill(DesignTokens.Colors.primary.opacity(0.12))
@@ -123,7 +123,7 @@ struct HeroView: View {
                     Image(systemName: "minus")
                         .font(.system(size: 9, weight: .bold))
                         .foregroundStyle(DesignTokens.Colors.textSecondary)
-                        .frame(width: 20, height: 20)
+                        .frame(width: 28, height: 28)
                         .background(Circle().fill(DesignTokens.Colors.backgroundSecondary))
                 }
                 .buttonStyle(.plain)
@@ -140,7 +140,7 @@ struct HeroView: View {
                     Image(systemName: "plus")
                         .font(.system(size: 9, weight: .bold))
                         .foregroundStyle(DesignTokens.Colors.textSecondary)
-                        .frame(width: 20, height: 20)
+                        .frame(width: 28, height: 28)
                         .background(Circle().fill(DesignTokens.Colors.backgroundSecondary))
                 }
                 .buttonStyle(.plain)
@@ -151,7 +151,7 @@ struct HeroView: View {
                     Image(systemName: "play.fill")
                         .font(.system(size: 10))
                         .foregroundStyle(DesignTokens.Colors.primary)
-                        .frame(width: 24, height: 24)
+                        .frame(width: 28, height: 28)
                         .background(Circle().fill(DesignTokens.Colors.primary.opacity(0.15)))
                 }
                 .buttonStyle(.plain)

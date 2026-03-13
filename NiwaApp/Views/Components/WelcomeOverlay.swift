@@ -15,6 +15,7 @@ struct WelcomeOverlay: View {
             ZStack {
                 Color.black.opacity(0.5)
                     .ignoresSafeArea()
+                    .accessibilityHidden(true)
 
                 VStack(spacing: 0) {
                     // Header with sage gradient
@@ -86,6 +87,7 @@ struct WelcomeOverlay: View {
                         }
                         .buttonStyle(.plain)
                         .disabled(!nameIsValid)
+                        .accessibilityHint(nameIsValid ? "Opens the garden" : "Enter your name first")
                     }
                     .padding(.horizontal, DesignTokens.Spacing.md)
                     .padding(.bottom, DesignTokens.Spacing.md)
