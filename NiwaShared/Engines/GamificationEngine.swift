@@ -7,7 +7,7 @@ import WidgetKit
 @Observable
 final class GamificationEngine {
     private let modelContext: ModelContext
-    private(set) var didLevelUp: Bool = false
+    private(set) var levelUpCount: Int = 0
     /// Stores the level before the most recent level-up, for the celebration overlay.
     private(set) var previousLevel: Int = 0
 
@@ -40,7 +40,7 @@ final class GamificationEngine {
 
         let leveledUp = profile.currentLevel > previousLevelLocal
         if leveledUp { self.previousLevel = previousLevelLocal }
-        didLevelUp = leveledUp
+        if leveledUp { levelUpCount += 1 }
         return leveledUp
     }
 
@@ -50,7 +50,7 @@ final class GamificationEngine {
 
         profile.totalXP = max(0, profile.totalXP - amount)
         profile.currentLevel = XPConstants.levelForTotalXP(profile.totalXP)
-        // Level-down is always silent — didLevelUp is NOT set
+        // Level-down is always silent — levelUpCount is NOT incremented
 
         // Delete the most recent matching XPEvent from today
         let calendar = Calendar.current
@@ -71,11 +71,7 @@ final class GamificationEngine {
         return true
     }
 
-    func resetLevelUpFlag() {
-        didLevelUp = false
-    }
-
-    private func fetchProfile(from context: ModelContext) -> UserProfile? {
+private func fetchProfile(from context: ModelContext) -> UserProfile? {
         let descriptor = FetchDescriptor<UserProfile>()
         return try? context.fetch(descriptor).first
     }

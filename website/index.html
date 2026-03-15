@@ -6,8 +6,8 @@
 
     <!-- Primary Meta -->
     <title>Niwa (庭) — Grow Your Productivity | macOS Menu Bar App</title>
-    <meta name="description" content="Niwa is a free, open-source macOS menu bar app with a Pomodoro timer, task manager, quick notes, clipboard history, and health reminders — all with a gamified leveling system where your plant grows as you do.">
-    <meta name="keywords" content="Niwa, macOS app, menu bar app, Pomodoro timer, task manager, productivity app, gamification, SwiftUI, open source, focus timer, clipboard history, health reminders">
+    <meta name="description" content="Niwa is a free, open-source macOS menu bar app with a focus timer, task manager, quick notes, and health reminders — all with a gamified leveling system where your plant grows as you do.">
+    <meta name="keywords" content="Niwa, macOS app, menu bar app, focus timer, task manager, productivity app, gamification, SwiftUI, open source, health reminders">
     <meta name="author" content="James Said Philip">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="theme-color" content="#E07A5F">
@@ -18,7 +18,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://niwa-app.pages.dev/">
     <meta property="og:title" content="Niwa (庭) — Grow Your Productivity">
-    <meta property="og:description" content="A free, open-source macOS menu bar app combining Pomodoro timer, tasks, notes, clipboard history, and health reminders — with a gamified leveling system.">
+    <meta property="og:description" content="A free, open-source macOS menu bar app combining focus timer, tasks, notes, and health reminders — with a gamified leveling system.">
     <meta property="og:image" content="https://niwa-app.pages.dev/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -30,7 +30,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://niwa-app.pages.dev/">
     <meta name="twitter:title" content="Niwa (庭) — Grow Your Productivity">
-    <meta name="twitter:description" content="A free, open-source macOS menu bar app combining Pomodoro timer, tasks, notes, clipboard history, and health reminders — with a gamified leveling system.">
+    <meta name="twitter:description" content="A free, open-source macOS menu bar app combining focus timer, tasks, notes, and health reminders — with a gamified leveling system.">
     <meta name="twitter:image" content="https://niwa-app.pages.dev/og-image.png">
     <meta name="twitter:image:alt" content="Niwa app icon with tagline: Grow Your Productivity">
 
@@ -53,7 +53,7 @@
         "@type": "SoftwareApplication",
         "name": "Niwa",
         "alternateName": "Niwa (庭)",
-        "description": "A native macOS menu bar app combining Pomodoro timer, tasks, notes, clipboard history, and health reminders with a gamified leveling system where your plant grows as you do.",
+        "description": "A native macOS menu bar app combining focus timer, tasks, notes, and health reminders with a gamified leveling system where your plant grows as you do.",
         "url": "https://niwa-app.pages.dev/",
         "applicationCategory": "ProductivityApplication",
         "operatingSystem": "macOS 15+",
@@ -76,7 +76,7 @@
             "Focus Timer with preset and custom durations",
             "Task Manager with drag-to-reorder",
             "Quick Notes from the menu bar",
-            "Clipboard History (last 20 copies)",
+
             "Health Reminders (water and standing)",
             "Gamified leveling system with 8 plant growth stages",
             "Floating mini-player window",
@@ -105,7 +105,7 @@
                 "name": "How does the leveling system work?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "You earn XP by completing tasks (+15), finishing Pomodoro sessions (+25), creating notes (+5), and logging water/standing (+10 each). XP fills a progress bar — when it's full, you level up and your plant grows."
+                    "text": "You earn XP by completing tasks (+15), finishing focus sessions (+1 per minute), creating notes (+5), and logging health habits like water and standing (+10 each). XP fills a progress bar — when it's full, you level up and your plant grows."
                 }
             },
             {
@@ -113,7 +113,7 @@
                 "name": "Can I customise the timer durations?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Yes. Open Settings and adjust work, short break, and long break durations. You can also configure sessions before a long break."
+                    "text": "Yes. Open Settings to add, remove, or adjust your Quick Pick presets (up to 5). You can also set a custom duration with the stepper."
                 }
             },
             {
@@ -608,7 +608,7 @@
         </svg>
     </div>
     <h1>Grow your <em>productivity</em></h1>
-    <p>Niwa (庭) lives in your menu bar. A Pomodoro timer, tasks, notes, clipboard history, and health reminders — all with a leveling system where your plant grows as you do.</p>
+    <p>Niwa (庭) lives in your menu bar. A focus timer, tasks, notes, and health reminders — all with a leveling system where your plant grows as you do.</p>
     <div class="hero-actions">
         <a href="#install" class="btn-primary">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
@@ -674,7 +674,6 @@
                             <text x="50" y="153" text-anchor="middle" font-family="-apple-system, system-ui" font-size="11" font-weight="600" fill="#E07A5F">Tasks</text>
                             <line x1="32" y1="158" x2="68" y2="158" stroke="#E07A5F" stroke-width="2" stroke-linecap="round"/>
                             <text x="150" y="153" text-anchor="middle" font-family="-apple-system, system-ui" font-size="11" fill="#A89B8C">Notes</text>
-                            <text x="260" y="153" text-anchor="middle" font-family="-apple-system, system-ui" font-size="11" fill="#A89B8C">Clipboard</text>
                             <!-- Tasks -->
                             <g transform="translate(12, 172)">
                                 <rect width="14" height="14" rx="3" fill="none" stroke="#D4C5B2" stroke-width="1.5"/>
@@ -730,7 +729,6 @@
                             <text x="50" y="153" text-anchor="middle" font-family="-apple-system, system-ui" font-size="11" font-weight="600" fill="#E07A5F">Tasks</text>
                             <line x1="32" y1="158" x2="68" y2="158" stroke="#E07A5F" stroke-width="2" stroke-linecap="round"/>
                             <text x="150" y="153" text-anchor="middle" font-family="-apple-system, system-ui" font-size="11" fill="#7A6E63">Notes</text>
-                            <text x="260" y="153" text-anchor="middle" font-family="-apple-system, system-ui" font-size="11" fill="#7A6E63">Clipboard</text>
                             <!-- Tasks -->
                             <g transform="translate(12, 172)">
                                 <rect width="14" height="14" rx="3" fill="none" stroke="#3D3229" stroke-width="1.5"/>
@@ -761,15 +759,11 @@
         <div class="showcase-badges">
             <div class="showcase-badge">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E07A5F" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                Pomodoro Timer
+                Focus Timer
             </div>
             <div class="showcase-badge">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#81B29A" stroke-width="2" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
                 Tasks &amp; Notes
-            </div>
-            <div class="showcase-badge">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E07A5F" stroke-width="2" stroke-linecap="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/></svg>
-                Clipboard History
             </div>
             <div class="showcase-badge">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#81B29A" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg>
@@ -808,8 +802,8 @@
                 </div>
                 <div class="spotlight-content">
                     <h3>Deep Focus Timer</h3>
-                    <p>25/5/15 minute Pomodoro cycles with a satisfying progress ring. Earn XP every session.</p>
-                    <span class="spotlight-tag">+25 XP per session</span>
+                    <p>Pick a preset or set a custom duration. Commit to focus, earn 1 XP per minute with a satisfying progress ring.</p>
+                    <span class="spotlight-tag">+1 XP per minute</span>
                 </div>
             </div>
 
@@ -905,16 +899,16 @@
 <!-- ── Features ── -->
 <section class="features" id="features" aria-label="Features">
     <h2>Everything in your menu bar</h2>
-    <p>Six tools that earn you XP. Level up, grow your plant.</p>
+    <p>Five tools that earn you XP. Level up, grow your plant.</p>
 
     <div class="feature-grid">
         <div class="feature-card">
             <div class="feature-icon" style="background: rgba(224,122,95,0.1);">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E07A5F" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             </div>
-            <h3>Pomodoro Timer</h3>
-            <p>25/5/15 min cycles with circular progress ring. Date-based — no drift, survives restarts.</p>
-            <span class="feature-xp">+25 XP per session</span>
+            <h3>Focus Timer</h3>
+            <p>Pick a preset or custom duration with a circular progress ring. Date-based — no drift, survives restarts.</p>
+            <span class="feature-xp">+1 XP per minute</span>
         </div>
 
         <div class="feature-card">
@@ -933,14 +927,6 @@
             <h3>Quick Notes</h3>
             <p>Capture thoughts instantly from the menu bar. Sorted by recency.</p>
             <span class="feature-xp">+5 XP per note</span>
-        </div>
-
-        <div class="feature-card">
-            <div class="feature-icon" style="background: rgba(129,178,154,0.1);">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#81B29A" stroke-width="2" stroke-linecap="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/></svg>
-            </div>
-            <h3>Clipboard History</h3>
-            <p>Auto-saves your last 20 copies. Tap to re-copy. Polls every 0.5s.</p>
         </div>
 
         <div class="feature-card">
@@ -1260,12 +1246,12 @@
 
     <div class="faq-item">
         <button class="faq-q">How does the leveling system work? <span class="arrow">+</span></button>
-        <div class="faq-a"><p>You earn XP by completing tasks (+15), finishing Pomodoro sessions (+25), creating notes (+5), and logging water/standing (+10 each). XP fills a progress bar — when it's full, you level up and your plant grows.</p></div>
+        <div class="faq-a"><p>You earn XP by completing tasks (+15), finishing focus sessions (+1 per minute), creating notes (+5), and logging health habits like water and standing (+10 each). XP fills a progress bar — when it's full, you level up and your plant grows.</p></div>
     </div>
 
     <div class="faq-item">
         <button class="faq-q">Can I customise the timer durations? <span class="arrow">+</span></button>
-        <div class="faq-a"><p>Yes. Open Settings and adjust work, short break, and long break durations. You can also configure sessions before a long break.</p></div>
+        <div class="faq-a"><p>Yes. Open Settings to add, remove, or adjust your Quick Pick presets (up to 5). You can also set a custom duration with the stepper.</p></div>
     </div>
 
     <div class="faq-item">

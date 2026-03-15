@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftData
 import AppKit
+import UserNotifications
 
 struct InlineSettingsView: View {
     let profileManager: UserProfileManager
@@ -11,6 +12,7 @@ struct InlineSettingsView: View {
 
     @State private var confirmingReset = false
     @State private var exportMessage = ""
+    @State private var notificationPermission: String = "checking"
     @StateObject private var updateChecker = UpdateChecker()
 
     var body: some View {
@@ -126,21 +128,44 @@ struct InlineSettingsView: View {
                             }
                         }
 
-                        Button {
-                            NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.Notifications-Settings")!)
-                        } label: {
-                            HStack(spacing: DesignTokens.Spacing.xs) {
-                                Image(systemName: "bell.badge")
-                                    .font(.system(size: 11))
-                                Text("Manage in System Settings")
-                                    .font(.system(size: 11))
-                                Image(systemName: "arrow.up.right")
-                                    .font(.system(size: 8))
+                        HStack(spacing: DesignTokens.Spacing.sm) {
+                            Button {
+                                NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.Notifications-Settings")!)
+                            } label: {
+                                HStack(spacing: DesignTokens.Spacing.xs) {
+                                    Image(systemName: "bell.badge")
+                                        .font(.system(size: 11))
+                                    Text("Manage in System Settings")
+                                        .font(.system(size: 11))
+                                    Image(systemName: "arrow.up.right")
+                                        .font(.system(size: 8))
+                                }
+                                .foregroundStyle(DesignTokens.Colors.textSecondary)
                             }
-                            .foregroundStyle(DesignTokens.Colors.textSecondary)
+                            .buttonStyle(.plain)
+
+                            Spacer()
+
+                            if notificationPermission == "allowed" {
+                                Text("Allowed")
+                                    .font(.system(size: 9, weight: .semibold))
+                                    .foregroundStyle(DesignTokens.Colors.secondary)
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 2)
+                                    .background(DesignTokens.Colors.secondary.opacity(0.15))
+                                    .clipShape(RoundedRectangle(cornerRadius: 4))
+                            } else if notificationPermission == "blocked" {
+                                Text("Blocked")
+                                    .font(.system(size: 9, weight: .semibold))
+                                    .foregroundStyle(.orange)
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 2)
+                                    .background(Color.orange.opacity(0.15))
+                                    .clipShape(RoundedRectangle(cornerRadius: 4))
+                            }
                         }
-                        .buttonStyle(.plain)
                         .padding(.vertical, DesignTokens.Spacing.xs)
+                        .onAppear { checkNotificationPermission() }
                     }
 
                     // Work Hours
@@ -454,7 +479,7 @@ struct InlineSettingsView: View {
     // MARK: - Update Row
 
     private var currentVersion: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.3.12"
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?"
     }
 
     private var updateRow: some View {
@@ -523,6 +548,19 @@ struct InlineSettingsView: View {
     private func save() { profileManager.save() }
     private func saveTimer() { profileManager.save(); timerEngine.loadSettings() }
     private func saveHealth() { profileManager.save() }
+
+    private func checkNotificationPermission() {
+        Task {
+            let settings = await UNUserNotificationCenter.current().notificationSettings()
+            await MainActor.run {
+                switch settings.authorizationStatus {
+                case .authorized, .provisional: notificationPermission = "allowed"
+                case .denied: notificationPermission = "blocked"
+                default: notificationPermission = "unknown"
+                }
+            }
+        }
+    }
 
     private func exportData() {
         let panel = NSSavePanel()

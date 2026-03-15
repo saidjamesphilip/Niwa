@@ -5,7 +5,7 @@ enum ModelContainerSetup {
     static let allModelTypes: [any PersistentModel.Type] = [
         NiwaTask.self,
         NiwaNote.self,
-        ClipboardEntry.self,
+
         TimerSession.self,
         HealthEvent.self,
         XPEvent.self,

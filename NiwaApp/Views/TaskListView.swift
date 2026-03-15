@@ -72,7 +72,7 @@ struct TaskListView: View {
                                 onSetPriority: { taskManager.setPriority(task, priority: $0) },
                                 onSetDueDate: { taskManager.setDueDate(task, date: $0) },
                                 isFirst: index == 0,
-                                isLast: index == incompleteTasks.count - 1
+                                isLast: index == visibleIncompleteTasks.count - 1
                             )
                         }
 

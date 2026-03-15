@@ -94,12 +94,9 @@ struct DropdownRootView: View {
                 }
             }
         }
-        .onChange(of: gamificationEngine.didLevelUp) { _, newValue in
-            if newValue {
-                showLevelUp = true
-                soundManager.play(.levelUp)
-                gamificationEngine.resetLevelUpFlag()
-            }
+        .onChange(of: gamificationEngine.levelUpCount) { _, _ in
+            showLevelUp = true
+            soundManager.play(.levelUp)
         }
         .onAppear {
             NotificationManager.shared.isDropdownVisible = true
@@ -110,9 +107,7 @@ struct DropdownRootView: View {
         }
         .onChange(of: profile?.totalXP) { oldXP, newXP in
             guard let oldXP, let newXP, newXP > oldXP else { return }
-            if !gamificationEngine.didLevelUp {
-                soundManager.play(.xpEarned)
-            }
+            soundManager.play(.xpEarned)
         }
         .onChange(of: timerEngine.state) { _, newState in
             if newState == .complete {
