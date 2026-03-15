@@ -2,9 +2,8 @@ import SwiftUI
 import SwiftData
 
 struct NotesListView: View {
+    let noteManager: NoteManager
     var contentMaxHeight: CGFloat = 600
-
-    @EnvironmentObject var noteManager: NoteManager
 
     @State private var expandedNoteId: UUID?
     @State private var editingContent = ""

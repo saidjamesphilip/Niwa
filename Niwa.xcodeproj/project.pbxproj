@@ -17,6 +17,7 @@
 		1E805E088347FB5267EE401F /* TaskRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE220B79D48654F793D84391 /* TaskRowView.swift */; };
 		1ECC7345178E6F2E4896FBF2 /* XPConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89825B6502E06090F6AEBC28 /* XPConstants.swift */; };
 		225506DAD6DAEBD4A9585E51 /* XPChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0F76F0CFA25AEE4B3A7F09 /* XPChartView.swift */; };
+		23DBD7AE4115FECB34E045BB /* WidgetDesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A01329F2E0F6EC9E123FD47 /* WidgetDesignTokens.swift */; };
 		29ED93A6F80BD1B1F35A4A60 /* ModelContainerSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C5264BCDFD7880F7216D02 /* ModelContainerSetup.swift */; };
 		2B18A056A5DD53B1E815BF08 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5E508CE0F53CD071839921 /* DesignTokens.swift */; };
 		2C3FEC93180D6A40E4AAB491 /* NiwaNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86F29BB508E5620DB33CC1A /* NiwaNote.swift */; };
@@ -43,6 +44,7 @@
 		7451072E2FF24DC8CB54A1AB /* GamificationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CFC84AF338148B638DC065 /* GamificationEngine.swift */; };
 		74AEC4E923C162916D60F6FB /* WaterDrop.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 30AEC19C5C5C5758F565676E /* WaterDrop.aiff */; };
 		7B64F9D7267CC555A571198B /* SoftPop.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 4EE3DB9B4B33789E241414F8 /* SoftPop.aiff */; };
+		7BF1392E5F39FD71D1C73697 /* WidgetDesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A01329F2E0F6EC9E123FD47 /* WidgetDesignTokens.swift */; };
 		7E214006FFE25354701EE7A4 /* NiwaWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C68D4DE8A47D3694480CA399 /* NiwaWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7EE7D0E8E7EBABA7B3D09D69 /* FocusTimerEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B4D4EC442B4BA954DFE10B /* FocusTimerEngine.swift */; };
 		8110C5D74F7CF71233AD7903 /* ModelContainerSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C5264BCDFD7880F7216D02 /* ModelContainerSetup.swift */; };
@@ -121,6 +123,7 @@
 		2E87A5920DB12AE735E192E0 /* NiwaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiwaApp.swift; sourceTree = "<group>"; };
 		30AEC19C5C5C5758F565676E /* WaterDrop.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = WaterDrop.aiff; sourceTree = "<group>"; };
 		32E51A01E310EF668BE39B89 /* MicroDing.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = MicroDing.aiff; sourceTree = "<group>"; };
+		3A01329F2E0F6EC9E123FD47 /* WidgetDesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetDesignTokens.swift; sourceTree = "<group>"; };
 		3A69D63225294540599FA9C6 /* NiwaTimelineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiwaTimelineProvider.swift; sourceTree = "<group>"; };
 		3D8584FC2518EBF15E243EF1 /* TinyShimmer.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = TinyShimmer.aiff; sourceTree = "<group>"; };
 		4AB5902F76EA29378261E627 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
@@ -244,6 +247,7 @@
 			isa = PBXGroup;
 			children = (
 				5B5E508CE0F53CD071839921 /* DesignTokens.swift */,
+				3A01329F2E0F6EC9E123FD47 /* WidgetDesignTokens.swift */,
 				89825B6502E06090F6AEBC28 /* XPConstants.swift */,
 			);
 			path = Constants;
@@ -500,6 +504,7 @@
 				6256DE88BE1ED960BBB6A1F5 /* UserProfile.swift in Sources */,
 				C0236E3C10232FD174A68E12 /* UserProfileManager.swift in Sources */,
 				9C83DCFFC8F172091C2402F8 /* WelcomeOverlay.swift in Sources */,
+				23DBD7AE4115FECB34E045BB /* WidgetDesignTokens.swift in Sources */,
 				C29712DC891D37C39B53C650 /* XPBarView.swift in Sources */,
 				225506DAD6DAEBD4A9585E51 /* XPChartView.swift in Sources */,
 				C7C460BBBC4FBA295EAE0EEF /* XPConstants.swift in Sources */,
@@ -526,6 +531,7 @@
 				90454112D99E84A7E15E49A0 /* SmallWidgetView.swift in Sources */,
 				428FA7ABB4AC460B36462C09 /* TimerSession.swift in Sources */,
 				D1096972C1636730ECF8C8F3 /* UserProfile.swift in Sources */,
+				7BF1392E5F39FD71D1C73697 /* WidgetDesignTokens.swift in Sources */,
 				4D8046388C3122D2B112A0F1 /* WidgetXPSparkline.swift in Sources */,
 				1ECC7345178E6F2E4896FBF2 /* XPConstants.swift in Sources */,
 				39A67A9F1426A4B03DBD42DA /* XPEvent.swift in Sources */,

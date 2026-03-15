@@ -9,8 +9,8 @@ struct DropdownRootView: View {
     let profileManager: UserProfileManager
     let soundManager: SoundManager
 
-    @EnvironmentObject var taskManager: TaskManager
-    @EnvironmentObject var noteManager: NoteManager
+    let taskManager: TaskManager
+    let noteManager: NoteManager
 
     @State private var showLevelUp = false
     @State private var showSettings = false
@@ -159,7 +159,7 @@ struct DropdownRootView: View {
             Divider()
                 .background(DesignTokens.Colors.subtle)
 
-            ContentTabView(contentMaxHeight: contentMaxHeight)
+            ContentTabView(taskManager: taskManager, noteManager: noteManager, contentMaxHeight: contentMaxHeight)
 
             Divider()
                 .background(DesignTokens.Colors.subtle)

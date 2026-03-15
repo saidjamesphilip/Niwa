@@ -122,10 +122,10 @@ struct NiwaApp: App {
                 timerEngine: timerEngine,
                 healthManager: healthManager,
                 profileManager: profileManager,
-                soundManager: soundManager
+                soundManager: soundManager,
+                taskManager: taskManager,
+                noteManager: noteManager
             )
-            .environmentObject(taskManager)
-            .environmentObject(noteManager)
             .modelContainer(modelContainer)
         } label: {
             MenuBarIcon(timerEngine: timerEngine)

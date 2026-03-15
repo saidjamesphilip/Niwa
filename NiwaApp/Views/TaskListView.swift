@@ -2,9 +2,8 @@ import SwiftUI
 import SwiftData
 
 struct TaskListView: View {
+    let taskManager: TaskManager
     var contentMaxHeight: CGFloat = 600
-
-    @EnvironmentObject var taskManager: TaskManager
 
     @State private var newTaskTitle = ""
     @State private var showAllTasks = false

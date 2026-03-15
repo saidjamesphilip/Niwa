@@ -1,14 +1,15 @@
 import Foundation
 import SwiftData
-import Combine
+import Observation
 
 @MainActor
-final class NoteManager: ObservableObject {
+@Observable
+final class NoteManager {
     private let modelContext: ModelContext
     private let gamificationEngine: GamificationEngine
     private var appErrorState: AppErrorState?
 
-    @Published private(set) var notes: [NiwaNote] = []
+    private(set) var notes: [NiwaNote] = []
 
     init(modelContext: ModelContext, gamificationEngine: GamificationEngine, appErrorState: AppErrorState) {
         self.modelContext = modelContext

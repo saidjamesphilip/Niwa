@@ -6,8 +6,8 @@ enum ContentTab: String, CaseIterable {
 }
 
 struct ContentTabView: View {
-    @EnvironmentObject var taskManager: TaskManager
-    @EnvironmentObject var noteManager: NoteManager
+    let taskManager: TaskManager
+    let noteManager: NoteManager
 
     var contentMaxHeight: CGFloat = 600
 
@@ -50,9 +50,9 @@ struct ContentTabView: View {
             // Tab content
             switch selectedTab {
             case .tasks:
-                TaskListView(contentMaxHeight: contentMaxHeight)
+                TaskListView(taskManager: taskManager, contentMaxHeight: contentMaxHeight)
             case .notes:
-                NotesListView(contentMaxHeight: contentMaxHeight)
+                NotesListView(noteManager: noteManager, contentMaxHeight: contentMaxHeight)
             }
         }
     }

@@ -13,7 +13,7 @@ struct InlineSettingsView: View {
     @State private var confirmingReset = false
     @State private var exportMessage = ""
     @State private var notificationPermission: String = "checking"
-    @StateObject private var updateChecker = UpdateChecker()
+    @State private var updateChecker = UpdateChecker()
 
     var body: some View {
         ScrollView {
@@ -577,6 +577,25 @@ struct InlineSettingsView: View {
             export["notes"] = notes.map { ["id": $0.id.uuidString, "content": $0.content] }
             let xpEvents = try context.fetch(FetchDescriptor<XPEvent>())
             export["xpEvents"] = xpEvents.map { ["source": $0.source.rawValue, "amount": $0.amount, "earnedAt": $0.earnedAt.ISO8601Format()] }
+            let healthEvents = try context.fetch(FetchDescriptor<HealthEvent>())
+            export["healthEvents"] = healthEvents.map {
+                var dict: [String: Any] = ["type": $0.typeRaw]
+                if let confirmed = $0.confirmedAt { dict["confirmedAt"] = confirmed.ISO8601Format() }
+                if let standStart = $0.standingStartedAt { dict["standingStartedAt"] = standStart.ISO8601Format() }
+                if let standDuration = $0.standingDuration { dict["standingDuration"] = standDuration }
+                return dict
+            }
+            let timerSessions = try context.fetch(FetchDescriptor<TimerSession>())
+            export["timerSessions"] = timerSessions.map {
+                var dict: [String: Any] = [
+                    "type": $0.typeRaw,
+                    "durationMinutes": $0.durationMinutes,
+                    "startedAt": $0.startedAt.ISO8601Format(),
+                    "wasSkipped": $0.wasSkipped
+                ]
+                if let completed = $0.completedAt { dict["completedAt"] = completed.ISO8601Format() }
+                return dict
+            }
             let profiles = try context.fetch(FetchDescriptor<UserProfile>())
             if let p = profiles.first {
                 export["profile"] = ["totalXP": p.totalXP, "currentLevel": p.currentLevel]

@@ -2,10 +2,7 @@ import Foundation
 import SwiftData
 
 enum SessionType: String, Codable {
-    case work        // Legacy
-    case shortBreak  // Legacy
-    case longBreak   // Legacy
-    case focus       // New
+    case focus
 }
 
 @Model
@@ -17,7 +14,6 @@ final class TimerSession {
     var startedAt: Date
     var completedAt: Date?
     var wasSkipped: Bool
-    var pausedElapsed: TimeInterval
 
     var type: SessionType {
         get { SessionType(rawValue: typeRaw) ?? .focus }
@@ -32,6 +28,5 @@ final class TimerSession {
         self.startedAt = Date()
         self.completedAt = nil
         self.wasSkipped = false
-        self.pausedElapsed = 0
     }
 }
