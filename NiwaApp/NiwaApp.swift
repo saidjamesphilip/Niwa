@@ -70,6 +70,7 @@ struct NiwaApp: App {
         let rtm = ReminderTimerManager(profileManager: profMgr, healthManager: hm)
         reminderTimerManager = rtm
         soundManager = SoundManager(modelContext: context)
+        appDelegate.timerEngine = timerEngine
 
         // Wire ALL notification callbacks
         let nm = NotificationManager.shared

@@ -169,15 +169,8 @@ final class HealthEventManager {
         loadTodayStats()
     }
 
-    /// Daily habits reset at 7am, not midnight
     static func habitDayStart(for date: Date = Date()) -> Date {
-        let calendar = Calendar.current
-        let startOfDay = calendar.startOfDay(for: date)
-        let sevenAM = calendar.date(byAdding: .hour, value: 7, to: startOfDay)!
-        // If it's before 7am, the habit day started yesterday at 7am
-        return date < sevenAM
-            ? calendar.date(byAdding: .day, value: -1, to: sevenAM)!
-            : sevenAM
+        XPConstants.habitDayStart(for: date)
     }
 
     private func loadTodayStats() {
@@ -189,11 +182,7 @@ final class HealthEventManager {
             }
         )
         guard let events = try? modelContext.fetch(descriptor) else { return }
-
-        let todayEvents = events.filter { event in
-            guard let confirmed = event.confirmedAt else { return false }
-            return confirmed >= dayStart
-        }
+        let todayEvents = events.filter { ($0.confirmedAt ?? .distantPast) >= dayStart }
 
         todayWaterCount = todayEvents.filter { $0.typeRaw == HealthEventType.water.rawValue }.count
         todayCreatineLogged = todayEvents.contains { $0.typeRaw == HealthEventType.creatine.rawValue }

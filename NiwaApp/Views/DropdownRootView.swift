@@ -27,6 +27,15 @@ struct DropdownRootView: View {
 
     private var profile: UserProfile? { profileManager.profile }
 
+    private var recentXPEvents: [XPEvent] {
+        let calendar = Calendar.current
+        let eightDaysAgo = calendar.date(byAdding: .day, value: -8, to: calendar.startOfDay(for: Date()))!
+        let descriptor = FetchDescriptor<XPEvent>(
+            predicate: #Predicate<XPEvent> { $0.earnedAt >= eightDaysAgo }
+        )
+        return (try? profileManager.context.fetch(descriptor)) ?? []
+    }
+
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
@@ -165,7 +174,7 @@ struct DropdownRootView: View {
             Divider()
                 .background(DesignTokens.Colors.subtle)
 
-            XPChartView()
+            XPChartView(xpEvents: recentXPEvents)
         }
     }
 
@@ -250,7 +259,7 @@ struct DropdownRootView: View {
 
     private var bottomToolbar: some View {
         HStack(spacing: DesignTokens.Spacing.md) {
-            Text("v\(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.3.10")")
+            Text("v\(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?")")
                 .font(.system(size: 10, weight: .medium, design: .monospaced))
                 .foregroundStyle(DesignTokens.Colors.textMuted)
 
@@ -344,13 +353,14 @@ struct DropdownRootView: View {
         do {
             try context.delete(model: NiwaTask.self)
             try context.delete(model: NiwaNote.self)
-            try context.delete(model: ClipboardEntry.self)
+
             try context.delete(model: TimerSession.self)
             try context.delete(model: HealthEvent.self)
             try context.delete(model: XPEvent.self)
             try context.delete(model: UserProfile.self)
             context.insert(UserProfile())
             try context.save()
+            profileManager.reload()
             NotificationManager.shared.cancelAllPending()
             timerEngine.forceReset()
             healthManager.stopStanding()

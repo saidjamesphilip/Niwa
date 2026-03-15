@@ -2,7 +2,13 @@ import SwiftUI
 import SwiftData
 
 struct XPChartView: View {
-    @Query private var xpEvents: [XPEvent]
+    let xpEvents: [XPEvent]
+
+    private static let dayFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "E"
+        return formatter
+    }()
 
     private var last7DaysData: [(day: String, task: Int, timer: Int, note: Int, water: Int, coffee: Int, stand: Int, creatine: Int, gym: Int)] {
         let calendar = Calendar.current
@@ -14,9 +20,7 @@ struct XPChartView: View {
 
             let dayEvents = xpEvents.filter { $0.earnedAt >= dayStart && $0.earnedAt < dayEnd }
 
-            let formatter = DateFormatter()
-            formatter.dateFormat = "E"
-            let label = String(formatter.string(from: dayStart).prefix(2))
+            let label = String(Self.dayFormatter.string(from: dayStart).prefix(2))
 
             return (
                 day: label,
