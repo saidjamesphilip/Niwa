@@ -4,6 +4,38 @@ All notable changes to Niwa will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.3.13] — 2026-03-16
+
+### Added
+- Unit test suite — 49 tests across XP formulas, task model, timer formatting, and widget tokens
+- Notification permission indicator in settings (green "Allowed" / orange "Blocked")
+- Quit warning when closing app during active focus timer
+- HealthEvent and TimerSession included in JSON data export
+- Widget design tokens (shared brand colors across all 3 widget sizes)
+
+### Fixed
+- Health habit date filter pushed into SQLite predicate (was loading all events into memory)
+- XP chart data cached in GamificationEngine — no longer fetches from DB on every render (~4x/sec)
+- XP chart computed once per render instead of twice (DayXP struct)
+- Timer display interval reduced from 250ms to 1000ms (4x fewer cascading re-renders)
+- Level-up race condition — uses incrementing counter instead of boolean flag
+- UserProfile cached instead of fetched on every access
+- Widget reuses a single ModelContainer instead of recreating per refresh
+- Widget day-start aligned to 7am (matching app behaviour)
+- PlantView uses shared XPConstants.plantStage() instead of duplicate logic
+
+### Changed
+- Health pills uniform size (consistent minWidth across all 5 pills)
+- Dropdown width increased 5% (380→400pt) and height reduced 5%
+- Standing pill shows compact timer inline instead of expanding wider
+- TaskManager and NoteManager migrated from ObservableObject to @Observable
+- UpdateChecker migrated from @StateObject to @Observable + @State
+- Removed dead schema fields (pausedElapsed, snoozedUntil, legacy SessionType cases)
+
+### Removed
+- Clipboard history feature (model, service, view, tab) — fully removed
+- References to "Pomodoro" replaced with "Focus Timer" across website copy and meta tags
+
 ## [1.3.12] — 2026-03-13
 
 ### Added

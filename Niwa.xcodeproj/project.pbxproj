@@ -622,7 +622,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NiwaApp/NiwaApp.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NiwaApp/Info.plist;
 				INFOPLIST_KEY_LSUIElement = YES;
@@ -630,7 +630,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.3.12;
+				MARKETING_VERSION = 1.3.13;
 				PRODUCT_BUNDLE_IDENTIFIER = com.niwa.app;
 				PRODUCT_NAME = Niwa;
 				SDKROOT = macosx;
@@ -708,7 +708,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NiwaApp/NiwaApp.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NiwaApp/Info.plist;
 				INFOPLIST_KEY_LSUIElement = YES;
@@ -716,7 +716,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.3.12;
+				MARKETING_VERSION = 1.3.13;
 				PRODUCT_BUNDLE_IDENTIFIER = com.niwa.app;
 				PRODUCT_NAME = Niwa;
 				SDKROOT = macosx;
@@ -803,7 +803,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = NiwaWidget/NiwaWidget.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NiwaWidget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -811,7 +811,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MARKETING_VERSION = 1.3.12;
+				MARKETING_VERSION = 1.3.13;
 				PRODUCT_BUNDLE_IDENTIFIER = com.niwa.app.widget;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -823,7 +823,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = NiwaWidget/NiwaWidget.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NiwaWidget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -831,7 +831,7 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MARKETING_VERSION = 1.3.12;
+				MARKETING_VERSION = 1.3.13;
 				PRODUCT_BUNDLE_IDENTIFIER = com.niwa.app.widget;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
