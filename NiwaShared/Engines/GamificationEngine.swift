@@ -10,9 +10,21 @@ final class GamificationEngine {
     private(set) var levelUpCount: Int = 0
     /// Stores the level before the most recent level-up, for the celebration overlay.
     private(set) var previousLevel: Int = 0
+    /// Cached recent XP events for the chart — refreshed only on XP award/deduct.
+    private(set) var recentXPEvents: [XPEvent] = []
 
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
+        refreshRecentXPEvents()
+    }
+
+    private func refreshRecentXPEvents() {
+        let calendar = Calendar.current
+        let eightDaysAgo = calendar.date(byAdding: .day, value: -8, to: calendar.startOfDay(for: Date()))!
+        let descriptor = FetchDescriptor<XPEvent>(
+            predicate: #Predicate<XPEvent> { $0.earnedAt >= eightDaysAgo }
+        )
+        recentXPEvents = (try? modelContext.fetch(descriptor)) ?? []
     }
 
     /// Awards XP, creates an XPEvent, updates UserProfile, and returns whether a level-up occurred.
@@ -35,7 +47,8 @@ final class GamificationEngine {
         // Single save
         try? ctx.save()
 
-        // Update widgets
+        // Refresh cached chart data and widgets
+        refreshRecentXPEvents()
         WidgetCenter.shared.reloadAllTimelines()
 
         let leveledUp = profile.currentLevel > previousLevelLocal
@@ -67,6 +80,7 @@ final class GamificationEngine {
         }
 
         try? context.save()
+        refreshRecentXPEvents()
         WidgetCenter.shared.reloadAllTimelines()
         return true
     }

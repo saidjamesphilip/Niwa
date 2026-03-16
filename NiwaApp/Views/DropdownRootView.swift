@@ -27,15 +27,6 @@ struct DropdownRootView: View {
 
     private var profile: UserProfile? { profileManager.profile }
 
-    private var recentXPEvents: [XPEvent] {
-        let calendar = Calendar.current
-        let eightDaysAgo = calendar.date(byAdding: .day, value: -8, to: calendar.startOfDay(for: Date()))!
-        let descriptor = FetchDescriptor<XPEvent>(
-            predicate: #Predicate<XPEvent> { $0.earnedAt >= eightDaysAgo }
-        )
-        return (try? profileManager.context.fetch(descriptor)) ?? []
-    }
-
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
@@ -169,7 +160,7 @@ struct DropdownRootView: View {
             Divider()
                 .background(DesignTokens.Colors.subtle)
 
-            XPChartView(xpEvents: recentXPEvents)
+            XPChartView(xpEvents: gamificationEngine.recentXPEvents)
         }
     }
 

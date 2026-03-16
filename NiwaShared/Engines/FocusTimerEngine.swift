@@ -128,7 +128,7 @@ final class FocusTimerEngine {
 
     private func startDisplayTimer() {
         stopDisplayTimer()
-        displayTimer = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { [weak self] _ in
+        displayTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             Task { @MainActor in
                 self?.updateRemainingTime()
             }
