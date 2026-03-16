@@ -33,6 +33,20 @@ targets:
     dependencies:
       - target: NiwaWidget
 
+  NiwaTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: NiwaTests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.niwa.tests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Niwa.app/Contents/MacOS/Niwa"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+    dependencies:
+      - target: NiwaApp
+
   NiwaWidget:
     type: app-extension
     platform: macOS

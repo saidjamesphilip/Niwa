@@ -26,6 +26,7 @@
 		39A67A9F1426A4B03DBD42DA /* XPEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A20ACD99DF0FB0C70BC12F2 /* XPEvent.swift */; };
 		3C412664AB139F208F0458BB /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5E508CE0F53CD071839921 /* DesignTokens.swift */; };
 		3CBA84924326FDED817C083C /* SoundsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6595E9D29271F6D152F44035 /* SoundsView.swift */; };
+		3E66D7C11C7EAEE4495E84F6 /* TaskModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BAE0FCFBEB30337E1CAC37E /* TaskModelTests.swift */; };
 		41322B50BF4DF26DA410B0BD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44915DBBEF147EB80E365AE /* AppDelegate.swift */; };
 		428FA7ABB4AC460B36462C09 /* TimerSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077D9A2FEB38FB0CEE420C6B /* TimerSession.swift */; };
 		44CC329D27DAE17253F0F9BE /* GentleBell.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 5169BF3FF9BF2821128068DA /* GentleBell.aiff */; };
@@ -34,6 +35,7 @@
 		4DED95F1EFA298C5936C13E8 /* SoftTick.aiff in Resources */ = {isa = PBXBuildFile; fileRef = EB6D2E85E995F04C6B5C927F /* SoftTick.aiff */; };
 		4F10543E5F4A02925B924966 /* UpdateChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FC73502E44C3C91CCA48FA /* UpdateChecker.swift */; };
 		520D0F70C39B2F83806A1485 /* NotesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57F556F494D0EC1C104F4F7 /* NotesListView.swift */; };
+		54A4F1C7CF89CCBBFC34520F /* WidgetDesignTokensTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0072442B0F2B3DD7EC4CA2 /* WidgetDesignTokensTests.swift */; };
 		5631F270F1717E20335C2C30 /* RisingTone.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 0F875F0DDDC1DF0EB913AE81 /* RisingTone.aiff */; };
 		567D04AA7991A7D3D32FD713 /* AppErrorState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A00CE889E4D0038DFAC6599 /* AppErrorState.swift */; };
 		5DC7F4A04126CD65326D188F /* ContentTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA565B3DCF0E8FD3A5D3EA4 /* ContentTabView.swift */; };
@@ -47,6 +49,8 @@
 		7BF1392E5F39FD71D1C73697 /* WidgetDesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A01329F2E0F6EC9E123FD47 /* WidgetDesignTokens.swift */; };
 		7E214006FFE25354701EE7A4 /* NiwaWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C68D4DE8A47D3694480CA399 /* NiwaWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7EE7D0E8E7EBABA7B3D09D69 /* FocusTimerEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B4D4EC442B4BA954DFE10B /* FocusTimerEngine.swift */; };
+		8057CA70105D2241D198FB26 /* XPConstantsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52463450C1B0AD65B4073DC /* XPConstantsTests.swift */; };
+		8078C8CAC0927413BC0F7A9A /* FocusTimerFormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5382CAA339A9A3D657DA1AA3 /* FocusTimerFormattingTests.swift */; };
 		8110C5D74F7CF71233AD7903 /* ModelContainerSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C5264BCDFD7880F7216D02 /* ModelContainerSetup.swift */; };
 		821A13338A58C3396BE8AFAF /* GardenBird.aiff in Resources */ = {isa = PBXBuildFile; fileRef = AAF8B4A08C641A26DC00804E /* GardenBird.aiff */; };
 		8370D1CBEEBA551D8F393742 /* HeroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED8905B142AE85F9D594B8B /* HeroView.swift */; };
@@ -86,6 +90,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		1AAD681DAC9282F929ED927F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2B1720FDBD476B0AC9F3948B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = ED6A35968EA1896195F69CBA;
+			remoteInfo = NiwaApp;
+		};
 		2D88CFEC569814FC79DB435E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2B1720FDBD476B0AC9F3948B /* Project object */;
@@ -128,8 +139,10 @@
 		3D8584FC2518EBF15E243EF1 /* TinyShimmer.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = TinyShimmer.aiff; sourceTree = "<group>"; };
 		4AB5902F76EA29378261E627 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
 		4B9594A73F5D1D20C5656B11 /* NiwaWidgetEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiwaWidgetEntry.swift; sourceTree = "<group>"; };
+		4BAE0FCFBEB30337E1CAC37E /* TaskModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskModelTests.swift; sourceTree = "<group>"; };
 		4EE3DB9B4B33789E241414F8 /* SoftPop.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = SoftPop.aiff; sourceTree = "<group>"; };
 		5169BF3FF9BF2821128068DA /* GentleBell.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = GentleBell.aiff; sourceTree = "<group>"; };
+		5382CAA339A9A3D657DA1AA3 /* FocusTimerFormattingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusTimerFormattingTests.swift; sourceTree = "<group>"; };
 		59712553F7C61E9507E1A609 /* NiwaApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NiwaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B5E508CE0F53CD071839921 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignTokens.swift; sourceTree = "<group>"; };
 		5E4EB15D22106089BB5975CA /* Bloom.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = Bloom.aiff; sourceTree = "<group>"; };
@@ -157,9 +170,11 @@
 		AAF8B4A08C641A26DC00804E /* GardenBird.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = GardenBird.aiff; sourceTree = "<group>"; };
 		B136A6EE1D451B5D32814B90 /* ErrorBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorBannerView.swift; sourceTree = "<group>"; };
 		B50996E5D2B13383B3BF11C5 /* NoteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteManager.swift; sourceTree = "<group>"; };
+		B52463450C1B0AD65B4073DC /* XPConstantsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPConstantsTests.swift; sourceTree = "<group>"; };
 		B86F29BB508E5620DB33CC1A /* NiwaNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiwaNote.swift; sourceTree = "<group>"; };
 		C5DA083410BC36CE388B1062 /* HealthEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthEvent.swift; sourceTree = "<group>"; };
 		C68D4DE8A47D3694480CA399 /* NiwaWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NiwaWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		C996E05A5F73BAE1CFC3FD5A /* NiwaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NiwaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC035467AC2EDECA083F30B6 /* StringPluck.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = StringPluck.aiff; sourceTree = "<group>"; };
 		CC236069B01E13626AA524FF /* NiwaApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NiwaApp.entitlements; sourceTree = "<group>"; };
 		CE41CAF16405364AF6DAE9CB /* LargeWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeWidgetView.swift; sourceTree = "<group>"; };
@@ -178,6 +193,7 @@
 		F43873D8700EB8C1C148F73A /* WoodBlock.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = WoodBlock.aiff; sourceTree = "<group>"; };
 		F56F0921717681A5A0E2BF39 /* SoftDoubleTap.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = SoftDoubleTap.aiff; sourceTree = "<group>"; };
 		FAA565B3DCF0E8FD3A5D3EA4 /* ContentTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentTabView.swift; sourceTree = "<group>"; };
+		FD0072442B0F2B3DD7EC4CA2 /* WidgetDesignTokensTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetDesignTokensTests.swift; sourceTree = "<group>"; };
 		FE220B79D48654F793D84391 /* TaskRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskRowView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -267,6 +283,7 @@
 			children = (
 				E659DA28078521549D5593EC /* NiwaApp */,
 				E386E5F9A02AADA0425AE0C4 /* NiwaShared */,
+				F0155B4A586FC6A778CA0236 /* NiwaTests */,
 				F409ACB064D60548A37122FB /* NiwaWidget */,
 				DF8D901E62B226BB13A23ED4 /* Products */,
 			);
@@ -301,6 +318,7 @@
 			isa = PBXGroup;
 			children = (
 				59712553F7C61E9507E1A609 /* NiwaApp.app */,
+				C996E05A5F73BAE1CFC3FD5A /* NiwaTests.xctest */,
 				C68D4DE8A47D3694480CA399 /* NiwaWidget.appex */,
 			);
 			name = Products;
@@ -329,6 +347,17 @@
 				1BC97A50A32208BC23B688D6 /* Views */,
 			);
 			path = NiwaApp;
+			sourceTree = "<group>";
+		};
+		F0155B4A586FC6A778CA0236 /* NiwaTests */ = {
+			isa = PBXGroup;
+			children = (
+				5382CAA339A9A3D657DA1AA3 /* FocusTimerFormattingTests.swift */,
+				4BAE0FCFBEB30337E1CAC37E /* TaskModelTests.swift */,
+				FD0072442B0F2B3DD7EC4CA2 /* WidgetDesignTokensTests.swift */,
+				B52463450C1B0AD65B4073DC /* XPConstantsTests.swift */,
+			);
+			path = NiwaTests;
 			sourceTree = "<group>";
 		};
 		F18C2D4B5C20A66D7D6636EA /* Models */ = {
@@ -364,6 +393,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		40B3226CFFB5C0B12A80C49F /* NiwaTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ADC1AB498F94D9AFCE6597C7 /* Build configuration list for PBXNativeTarget "NiwaTests" */;
+			buildPhases = (
+				8549CB32F30A544E3A075230 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7F5F01E7A56FD8D477BD28BA /* PBXTargetDependency */,
+			);
+			name = NiwaTests;
+			packageProductDependencies = (
+			);
+			productName = NiwaTests;
+			productReference = C996E05A5F73BAE1CFC3FD5A /* NiwaTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		B4543E0010CEBA17870F42D3 /* NiwaWidget */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 432FD9DFA93E30C22AAF9A7E /* Build configuration list for PBXNativeTarget "NiwaWidget" */;
@@ -410,6 +457,9 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
+					40B3226CFFB5C0B12A80C49F = {
+						ProvisioningStyle = Automatic;
+					};
 					B4543E0010CEBA17870F42D3 = {
 						ProvisioningStyle = Automatic;
 					};
@@ -433,6 +483,7 @@
 			projectRoot = "";
 			targets = (
 				ED6A35968EA1896195F69CBA /* NiwaApp */,
+				40B3226CFFB5C0B12A80C49F /* NiwaTests */,
 				B4543E0010CEBA17870F42D3 /* NiwaWidget */,
 			);
 		};
@@ -538,6 +589,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8549CB32F30A544E3A075230 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8078C8CAC0927413BC0F7A9A /* FocusTimerFormattingTests.swift in Sources */,
+				3E66D7C11C7EAEE4495E84F6 /* TaskModelTests.swift in Sources */,
+				54A4F1C7CF89CCBBFC34520F /* WidgetDesignTokensTests.swift in Sources */,
+				8057CA70105D2241D198FB26 /* XPConstantsTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -545,6 +607,11 @@
 			isa = PBXTargetDependency;
 			target = B4543E0010CEBA17870F42D3 /* NiwaWidget */;
 			targetProxy = 2D88CFEC569814FC79DB435E /* PBXContainerItemProxy */;
+		};
+		7F5F01E7A56FD8D477BD28BA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = ED6A35968EA1896195F69CBA /* NiwaApp */;
+			targetProxy = 1AAD681DAC9282F929ED927F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -656,6 +723,23 @@
 			};
 			name = Release;
 		};
+		829075D1CF155A79EFA3B793 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.niwa.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Niwa.app/Contents/MacOS/Niwa";
+			};
+			name = Debug;
+		};
 		83F0225BA0E6BF99169D4C5A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -754,6 +838,23 @@
 			};
 			name = Release;
 		};
+		F2144BDCD40148260E8315E9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.niwa.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Niwa.app/Contents/MacOS/Niwa";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -780,6 +881,15 @@
 			buildConfigurations = (
 				3679167F4189ACDFF94FA57E /* Debug */,
 				83F0225BA0E6BF99169D4C5A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		ADC1AB498F94D9AFCE6597C7 /* Build configuration list for PBXNativeTarget "NiwaTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				829075D1CF155A79EFA3B793 /* Debug */,
+				F2144BDCD40148260E8315E9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
