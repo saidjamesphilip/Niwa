@@ -12,21 +12,21 @@ struct LargeWidgetView: View {
                 VStack(spacing: 4) {
                     Image(systemName: entry.plantIconName)
                         .font(.system(size: 16))
-                        .foregroundStyle(Color(red: 224/255, green: 122/255, blue: 95/255))
+                        .foregroundStyle(WidgetDesignTokens.primary)
 
                     if entry.timerActive, let start = entry.timerStartDate, let end = entry.timerEndDate {
                         Text(timerInterval: start...end, countsDown: true)
                             .font(.system(size: 22, weight: .medium, design: .monospaced))
-                            .foregroundStyle(Color(red: 224/255, green: 122/255, blue: 95/255))
+                            .foregroundStyle(WidgetDesignTokens.primary)
                             .monospacedDigit()
 
                         Text(entry.sessionLabel)
                             .font(.system(size: 10))
-                            .foregroundStyle(Color(red: 122/255, green: 110/255, blue: 99/255))
+                            .foregroundStyle(WidgetDesignTokens.textSecondary)
                     } else {
                         Text("--:--")
                             .font(.system(size: 22, weight: .medium, design: .monospaced))
-                            .foregroundStyle(Color(red: 168/255, green: 155/255, blue: 140/255))
+                            .foregroundStyle(WidgetDesignTokens.textMuted)
                     }
 
                     Text("Lv \(entry.currentLevel)")
@@ -43,8 +43,8 @@ struct LargeWidgetView: View {
                             Image(systemName: task.isCompleted ? "checkmark.circle.fill" : "circle")
                                 .font(.system(size: 10))
                                 .foregroundStyle(task.isCompleted
-                                    ? Color(red: 129/255, green: 178/255, blue: 154/255)
-                                    : Color(red: 168/255, green: 155/255, blue: 140/255))
+                                    ? WidgetDesignTokens.secondary
+                                    : WidgetDesignTokens.textMuted)
                             Text(task.title)
                                 .font(.system(size: 11))
                                 .lineLimit(1)
@@ -69,7 +69,7 @@ struct LargeWidgetView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text("XP — Last 7 Days")
                     .font(.system(size: 10, weight: .medium))
-                    .foregroundStyle(Color(red: 122/255, green: 110/255, blue: 99/255))
+                    .foregroundStyle(WidgetDesignTokens.textSecondary)
 
                 WidgetXPSparkline(data: entry.last7DaysXP)
                     .frame(height: 50)
@@ -79,17 +79,17 @@ struct LargeWidgetView: View {
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
                     Capsule()
-                        .fill(Color(red: 212/255, green: 197/255, blue: 178/255))
+                        .fill(WidgetDesignTokens.xpTrack)
                         .frame(height: 4)
                     Capsule()
-                        .fill(Color(red: 224/255, green: 122/255, blue: 95/255))
+                        .fill(WidgetDesignTokens.primary)
                         .frame(width: geo.size.width * entry.xpProgress, height: 4)
                 }
             }
             .frame(height: 4)
         }
         .padding(12)
-        .containerBackground(Color(red: 250/255, green: 246/255, blue: 241/255), for: .widget)
+        .containerBackground(WidgetDesignTokens.background, for: .widget)
     }
 
     private func healthPill(icon: String, text: String) -> some View {
@@ -99,10 +99,10 @@ struct LargeWidgetView: View {
             Text(text)
                 .font(.system(size: 9))
         }
-        .foregroundStyle(Color(red: 129/255, green: 178/255, blue: 154/255))
+        .foregroundStyle(WidgetDesignTokens.secondary)
         .padding(.horizontal, 6)
         .padding(.vertical, 2)
-        .background(Color(red: 129/255, green: 178/255, blue: 154/255).opacity(0.15))
+        .background(WidgetDesignTokens.secondary.opacity(0.15))
         .clipShape(Capsule())
     }
 }

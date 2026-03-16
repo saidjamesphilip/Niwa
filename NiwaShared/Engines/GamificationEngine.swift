@@ -7,12 +7,24 @@ import WidgetKit
 @Observable
 final class GamificationEngine {
     private let modelContext: ModelContext
-    private(set) var didLevelUp: Bool = false
+    private(set) var levelUpCount: Int = 0
     /// Stores the level before the most recent level-up, for the celebration overlay.
     private(set) var previousLevel: Int = 0
+    /// Cached recent XP events for the chart — refreshed only on XP award/deduct.
+    private(set) var recentXPEvents: [XPEvent] = []
 
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
+        refreshRecentXPEvents()
+    }
+
+    private func refreshRecentXPEvents() {
+        let calendar = Calendar.current
+        let eightDaysAgo = calendar.date(byAdding: .day, value: -8, to: calendar.startOfDay(for: Date()))!
+        let descriptor = FetchDescriptor<XPEvent>(
+            predicate: #Predicate<XPEvent> { $0.earnedAt >= eightDaysAgo }
+        )
+        recentXPEvents = (try? modelContext.fetch(descriptor)) ?? []
     }
 
     /// Awards XP, creates an XPEvent, updates UserProfile, and returns whether a level-up occurred.
@@ -35,12 +47,13 @@ final class GamificationEngine {
         // Single save
         try? ctx.save()
 
-        // Update widgets
+        // Refresh cached chart data and widgets
+        refreshRecentXPEvents()
         WidgetCenter.shared.reloadAllTimelines()
 
         let leveledUp = profile.currentLevel > previousLevelLocal
         if leveledUp { self.previousLevel = previousLevelLocal }
-        didLevelUp = leveledUp
+        if leveledUp { levelUpCount += 1 }
         return leveledUp
     }
 
@@ -50,7 +63,7 @@ final class GamificationEngine {
 
         profile.totalXP = max(0, profile.totalXP - amount)
         profile.currentLevel = XPConstants.levelForTotalXP(profile.totalXP)
-        // Level-down is always silent — didLevelUp is NOT set
+        // Level-down is always silent — levelUpCount is NOT incremented
 
         // Delete the most recent matching XPEvent from today
         let calendar = Calendar.current
@@ -67,12 +80,9 @@ final class GamificationEngine {
         }
 
         try? context.save()
+        refreshRecentXPEvents()
         WidgetCenter.shared.reloadAllTimelines()
         return true
-    }
-
-    func resetLevelUpFlag() {
-        didLevelUp = false
     }
 
     private func fetchProfile(from context: ModelContext) -> UserProfile? {

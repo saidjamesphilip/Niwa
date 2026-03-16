@@ -1,15 +1,16 @@
 import Foundation
 import SwiftData
-import Combine
+import Observation
 import WidgetKit
 
 @MainActor
-final class TaskManager: ObservableObject {
+@Observable
+final class TaskManager {
     private let modelContext: ModelContext
     private let gamificationEngine: GamificationEngine
     private var appErrorState: AppErrorState?
 
-    @Published private(set) var tasks: [NiwaTask] = []
+    private(set) var tasks: [NiwaTask] = []
 
     init(modelContext: ModelContext, gamificationEngine: GamificationEngine, appErrorState: AppErrorState) {
         self.modelContext = modelContext

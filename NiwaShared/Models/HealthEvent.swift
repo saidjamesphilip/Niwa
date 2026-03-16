@@ -14,7 +14,6 @@ final class HealthEvent {
     var id: UUID
     var typeRaw: String
     var confirmedAt: Date?
-    var snoozedUntil: Date?
     var standingStartedAt: Date?
     var standingDuration: TimeInterval?
 
@@ -27,7 +26,6 @@ final class HealthEvent {
         self.id = UUID()
         self.typeRaw = type.rawValue
         self.confirmedAt = nil
-        self.snoozedUntil = nil
         self.standingStartedAt = nil
         self.standingDuration = nil
     }

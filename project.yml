@@ -28,10 +28,24 @@ targets:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_LSUIElement: YES
-        MARKETING_VERSION: "1.3.12"
-        CURRENT_PROJECT_VERSION: 12
+        MARKETING_VERSION: "1.3.13"
+        CURRENT_PROJECT_VERSION: 13
     dependencies:
       - target: NiwaWidget
+
+  NiwaTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: NiwaTests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.niwa.tests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Niwa.app/Contents/MacOS/Niwa"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+    dependencies:
+      - target: NiwaApp
 
   NiwaWidget:
     type: app-extension
@@ -46,8 +60,8 @@ targets:
         CODE_SIGN_ENTITLEMENTS: NiwaWidget/NiwaWidget.entitlements
         GENERATE_INFOPLIST_FILE: YES
         SKIP_INSTALL: YES
-        MARKETING_VERSION: "1.3.12"
-        CURRENT_PROJECT_VERSION: 12
+        MARKETING_VERSION: "1.3.13"
+        CURRENT_PROJECT_VERSION: 13
     frameworks:
       - sdk: WidgetKit.framework
       - sdk: SwiftUI.framework

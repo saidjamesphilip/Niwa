@@ -6,15 +6,14 @@ import Observation
 @Observable
 final class UserProfileManager {
     let context: ModelContext
+    private(set) var cachedProfile: UserProfile?
 
     init(modelContext: ModelContext) {
         self.context = modelContext
+        self.cachedProfile = Self.fetchProfile(from: modelContext)
     }
 
-    var profile: UserProfile? {
-        let descriptor = FetchDescriptor<UserProfile>()
-        return try? context.fetch(descriptor).first
-    }
+    var profile: UserProfile? { cachedProfile }
 
     func isWithinWorkHours(date: Date = Date()) -> Bool {
         guard let profile else { return false }
@@ -40,5 +39,15 @@ final class UserProfileManager {
 
     func save() {
         try? context.save()
+    }
+
+    /// Re-fetch profile from store (call after reset)
+    func reload() {
+        cachedProfile = Self.fetchProfile(from: context)
+    }
+
+    private static func fetchProfile(from context: ModelContext) -> UserProfile? {
+        let descriptor = FetchDescriptor<UserProfile>()
+        return try? context.fetch(descriptor).first
     }
 }

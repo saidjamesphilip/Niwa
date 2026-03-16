@@ -5,6 +5,10 @@ import Foundation
 struct NiwaTimelineProvider: TimelineProvider {
     typealias Entry = NiwaWidgetEntry
 
+    private static let sharedContainer: ModelContainer? = {
+        try? ModelContainerSetup.createContainer()
+    }()
+
     func placeholder(in context: Context) -> NiwaWidgetEntry {
         .placeholder
     }
@@ -23,7 +27,7 @@ struct NiwaTimelineProvider: TimelineProvider {
 
     private func createEntry() -> NiwaWidgetEntry {
         do {
-            let container = try ModelContainerSetup.createContainer()
+            guard let container = Self.sharedContainer else { return .placeholder }
             let context = ModelContext(container)
 
             // Profile
@@ -58,11 +62,7 @@ struct NiwaTimelineProvider: TimelineProvider {
                 timerActive = true
                 timerStartDate = session.startedAt
                 timerEndDate = session.startedAt.addingTimeInterval(session.duration)
-                switch session.type {
-                case .work, .focus: sessionLabel = "Focus"
-                case .shortBreak: sessionLabel = "Short Break"
-                case .longBreak: sessionLabel = "Long Break"
-                }
+                sessionLabel = "Focus"
             }
 
             // Tasks
@@ -75,14 +75,14 @@ struct NiwaTimelineProvider: TimelineProvider {
             let topTasks = tasks.map { (title: $0.title, isCompleted: $0.isCompleted) }
 
             // Water count today
-            let calendar = Calendar.current
-            let startOfDay = calendar.startOfDay(for: Date())
+            let dayStart = XPConstants.habitDayStart()
             let waterType = HealthEventType.water.rawValue
             let waterDescriptor = FetchDescriptor<HealthEvent>(
-                predicate: #Predicate<HealthEvent> { $0.typeRaw == waterType && $0.confirmedAt != nil }
+                predicate: #Predicate<HealthEvent> { event in
+                    event.typeRaw == waterType && event.confirmedAt != nil && event.confirmedAt! >= dayStart
+                }
             )
-            let waterEvents = try context.fetch(waterDescriptor)
-            let waterCount = waterEvents.filter { ($0.confirmedAt ?? .distantPast) >= startOfDay }.count
+            let waterCount = try context.fetchCount(waterDescriptor)
 
             // Standing
             let standDescriptor = FetchDescriptor<HealthEvent>(
@@ -91,16 +91,18 @@ struct NiwaTimelineProvider: TimelineProvider {
             let isStanding = !(try context.fetch(standDescriptor)).isEmpty
 
             // Last 7 days XP
+            let calendar = Calendar.current
+            let startOfToday = calendar.startOfDay(for: Date())
+            let sevenDaysAgo = calendar.date(byAdding: .day, value: -6, to: startOfToday)!
+            let xpDescriptor = FetchDescriptor<XPEvent>(
+                predicate: #Predicate<XPEvent> { $0.earnedAt >= sevenDaysAgo }
+            )
+            let recentXPEvents = try context.fetch(xpDescriptor)
             var last7DaysXP = [Int](repeating: 0, count: 7)
-            let sevenDaysAgo = calendar.date(byAdding: .day, value: -6, to: startOfDay)!
-            let xpDescriptor = FetchDescriptor<XPEvent>()
-            let allXPEvents = try context.fetch(xpDescriptor)
-            for event in allXPEvents {
-                if event.earnedAt >= sevenDaysAgo {
-                    let dayIndex = calendar.dateComponents([.day], from: sevenDaysAgo, to: event.earnedAt).day ?? 0
-                    if dayIndex >= 0 && dayIndex < 7 {
-                        last7DaysXP[dayIndex] += event.amount
-                    }
+            for event in recentXPEvents {
+                let dayIndex = calendar.dateComponents([.day], from: sevenDaysAgo, to: event.earnedAt).day ?? 0
+                if dayIndex >= 0 && dayIndex < 7 {
+                    last7DaysXP[dayIndex] += event.amount
                 }
             }
 

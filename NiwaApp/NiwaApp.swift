@@ -70,6 +70,7 @@ struct NiwaApp: App {
         let rtm = ReminderTimerManager(profileManager: profMgr, healthManager: hm)
         reminderTimerManager = rtm
         soundManager = SoundManager(modelContext: context)
+        appDelegate.timerEngine = timerEngine
 
         // Wire ALL notification callbacks
         let nm = NotificationManager.shared
@@ -121,10 +122,10 @@ struct NiwaApp: App {
                 timerEngine: timerEngine,
                 healthManager: healthManager,
                 profileManager: profileManager,
-                soundManager: soundManager
+                soundManager: soundManager,
+                taskManager: taskManager,
+                noteManager: noteManager
             )
-            .environmentObject(taskManager)
-            .environmentObject(noteManager)
             .modelContainer(modelContainer)
         } label: {
             MenuBarIcon(timerEngine: timerEngine)

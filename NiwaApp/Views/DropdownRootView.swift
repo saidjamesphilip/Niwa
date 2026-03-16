@@ -9,8 +9,8 @@ struct DropdownRootView: View {
     let profileManager: UserProfileManager
     let soundManager: SoundManager
 
-    @EnvironmentObject var taskManager: TaskManager
-    @EnvironmentObject var noteManager: NoteManager
+    let taskManager: TaskManager
+    let noteManager: NoteManager
 
     @State private var showLevelUp = false
     @State private var showSettings = false
@@ -23,7 +23,7 @@ struct DropdownRootView: View {
     @State private var mainContentHeight: CGFloat = 0
 
     private var screenHeight: CGFloat { NSScreen.main?.visibleFrame.height ?? 900 }
-    private var contentMaxHeight: CGFloat { isExpanded ? screenHeight * 0.5 : screenHeight * 0.3 }
+    private var contentMaxHeight: CGFloat { isExpanded ? screenHeight * 0.475 : screenHeight * 0.285 }
 
     private var profile: UserProfile? { profileManager.profile }
 
@@ -67,7 +67,7 @@ struct DropdownRootView: View {
 
                 bottomToolbar
             }
-            .frame(width: 380)
+            .frame(width: 400)
             .background(DesignTokens.Colors.background)
 
             LevelUpOverlay(
@@ -85,12 +85,9 @@ struct DropdownRootView: View {
                 }
             }
         }
-        .onChange(of: gamificationEngine.didLevelUp) { _, newValue in
-            if newValue {
-                showLevelUp = true
-                soundManager.play(.levelUp)
-                gamificationEngine.resetLevelUpFlag()
-            }
+        .onChange(of: gamificationEngine.levelUpCount) { _, _ in
+            showLevelUp = true
+            soundManager.play(.levelUp)
         }
         .onAppear {
             NotificationManager.shared.isDropdownVisible = true
@@ -101,9 +98,7 @@ struct DropdownRootView: View {
         }
         .onChange(of: profile?.totalXP) { oldXP, newXP in
             guard let oldXP, let newXP, newXP > oldXP else { return }
-            if !gamificationEngine.didLevelUp {
-                soundManager.play(.xpEarned)
-            }
+            soundManager.play(.xpEarned)
         }
         .onChange(of: timerEngine.state) { _, newState in
             if newState == .complete {
@@ -155,7 +150,7 @@ struct DropdownRootView: View {
             Divider()
                 .background(DesignTokens.Colors.subtle)
 
-            ContentTabView(contentMaxHeight: contentMaxHeight)
+            ContentTabView(taskManager: taskManager, noteManager: noteManager, contentMaxHeight: contentMaxHeight)
 
             Divider()
                 .background(DesignTokens.Colors.subtle)
@@ -165,7 +160,7 @@ struct DropdownRootView: View {
             Divider()
                 .background(DesignTokens.Colors.subtle)
 
-            XPChartView()
+            XPChartView(xpEvents: gamificationEngine.recentXPEvents)
         }
     }
 
@@ -250,7 +245,7 @@ struct DropdownRootView: View {
 
     private var bottomToolbar: some View {
         HStack(spacing: DesignTokens.Spacing.md) {
-            Text("v\(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.3.10")")
+            Text("v\(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?")")
                 .font(.system(size: 10, weight: .medium, design: .monospaced))
                 .foregroundStyle(DesignTokens.Colors.textMuted)
 
@@ -344,13 +339,14 @@ struct DropdownRootView: View {
         do {
             try context.delete(model: NiwaTask.self)
             try context.delete(model: NiwaNote.self)
-            try context.delete(model: ClipboardEntry.self)
+
             try context.delete(model: TimerSession.self)
             try context.delete(model: HealthEvent.self)
             try context.delete(model: XPEvent.self)
             try context.delete(model: UserProfile.self)
             context.insert(UserProfile())
             try context.save()
+            profileManager.reload()
             NotificationManager.shared.cancelAllPending()
             timerEngine.forceReset()
             healthManager.stopStanding()

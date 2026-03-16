@@ -1,12 +1,14 @@
 import Foundation
 import AppKit
+import Observation
 
 @MainActor
-final class UpdateChecker: ObservableObject {
-    @Published var updateAvailable = false
-    @Published var latestVersion: String?
-    @Published var downloadURL: String?
-    @Published var isChecking = false
+@Observable
+final class UpdateChecker {
+    var updateAvailable = false
+    var latestVersion: String?
+    var downloadURL: String?
+    var isChecking = false
 
     private let currentVersion: String
     private let releasesURL = "https://api.github.com/repos/saidjamesphilip/Niwa/releases/latest"

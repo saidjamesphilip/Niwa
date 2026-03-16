@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftData
 import AppKit
+import UserNotifications
 
 struct InlineSettingsView: View {
     let profileManager: UserProfileManager
@@ -11,7 +12,8 @@ struct InlineSettingsView: View {
 
     @State private var confirmingReset = false
     @State private var exportMessage = ""
-    @StateObject private var updateChecker = UpdateChecker()
+    @State private var notificationPermission: String = "checking"
+    @State private var updateChecker = UpdateChecker()
 
     var body: some View {
         ScrollView {
@@ -126,21 +128,44 @@ struct InlineSettingsView: View {
                             }
                         }
 
-                        Button {
-                            NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.Notifications-Settings")!)
-                        } label: {
-                            HStack(spacing: DesignTokens.Spacing.xs) {
-                                Image(systemName: "bell.badge")
-                                    .font(.system(size: 11))
-                                Text("Manage in System Settings")
-                                    .font(.system(size: 11))
-                                Image(systemName: "arrow.up.right")
-                                    .font(.system(size: 8))
+                        HStack(spacing: DesignTokens.Spacing.sm) {
+                            Button {
+                                NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.Notifications-Settings")!)
+                            } label: {
+                                HStack(spacing: DesignTokens.Spacing.xs) {
+                                    Image(systemName: "bell.badge")
+                                        .font(.system(size: 11))
+                                    Text("Manage in System Settings")
+                                        .font(.system(size: 11))
+                                    Image(systemName: "arrow.up.right")
+                                        .font(.system(size: 8))
+                                }
+                                .foregroundStyle(DesignTokens.Colors.textSecondary)
                             }
-                            .foregroundStyle(DesignTokens.Colors.textSecondary)
+                            .buttonStyle(.plain)
+
+                            Spacer()
+
+                            if notificationPermission == "allowed" {
+                                Text("Allowed")
+                                    .font(.system(size: 9, weight: .semibold))
+                                    .foregroundStyle(DesignTokens.Colors.secondary)
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 2)
+                                    .background(DesignTokens.Colors.secondary.opacity(0.15))
+                                    .clipShape(RoundedRectangle(cornerRadius: 4))
+                            } else if notificationPermission == "blocked" {
+                                Text("Blocked")
+                                    .font(.system(size: 9, weight: .semibold))
+                                    .foregroundStyle(.orange)
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 2)
+                                    .background(Color.orange.opacity(0.15))
+                                    .clipShape(RoundedRectangle(cornerRadius: 4))
+                            }
                         }
-                        .buttonStyle(.plain)
                         .padding(.vertical, DesignTokens.Spacing.xs)
+                        .onAppear { checkNotificationPermission() }
                     }
 
                     // Work Hours
@@ -454,7 +479,7 @@ struct InlineSettingsView: View {
     // MARK: - Update Row
 
     private var currentVersion: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.3.12"
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?"
     }
 
     private var updateRow: some View {
@@ -524,6 +549,19 @@ struct InlineSettingsView: View {
     private func saveTimer() { profileManager.save(); timerEngine.loadSettings() }
     private func saveHealth() { profileManager.save() }
 
+    private func checkNotificationPermission() {
+        Task {
+            let settings = await UNUserNotificationCenter.current().notificationSettings()
+            await MainActor.run {
+                switch settings.authorizationStatus {
+                case .authorized, .provisional: notificationPermission = "allowed"
+                case .denied: notificationPermission = "blocked"
+                default: notificationPermission = "unknown"
+                }
+            }
+        }
+    }
+
     private func exportData() {
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.json]
@@ -539,6 +577,25 @@ struct InlineSettingsView: View {
             export["notes"] = notes.map { ["id": $0.id.uuidString, "content": $0.content] }
             let xpEvents = try context.fetch(FetchDescriptor<XPEvent>())
             export["xpEvents"] = xpEvents.map { ["source": $0.source.rawValue, "amount": $0.amount, "earnedAt": $0.earnedAt.ISO8601Format()] }
+            let healthEvents = try context.fetch(FetchDescriptor<HealthEvent>())
+            export["healthEvents"] = healthEvents.map {
+                var dict: [String: Any] = ["type": $0.typeRaw]
+                if let confirmed = $0.confirmedAt { dict["confirmedAt"] = confirmed.ISO8601Format() }
+                if let standStart = $0.standingStartedAt { dict["standingStartedAt"] = standStart.ISO8601Format() }
+                if let standDuration = $0.standingDuration { dict["standingDuration"] = standDuration }
+                return dict
+            }
+            let timerSessions = try context.fetch(FetchDescriptor<TimerSession>())
+            export["timerSessions"] = timerSessions.map {
+                var dict: [String: Any] = [
+                    "type": $0.typeRaw,
+                    "durationMinutes": $0.durationMinutes,
+                    "startedAt": $0.startedAt.ISO8601Format(),
+                    "wasSkipped": $0.wasSkipped
+                ]
+                if let completed = $0.completedAt { dict["completedAt"] = completed.ISO8601Format() }
+                return dict
+            }
             let profiles = try context.fetch(FetchDescriptor<UserProfile>())
             if let p = profiles.first {
                 export["profile"] = ["totalXP": p.totalXP, "currentLevel": p.currentLevel]

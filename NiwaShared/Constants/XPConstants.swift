@@ -31,9 +31,6 @@ enum XPConstants {
     static let defaultLunchEndHour: Int = 13
     static let defaultLunchEndMinute: Int = 0
 
-    // Clipboard
-    static let maxClipboardEntries: Int = 20
-
     // Standing milestones — cumulative bonuses at time thresholds
     static let standMilestones: [(minutes: Int, bonus: Int)] = [
         (10, 5), (20, 10), (30, 15)
@@ -92,5 +89,15 @@ enum XPConstants {
         let currentLevelThreshold = totalXPForLevel(currentLevel)
         let nextLevelThreshold = totalXPForLevel(currentLevel + 1)
         return (currentTotalXP - currentLevelThreshold, nextLevelThreshold - currentLevelThreshold)
+    }
+
+    /// Daily habits reset at 7am, not midnight
+    static func habitDayStart(for date: Date = Date()) -> Date {
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: date)
+        let sevenAM = calendar.date(byAdding: .hour, value: 7, to: startOfDay)!
+        return date < sevenAM
+            ? calendar.date(byAdding: .day, value: -1, to: sevenAM)!
+            : sevenAM
     }
 }

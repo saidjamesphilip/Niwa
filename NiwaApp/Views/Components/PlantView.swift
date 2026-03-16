@@ -7,17 +7,8 @@ import SwiftData
 struct PlantView: View {
     let level: Int
 
-    private var stage: PlantStage {
-        switch level {
-        case 0: return .seed
-        case 1...3: return .sprout
-        case 4...7: return .seedling
-        case 8...12: return .youngPlant
-        case 13...18: return .bush
-        case 19...25: return .smallTree
-        case 26...35: return .fullTree
-        default: return .ancientTree
-        }
+    private var stage: XPConstants.PlantStage {
+        XPConstants.plantStage(for: level)
     }
 
     var body: some View {
@@ -358,7 +349,4 @@ struct PlantView: View {
             .frame(width: width, height: height)
     }
 
-    private enum PlantStage {
-        case seed, sprout, seedling, youngPlant, bush, smallTree, fullTree, ancientTree
-    }
 }

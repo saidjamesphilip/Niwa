@@ -80,7 +80,7 @@ struct HealthStatusView: View {
             .padding(.bottom, DesignTokens.Spacing.xs)
 
             // Pills row
-            HStack(spacing: DesignTokens.Spacing.sm) {
+            HStack(spacing: DesignTokens.Spacing.xs) {
                 waterPill
                 coffeePill
                 standPill
@@ -182,26 +182,15 @@ struct HealthStatusView: View {
                         .symbolEffect(.pulse)
 
                     if let start = healthManager.standingStartedAt {
-                        Text(formatDuration(from: start, to: context.date))
+                        Text(formatCompact(from: start, to: context.date))
                             .font(.system(size: 11, weight: .medium, design: .monospaced))
                             .monospacedDigit()
-
-                        if let badge = milestoneBadge(from: start, to: context.date) {
-                            Text("+\(badge)")
-                                .font(.system(size: 9, weight: .medium))
-                                .foregroundStyle(PillColor.sage)
-                                .padding(.horizontal, 5)
-                                .padding(.vertical, 2)
-                                .background(
-                                    Capsule()
-                                        .fill(PillColor.sage.opacity(0.2))
-                                )
-                        }
                     }
                 }
                 .foregroundStyle(PillColor.sage)
-                .padding(.vertical, 5)
-                .padding(.horizontal, 10)
+                .frame(minWidth: pillMinWidth, minHeight: 24)
+                .padding(.vertical, 6)
+                .padding(.horizontal, 6)
                 .background(
                     Capsule()
                         .fill(PillColor.sage.opacity(0.25))
@@ -213,8 +202,23 @@ struct HealthStatusView: View {
             }
         }
         .buttonStyle(.plain)
-        .help("Stop standing · +\(XPConstants.standComplete) XP")
+        .help(standingHelpText)
         .accessibilityLabel("Standing active. Tap to stop.")
+    }
+
+    private var standingHelpText: String {
+        guard let start = healthManager.standingStartedAt else {
+            return "Stop standing · +\(XPConstants.standComplete) XP"
+        }
+        let elapsed = formatDuration(from: start, to: Date())
+        return "Standing: \(elapsed) · tap to stop · +\(XPConstants.standComplete) XP"
+    }
+
+    private func formatCompact(from start: Date, to now: Date) -> String {
+        let elapsed = Int(max(0, now.timeIntervalSince(start)))
+        let minutes = elapsed / 60
+        let seconds = elapsed % 60
+        return String(format: "%d:%02d", minutes, seconds)
     }
 
     // MARK: - Creatine Pill
@@ -408,6 +412,9 @@ struct HealthStatusView: View {
 
 // MARK: - IconPill
 
+/// Standard pill width so all health pills appear uniform.
+private let pillMinWidth: CGFloat = 50
+
 /// Compact icon-only pill with hover lift effect.
 private struct IconPill<Label: View>: View {
     let color: Color
@@ -420,9 +427,9 @@ private struct IconPill<Label: View>: View {
         Button(action: action) {
             label()
                 .foregroundStyle(color)
-                .frame(minWidth: 28, minHeight: 24)
+                .frame(minWidth: pillMinWidth, minHeight: 24)
                 .padding(.vertical, 6)
-                .padding(.horizontal, 10)
+                .padding(.horizontal, 6)
                 .background(
                     Capsule()
                         .fill(color.opacity(0.12))
@@ -476,9 +483,9 @@ private struct UndoableIconPill: View {
             }
             .foregroundStyle(isUndoMode ? DesignTokens.Colors.danger : color)
             .opacity(logged && !isUndoMode ? 0.4 : 1.0)
-            .frame(minWidth: 28, minHeight: 24)
+            .frame(minWidth: pillMinWidth, minHeight: 24)
             .padding(.vertical, 6)
-            .padding(.horizontal, isUndoMode ? 10 : 10)
+            .padding(.horizontal, 6)
             .background(
                 Capsule()
                     .fill(
