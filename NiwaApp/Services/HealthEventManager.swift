@@ -178,11 +178,10 @@ final class HealthEventManager {
 
         let descriptor = FetchDescriptor<HealthEvent>(
             predicate: #Predicate<HealthEvent> { event in
-                event.confirmedAt != nil
+                event.confirmedAt != nil && event.confirmedAt! >= dayStart
             }
         )
-        guard let events = try? modelContext.fetch(descriptor) else { return }
-        let todayEvents = events.filter { ($0.confirmedAt ?? .distantPast) >= dayStart }
+        guard let todayEvents = try? modelContext.fetch(descriptor) else { return }
 
         todayWaterCount = todayEvents.filter { $0.typeRaw == HealthEventType.water.rawValue }.count
         todayCreatineLogged = todayEvents.contains { $0.typeRaw == HealthEventType.creatine.rawValue }

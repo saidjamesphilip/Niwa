@@ -79,10 +79,10 @@ struct NiwaTimelineProvider: TimelineProvider {
             let waterType = HealthEventType.water.rawValue
             let waterDescriptor = FetchDescriptor<HealthEvent>(
                 predicate: #Predicate<HealthEvent> { event in
-                    event.typeRaw == waterType && event.confirmedAt != nil
+                    event.typeRaw == waterType && event.confirmedAt != nil && event.confirmedAt! >= dayStart
                 }
             )
-            let waterCount = try context.fetch(waterDescriptor).filter { ($0.confirmedAt ?? .distantPast) >= dayStart }.count
+            let waterCount = try context.fetchCount(waterDescriptor)
 
             // Standing
             let standDescriptor = FetchDescriptor<HealthEvent>(

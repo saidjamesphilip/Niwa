@@ -71,7 +71,7 @@ final class GamificationEngine {
         return true
     }
 
-private func fetchProfile(from context: ModelContext) -> UserProfile? {
+    private func fetchProfile(from context: ModelContext) -> UserProfile? {
         let descriptor = FetchDescriptor<UserProfile>()
         return try? context.fetch(descriptor).first
     }
