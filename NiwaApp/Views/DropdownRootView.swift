@@ -23,7 +23,7 @@ struct DropdownRootView: View {
     @State private var mainContentHeight: CGFloat = 0
 
     private var screenHeight: CGFloat { NSScreen.main?.visibleFrame.height ?? 900 }
-    private var contentMaxHeight: CGFloat { isExpanded ? screenHeight * 0.5 : screenHeight * 0.3 }
+    private var contentMaxHeight: CGFloat { isExpanded ? screenHeight * 0.475 : screenHeight * 0.285 }
 
     private var profile: UserProfile? { profileManager.profile }
 
@@ -76,7 +76,7 @@ struct DropdownRootView: View {
 
                 bottomToolbar
             }
-            .frame(width: 380)
+            .frame(width: 400)
             .background(DesignTokens.Colors.background)
 
             LevelUpOverlay(
