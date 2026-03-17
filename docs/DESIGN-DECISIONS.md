@@ -250,6 +250,55 @@ Sky:        rgb(100, 165, 210)
 
 ---
 
+## Calendar Meetings (v1.4.0)
+
+**Chosen: EventKit via macOS Calendar (Option C)**
+
+- Uses `EKEventStore` to fetch today's events from all synced calendars (Google, Outlook, iCloud)
+- No Google OAuth, no API keys — fully local-first via Apple's EventKit framework
+- Single `EKEventStore` instance retained for app lifetime (required for `EKEventStoreChanged` notifications)
+- Events fetched fresh per refresh cycle — never cached as object references
+
+**UI placement: New "Meetings" tab (third tab alongside Tasks and Notes)**
+
+- Three sections: Upcoming (sage bar), Current (terracotta bar), Past (muted bar)
+- "soon" badge on meetings starting within 15 minutes
+- Current meeting has elevated background
+- Past unreviewed meetings show "Review" button
+
+**Post-meeting review flow:**
+- Auto-prompt banner for meetings ended within 30 minutes
+- 3-point rating: Bad (muted) / OK (amber) / Good (sage)
+- Optional notes field after rating
+- Rating is immutable once set — UI disables buttons after selection
+- XP de-duplication via `ratingXPAwarded` / `notesXPAwarded` flags on MeetingReview model
+
+**XP values:**
+- +5 XP for rating (source: `.meeting`)
+- +5 XP for non-empty notes (source: `.meeting`)
+- Max +10 XP per meeting
+- Chart color: Amber (#E0AC3A, 70% opacity)
+
+**Empty states:**
+- No calendar access: PlantView seed + "Connect your calendar in System Settings" link
+- No meetings: PlantView seed + "No meetings today — focus time!"
+- Permission not yet requested: "Tap to enable calendar access" button
+
+**Entitlements:** `com.apple.security.personal-information.calendars` in NiwaApp only (not widget)
+
+**Rejected options:**
+- A: Full Google OAuth 2.0 (too complex, breaks local-first principle)
+- B: Google API key + Calendar ID (developer-friendly but not consumer-friendly)
+
+---
+
+## XP Chart — Meeting Source (v1.4.0)
+
+- Added `.meeting` segment between Gym and Creatine in stacked bar
+- Color: Amber (#E0AC3A) at 70% opacity — distinct from creatine (full amber)
+
+---
+
 ## General UI Conventions
 
 - All previews/mockups must use Niwa brand colors and design tokens

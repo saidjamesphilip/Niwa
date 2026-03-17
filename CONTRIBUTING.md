@@ -36,8 +36,8 @@ Niwa/
 
 ## Code Style
 
-- **Zero external dependencies** — Apple frameworks only
-- **SwiftUI** for all views, **SwiftData** for persistence
+- **Zero external dependencies** — Apple frameworks only (SwiftUI, SwiftData, EventKit, WidgetKit)
+- **SwiftUI** for all views, **SwiftData** for persistence, **EventKit** for calendar access
 - **`@Observable`** for engines and managers (not `ObservableObject`)
 - Views receive dependencies via init parameters (not `@EnvironmentObject`)
 - One primary type per file, filename matches type name

@@ -4,6 +4,34 @@ All notable changes to Niwa will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+- **Meetings tab** — shows today's calendar events via macOS EventKit (works with Google, Outlook, iCloud)
+- Three meeting sections: Upcoming (sage), Current (terracotta), Past (muted) with color-coded left bars
+- "soon" badge on meetings starting within 15 minutes
+- Post-meeting review: 3-point rating (Bad / OK / Good) + optional quick notes
+- Auto-prompt banner for meetings that ended within the last 30 minutes
+- +5 XP for rating, +5 XP for notes (max +10 per meeting) via new `.meeting` XP source
+- Meeting XP segment in 7-day XP chart (amber, 70% opacity)
+- MeetingReview SwiftData model with XP de-duplication flags
+- Calendar entitlement (`com.apple.security.personal-information.calendars`)
+- Empty states for no calendar access and no meetings today
+- SHA256 checksum verification in install.sh
+- Content-Security-Policy headers on website HTML files
+
+### Changed
+- Extracted duplicate settingsHeader/soundsHeader into single `navigationHeader(title:onBack:)`
+- Moved `resetAllData()` and `seedDemoContent()` from DropdownRootView to UserProfileManager
+- Renamed `UserProfileManager.context` → `modelContext` for naming consistency
+
+### Fixed
+- Removed dead code: `HeroView.plantStageName`, `HealthStatusView.milestoneBadge`, empty `setupNotificationCallbacks`
+- Removed unused imports (SwiftData, AppKit) from 6 view files
+
+### Removed
+- Stale clipboard history references from README, SECURITY.md, and architecture tree
+
 ## [1.3.13] — 2026-03-16
 
 ### Added

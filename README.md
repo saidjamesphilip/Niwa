@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  A native macOS menu bar app that combines a focus timer, task management, quick notes, and health reminders — all wrapped in a gamified leveling system where your virtual plant grows as you do.
+  A native macOS menu bar app that combines a focus timer, task management, quick notes, calendar meetings, and health reminders — all wrapped in a gamified leveling system where your virtual plant grows as you do.
 </p>
 
 <p align="center">
@@ -77,6 +77,15 @@
 - Auto-save on navigation and close
 - Sorted by last updated
 - **+5 XP** per note created
+
+### Calendar Meetings
+- Shows today's meetings from your macOS Calendar (works with Google, Outlook, iCloud)
+- Three sections: Upcoming (sage), Current (terracotta), Past (muted)
+- "soon" badge on meetings starting within 15 minutes
+- Post-meeting review: 3-point rating (Bad / OK / Good) + optional quick notes
+- Auto-prompt banner for meetings that ended within the last 30 minutes
+- **+5 XP** for rating a meeting, **+5 XP** for adding notes (max +10 per meeting)
+- Uses macOS EventKit — no Google sign-in or API keys needed
 
 ### Health Reminders
 - Water and standing reminders on configurable intervals
@@ -253,7 +262,7 @@ Niwa lives in your menu bar as a small leaf icon. Click it to open the dropdown 
 │────────────┴────────────────│
 │  ████████████░░░  72% XP    │  ← XP progress bar
 │─────────────────────────────│
-│  Tasks │ Notes              │  ← Content tabs
+│  Tasks │ Notes │ Meetings   │  ← Content tabs
 │─────────────────────────────│
 │  ☐ Design new landing page  │
 │  ☑ Review pull requests     │
@@ -273,7 +282,7 @@ All data is stored locally using **SwiftData** with an App Group container. Noth
 
 | Data | Storage |
 |------|---------|
-| Tasks, notes | SwiftData (SQLite) |
+| Tasks, notes, meeting reviews | SwiftData (SQLite) |
 | Timer sessions | SwiftData with Date-based tracking |
 | XP events | SwiftData with source attribution |
 | User preferences | SwiftData (UserProfile model) |
@@ -345,6 +354,7 @@ Niwa/
 │   │   ├── TaskManager.swift
 │   │   ├── NoteManager.swift
 │   │   ├── AppErrorState.swift
+│   │   ├── CalendarManager.swift
 │   │   ├── HealthEventManager.swift
 │   │   ├── UserProfileManager.swift
 │   │   ├── NotificationManager.swift
@@ -357,7 +367,9 @@ Niwa/
 │   │   │   ├── HeroView.swift       # Plant + timer + XP bar
 │   │   │   ├── PlantView.swift      # 8 growth stages (pure SwiftUI)
 │   │   │   ├── LevelUpOverlay.swift
+│   │   │   ├── MeetingReviewCard.swift
 │   │   │   └── ...
+│   │   ├── MeetingsListView.swift
 │   │   └── Settings/
 │   │       └── InlineSettingsView.swift
 │   └── Assets.xcassets/         # Color sets (light + dark)
@@ -374,6 +386,7 @@ Niwa/
 │       ├── NiwaNote.swift
 │       ├── TimerSession.swift
 │       ├── HealthEvent.swift
+│       ├── MeetingReview.swift
 │       └── XPEvent.swift
 └── NiwaWidget/                  # WidgetKit extension
     ├── SmallWidgetView.swift
@@ -391,6 +404,7 @@ Niwa/
 | **Shared ModelContainer** | Single context across all managers prevents stale state |
 | **NSPanel floating window** | Non-activating, doesn't steal focus from other apps |
 | **XcodeGen** | Reproducible project file, clean diffs |
+| **EventKit** | Calendar access via macOS system — no OAuth, no API keys |
 | **Pure SwiftUI plant shapes** | No image assets needed, scales to any size |
 
 ---
@@ -401,7 +415,7 @@ Niwa/
 |-|--------|
 | **Data storage** | All data stored locally in SwiftData (App Group container) |
 | **Network** | No analytics, no telemetry, no tracking. Optional manual "Check for Updates" calls GitHub Releases API |
-| **Clipboard** | Not accessed — Niwa does not read your clipboard |
+| **Calendar** | Read-only access via EventKit to show today's meetings. No data sent anywhere |
 | **Notifications** | Local `UNUserNotificationCenter` only. No push servers |
 
 > [!IMPORTANT]
