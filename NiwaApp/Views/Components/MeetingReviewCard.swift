@@ -42,8 +42,11 @@ struct MeetingReviewCard: View {
                         }
                     }
                     .font(DesignTokens.Typography.captionFont)
-                    .foregroundStyle(DesignTokens.Colors.primary)
+                    .foregroundStyle(notes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                        ? DesignTokens.Colors.textMuted
+                        : DesignTokens.Colors.primary)
                     .buttonStyle(.plain)
+                    .disabled(notes.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
             }
 

@@ -54,8 +54,11 @@ struct MeetingsListView: View {
                 dismissedPendingId = pendingId
             } label: {
                 Text("Dismiss")
-                    .font(.system(size: 9))
+                    .font(.system(size: 10))
                     .foregroundStyle(DesignTokens.Colors.textMuted)
+                    .padding(.vertical, DesignTokens.Spacing.xs)
+                    .padding(.horizontal, DesignTokens.Spacing.sm)
+                    .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
             .padding(.bottom, DesignTokens.Spacing.sm)
@@ -203,9 +206,14 @@ struct MeetingsListView: View {
             .padding(.bottom, DesignTokens.Spacing.xs)
     }
 
-    private func timeLabel(for event: EKEvent, state: MeetingState) -> String {
+    private static let timeFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "h:mm a"
+        return formatter
+    }()
+
+    private func timeLabel(for event: EKEvent, state: MeetingState) -> String {
+        let formatter = Self.timeFormatter
 
         switch state {
         case .current:
@@ -241,7 +249,6 @@ struct MeetingsListView: View {
 
     private var emptyStateNoAccess: some View {
         VStack(spacing: DesignTokens.Spacing.md) {
-            Spacer()
             PlantView(level: 0)
                 .scaleEffect(0.45)
                 .frame(width: 40, height: 40)
@@ -269,15 +276,13 @@ struct MeetingsListView: View {
                 .foregroundStyle(DesignTokens.Colors.primary)
                 .buttonStyle(.plain)
             }
-            Spacer()
         }
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(DesignTokens.Spacing.lg)
     }
 
     private var emptyStateNoMeetings: some View {
         VStack(spacing: DesignTokens.Spacing.md) {
-            Spacer()
             PlantView(level: 0)
                 .scaleEffect(0.45)
                 .frame(width: 40, height: 40)
@@ -286,9 +291,8 @@ struct MeetingsListView: View {
                 .font(DesignTokens.Typography.captionFont)
                 .foregroundStyle(DesignTokens.Colors.textMuted)
                 .multilineTextAlignment(.center)
-            Spacer()
         }
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(DesignTokens.Spacing.lg)
     }
 }

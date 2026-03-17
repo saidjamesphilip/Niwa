@@ -21,7 +21,9 @@ struct ContentTabView: View {
             HStack(spacing: 0) {
                 ForEach(ContentTab.allCases, id: \.self) { tab in
                     Button {
-                        selectedTab = tab
+                        withAnimation(.easeInOut(duration: 0.15)) {
+                            selectedTab = tab
+                        }
                     } label: {
                         Text(tab.rawValue)
                             .font(DesignTokens.Typography.captionFont)

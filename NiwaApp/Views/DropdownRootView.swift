@@ -23,7 +23,7 @@ struct DropdownRootView: View {
     @State private var mainContentHeight: CGFloat = 0
 
     private var screenHeight: CGFloat { NSScreen.main?.visibleFrame.height ?? 900 }
-    private var contentMaxHeight: CGFloat { isExpanded ? screenHeight * 0.475 : screenHeight * 0.285 }
+    private var contentMaxHeight: CGFloat { isExpanded ? screenHeight * 0.45 : screenHeight * 0.27 }
 
     private var profile: UserProfile? { profileManager.profile }
 
