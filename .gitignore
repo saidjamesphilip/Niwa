@@ -19,6 +19,9 @@ Package.resolved
 # CocoaPods
 Pods/
 
+# Brainstorming
+.superpowers/
+
 # Misc
 *.swp
 *.lock
