@@ -10,6 +10,7 @@ enum XPSource: String, Codable {
     case creatine
     case gym
     case coffee
+    case meeting
 }
 
 @Model

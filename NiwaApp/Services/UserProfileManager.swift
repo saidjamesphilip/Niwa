@@ -55,6 +55,7 @@ final class UserProfileManager {
             try modelContext.delete(model: TimerSession.self)
             try modelContext.delete(model: HealthEvent.self)
             try modelContext.delete(model: XPEvent.self)
+            try modelContext.delete(model: MeetingReview.self)
             try modelContext.delete(model: UserProfile.self)
             modelContext.insert(UserProfile())
             try modelContext.save()

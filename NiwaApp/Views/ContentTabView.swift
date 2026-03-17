@@ -3,11 +3,13 @@ import SwiftUI
 enum ContentTab: String, CaseIterable {
     case tasks = "Tasks"
     case notes = "Notes"
+    case meetings = "Meetings"
 }
 
 struct ContentTabView: View {
     let taskManager: TaskManager
     let noteManager: NoteManager
+    let calendarManager: CalendarManager
 
     var contentMaxHeight: CGFloat = 600
 
@@ -53,6 +55,8 @@ struct ContentTabView: View {
                 TaskListView(taskManager: taskManager, contentMaxHeight: contentMaxHeight)
             case .notes:
                 NotesListView(noteManager: noteManager, contentMaxHeight: contentMaxHeight)
+            case .meetings:
+                MeetingsListView(calendarManager: calendarManager, contentMaxHeight: contentMaxHeight)
             }
         }
     }

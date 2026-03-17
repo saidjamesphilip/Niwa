@@ -11,8 +11,9 @@ private struct DayXP {
     let stand: Int
     let creatine: Int
     let gym: Int
+    let meeting: Int
 
-    var total: Int { task + timer + note + water + coffee + stand + creatine + gym }
+    var total: Int { task + timer + note + water + coffee + stand + creatine + gym + meeting }
 }
 
 struct XPChartView: View {
@@ -43,7 +44,8 @@ struct XPChartView: View {
                 coffee: dayEvents.filter { $0.source == .coffee }.reduce(0) { $0 + $1.amount },
                 stand: dayEvents.filter { $0.source == .stand }.reduce(0) { $0 + $1.amount },
                 creatine: dayEvents.filter { $0.source == .creatine }.reduce(0) { $0 + $1.amount },
-                gym: dayEvents.filter { $0.source == .gym }.reduce(0) { $0 + $1.amount }
+                gym: dayEvents.filter { $0.source == .gym }.reduce(0) { $0 + $1.amount },
+                meeting: dayEvents.filter { $0.source == .meeting }.reduce(0) { $0 + $1.amount }
             )
         }
 
@@ -65,6 +67,7 @@ struct XPChartView: View {
                         // Stacked bar
                         VStack(spacing: 0) {
                             barSegment(value: day.gym, maxTotal: chartData.maxTotal, color: DesignTokens.Colors.primary)
+                            barSegment(value: day.meeting, maxTotal: chartData.maxTotal, color: Color(red: 224/255, green: 172/255, blue: 58/255).opacity(0.7))
                             barSegment(value: day.creatine, maxTotal: chartData.maxTotal, color: Color(red: 224/255, green: 172/255, blue: 58/255))
                             barSegment(value: day.stand, maxTotal: chartData.maxTotal, color: DesignTokens.Colors.secondary.opacity(0.6))
                             barSegment(value: day.water, maxTotal: chartData.maxTotal, color: DesignTokens.Colors.secondary)

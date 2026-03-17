@@ -16,6 +16,7 @@ struct NiwaApp: App {
     let healthManager: HealthEventManager
     let reminderTimerManager: ReminderTimerManager
     let soundManager: SoundManager
+    let calendarManager: CalendarManager
 
     init() {
         do {
@@ -70,6 +71,7 @@ struct NiwaApp: App {
         let rtm = ReminderTimerManager(profileManager: profMgr, healthManager: hm)
         reminderTimerManager = rtm
         soundManager = SoundManager(modelContext: context)
+        calendarManager = CalendarManager(modelContext: context, gamificationEngine: engine)
         appDelegate.timerEngine = timerEngine
 
         // Wire ALL notification callbacks
@@ -124,7 +126,8 @@ struct NiwaApp: App {
                 profileManager: profileManager,
                 soundManager: soundManager,
                 taskManager: taskManager,
-                noteManager: noteManager
+                noteManager: noteManager,
+                calendarManager: calendarManager
             )
             .modelContainer(modelContainer)
         } label: {

@@ -10,6 +10,7 @@ struct DropdownRootView: View {
 
     let taskManager: TaskManager
     let noteManager: NoteManager
+    let calendarManager: CalendarManager
 
     @State private var showLevelUp = false
     @State private var showSettings = false
@@ -149,7 +150,7 @@ struct DropdownRootView: View {
             Divider()
                 .background(DesignTokens.Colors.subtle)
 
-            ContentTabView(taskManager: taskManager, noteManager: noteManager, contentMaxHeight: contentMaxHeight)
+            ContentTabView(taskManager: taskManager, noteManager: noteManager, calendarManager: calendarManager, contentMaxHeight: contentMaxHeight)
 
             Divider()
                 .background(DesignTokens.Colors.subtle)

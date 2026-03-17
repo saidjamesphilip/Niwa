@@ -32,6 +32,7 @@ targets:
         CURRENT_PROJECT_VERSION: 13
     dependencies:
       - target: NiwaWidget
+      - sdk: EventKit.framework
 
   NiwaTests:
     type: bundle.unit-test
