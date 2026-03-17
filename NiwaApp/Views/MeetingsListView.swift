@@ -3,7 +3,7 @@ import EventKit
 
 struct MeetingsListView: View {
     let calendarManager: CalendarManager
-    let contentMaxHeight: CGFloat
+    var contentMaxHeight: CGFloat = 600
 
     @State private var expandedReviewId: String?
     @State private var dismissedPendingId: String?
@@ -22,7 +22,7 @@ struct MeetingsListView: View {
             .padding(.horizontal, DesignTokens.Spacing.lg)
             .padding(.vertical, DesignTokens.Spacing.sm)
         }
-        .frame(maxHeight: contentMaxHeight)
+        .frame(height: contentMaxHeight)
         .onAppear {
             if !calendarManager.isAuthorized && !calendarManager.authorizationDenied {
                 calendarManager.requestAccess()
