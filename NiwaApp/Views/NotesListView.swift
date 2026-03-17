@@ -1,5 +1,4 @@
 import SwiftUI
-import SwiftData
 
 struct NotesListView: View {
     let noteManager: NoteManager

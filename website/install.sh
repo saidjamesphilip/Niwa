@@ -21,10 +21,30 @@ fi
 VERSION=$(echo "$DOWNLOAD_URL" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
 echo "Found $APP_NAME v$VERSION"
 
+# Get expected SHA256 from release body
+EXPECTED_SHA=$(curl -sL "https://api.github.com/repos/$REPO/releases/latest" \
+  | grep -oE 'SHA256: [a-f0-9]{64}' \
+  | head -1 \
+  | awk '{print $2}')
+
 # Download
 TMPDIR=$(mktemp -d)
 echo "Downloading..."
 curl -sL "$DOWNLOAD_URL" -o "$TMPDIR/$APP_NAME.zip"
+
+# Verify checksum
+if [ -n "$EXPECTED_SHA" ]; then
+  ACTUAL_SHA=$(shasum -a 256 "$TMPDIR/$APP_NAME.zip" | awk '{print $1}')
+  if [ "$EXPECTED_SHA" != "$ACTUAL_SHA" ]; then
+    echo "Error: Checksum mismatch! Expected $EXPECTED_SHA but got $ACTUAL_SHA"
+    echo "The download may have been tampered with. Aborting."
+    rm -rf "$TMPDIR"
+    exit 1
+  fi
+  echo "Checksum verified."
+else
+  echo "Warning: No checksum found in release notes. Skipping verification."
+fi
 
 # Unzip
 echo "Extracting..."

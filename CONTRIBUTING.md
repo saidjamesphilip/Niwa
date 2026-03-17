@@ -14,7 +14,7 @@ Thanks for your interest in contributing! Here's how to get started.
 git clone https://github.com/saidjamesphilip/Niwa.git
 cd Niwa
 
-# Generate Xcode project from spec
+# Generate Xcode project from spec (re-run when adding/removing files)
 xcodegen generate
 
 # Build
@@ -74,16 +74,17 @@ git push -u origin feat/my-feature
 2. Make your changes
 3. Verify the build succeeds: `xcodebuild -scheme NiwaApp build`
 4. Test locally — run the app and verify your changes work
-5. Push and open a PR on GitHub — describe what changed and why
-6. Once approved, merge to `main`
+5. Run unit tests: `xcodebuild -scheme NiwaApp -destination 'platform=macOS' test`
+6. Push and open a PR on GitHub — describe what changed and why
+7. Once approved, merge to `main`
 
 ### Releasing
 
 Releases are triggered by pushing a version tag. Only maintainers do this:
 
 ```bash
-git tag v1.3.8
-git push origin v1.3.8
+git tag vX.Y.Z
+git push origin vX.Y.Z
 ```
 
 This triggers a GitHub Actions workflow that builds the app, creates a zip, and publishes a GitHub Release. After the release, the Homebrew Cask formula is updated with the new version and SHA.

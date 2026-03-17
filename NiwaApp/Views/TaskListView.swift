@@ -1,5 +1,4 @@
 import SwiftUI
-import SwiftData
 
 struct TaskListView: View {
     let taskManager: TaskManager

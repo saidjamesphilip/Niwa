@@ -4,7 +4,7 @@ Reference document for final design choices made during development. Use this wh
 
 ---
 
-## Focus Timer (improvements-and-qol)
+## Focus Timer (v1.3.12)
 
 **Chosen: Simple commit-or-cancel focus sessions**
 
@@ -21,20 +21,20 @@ Reference document for final design choices made during development. Use this wh
 
 ---
 
-## Dropdown Sizing (improvements-and-qol)
+## Dropdown Sizing (v1.3.12)
 
 **Chosen: Screen-percentage height with expand/collapse toggle**
 
 - Default height: 30% of visible screen height
 - Expanded height: 50% of visible screen height (toggle via chevron button in toolbar)
 - Settings and Sounds views match main dashboard height exactly via `GeometryReader` + `PreferenceKey`
-- Width fixed at 380pt
+- Width fixed at 400pt
 
 **Rejected:** Drag-to-resize handle — caused constraint crashes in MenuBarExtra window during animated transitions. Replaced with simpler expand/collapse approach.
 
 ---
 
-## MenuBarExtra Crash Fix (improvements-and-qol)
+## MenuBarExtra Crash Fix (v1.3.12)
 
 **Problem:** Switching between main content ↔ settings/sounds views with `withAnimation` caused `NSWindow._postWindowNeedsUpdateConstraints` crash.
 
@@ -42,7 +42,7 @@ Reference document for final design choices made during development. Use this wh
 
 ---
 
-## Tab Touch Targets (improvements-and-qol)
+## Tab Touch Targets (v1.3.12)
 
 - Tasks/Notes segmented control now uses `md` vertical padding (up from `sm`) and `.contentShape(Rectangle())` for full-width tappable area
 
@@ -112,7 +112,7 @@ Sky:        rgb(100, 165, 210)
 - Font: SF Mono, 10pt medium, monospaced digit
 
 **Rejected options:**
-- A: Pulsing dot + compact "Xm" (current before v1.4.0)
+- A: Pulsing dot + compact "Xm"
 - B: Full MM:SS + dot (no progress visual)
 - D: Mini circular ring + compact time
 - E: Emoji per session type
@@ -120,7 +120,7 @@ Sky:        rgb(100, 165, 210)
 
 ---
 
-## Health Status Pills (improvements-and-qol)
+## Health Status Pills (v1.3.12)
 
 **Layout:** Horizontal row of icon-only capsule pills with info popover
 

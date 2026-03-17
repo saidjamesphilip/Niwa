@@ -24,3 +24,11 @@ Pods/
 *.lock
 .claude/
 .wrangler/
+
+# Secrets & signing
+.env
+.env.*
+*.p12
+*.cer
+*.mobileprovision
+*.xcconfig

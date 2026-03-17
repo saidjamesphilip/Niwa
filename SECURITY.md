@@ -23,9 +23,7 @@ Niwa is a local-first application. The only network call is a user-initiated "Ch
 | Area | Detail |
 |------|--------|
 | **Local data storage** | SwiftData (SQLite) in App Group container — tasks, notes, XP, settings |
-| **Clipboard access** | Reads `NSPasteboard.general` to populate clipboard history |
 | **Notification content** | Health reminder notifications via `UNUserNotificationCenter` |
-| **Process execution** | App restart uses `/usr/bin/open` via `Process` |
 | **Update checker** | Manual-only GET to `api.github.com/repos/.../releases/latest` — no auth, no user data sent |
 
 ### Out of Scope

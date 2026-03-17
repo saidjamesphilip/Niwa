@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  A native macOS menu bar app that combines a focus timer, task management, quick notes, clipboard history, and health reminders — all wrapped in a gamified leveling system where your virtual plant grows as you do.
+  A native macOS menu bar app that combines a focus timer, task management, quick notes, and health reminders — all wrapped in a gamified leveling system where your virtual plant grows as you do.
 </p>
 
 <p align="center">
@@ -77,13 +77,6 @@
 - Auto-save on navigation and close
 - Sorted by last updated
 - **+5 XP** per note created
-
-### Clipboard History
-- Automatic monitoring (polls every 0.5s)
-- Keeps last 20 entries
-- Tap to re-copy with visual feedback
-- Relative timestamps ("3m ago")
-- Character count for long entries
 
 ### Health Reminders
 - Water and standing reminders on configurable intervals
@@ -260,7 +253,7 @@ Niwa lives in your menu bar as a small leaf icon. Click it to open the dropdown 
 │────────────┴────────────────│
 │  ████████████░░░  72% XP    │  ← XP progress bar
 │─────────────────────────────│
-│  Tasks │ Notes │ Clipboard  │  ← Content tabs
+│  Tasks │ Notes              │  ← Content tabs
 │─────────────────────────────│
 │  ☐ Design new landing page  │
 │  ☑ Review pull requests     │
@@ -270,7 +263,7 @@ Niwa lives in your menu bar as a small leaf icon. Click it to open the dropdown 
 │─────────────────────────────│
 │  ▁▃▅▇▅▃▁  7-day XP chart   │  ← Activity
 │─────────────────────────────│
-│  🪟  v1.0.0    🔄  ⚙️  ⏻   │  ← Toolbar
+│  🪟  vX.Y.Z    🔄  ⚙️  ⏻   │  ← Toolbar
 └─────────────────────────────┘
 ```
 
@@ -280,7 +273,7 @@ All data is stored locally using **SwiftData** with an App Group container. Noth
 
 | Data | Storage |
 |------|---------|
-| Tasks, notes, clipboard | SwiftData (SQLite) |
+| Tasks, notes | SwiftData (SQLite) |
 | Timer sessions | SwiftData with Date-based tracking |
 | XP events | SwiftData with source attribution |
 | User preferences | SwiftData (UserProfile model) |
@@ -303,8 +296,7 @@ Settings are embedded inline in the dropdown — no separate window.
 | **💼 Work Hours** | Start/end time (reminders only fire within) |
 | **🍜 Lunch** | Start/end time (reminders paused during) |
 | **🎨 Appearance** | System / Light / Dark theme |
-| **🪟 Window** | Always on top toggle |
-| **💾 Data** | Export JSON, Reset All Data |
+| **💾 Data** | Reset All Data |
 
 > [!TIP]
 > **Reset All Data** wipes everything — tasks, notes, XP, settings — and returns you to Level 0 with a fresh seed.
@@ -352,7 +344,7 @@ Niwa/
 │   ├── Services/                # Business logic
 │   │   ├── TaskManager.swift
 │   │   ├── NoteManager.swift
-│   │   ├── ClipboardMonitor.swift
+│   │   ├── AppErrorState.swift
 │   │   ├── HealthEventManager.swift
 │   │   ├── UserProfileManager.swift
 │   │   ├── NotificationManager.swift
@@ -366,9 +358,6 @@ Niwa/
 │   │   │   ├── PlantView.swift      # 8 growth stages (pure SwiftUI)
 │   │   │   ├── LevelUpOverlay.swift
 │   │   │   └── ...
-│   │   ├── FloatingWindow/
-│   │   │   ├── FloatingWindowController.swift
-│   │   │   └── FloatingWindowContentView.swift
 │   │   └── Settings/
 │   │       └── InlineSettingsView.swift
 │   └── Assets.xcassets/         # Color sets (light + dark)
@@ -383,7 +372,6 @@ Niwa/
 │       ├── UserProfile.swift
 │       ├── NiwaTask.swift
 │       ├── NiwaNote.swift
-│       ├── ClipboardEntry.swift
 │       ├── TimerSession.swift
 │       ├── HealthEvent.swift
 │       └── XPEvent.swift
@@ -413,7 +401,7 @@ Niwa/
 |-|--------|
 | **Data storage** | All data stored locally in SwiftData (App Group container) |
 | **Network** | No analytics, no telemetry, no tracking. Optional manual "Check for Updates" calls GitHub Releases API |
-| **Clipboard** | Reads `NSPasteboard.general` locally. Text stays on your machine |
+| **Clipboard** | Not accessed — Niwa does not read your clipboard |
 | **Notifications** | Local `UNUserNotificationCenter` only. No push servers |
 
 > [!IMPORTANT]

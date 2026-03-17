@@ -1,5 +1,4 @@
 import SwiftUI
-import SwiftData
 
 struct SoundsView: View {
     let soundManager: SoundManager

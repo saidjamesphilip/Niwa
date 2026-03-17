@@ -1,5 +1,4 @@
 import SwiftUI
-import AppKit
 
 struct WelcomeOverlay: View {
     @Binding var isVisible: Bool

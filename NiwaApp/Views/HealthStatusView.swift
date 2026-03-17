@@ -402,12 +402,6 @@ struct HealthStatusView: View {
         return String(format: "%d:%02d", minutes, seconds)
     }
 
-    private func milestoneBadge(from start: Date, to now: Date) -> Int? {
-        let elapsedMinutes = Int(max(0, now.timeIntervalSince(start))) / 60
-        let reached = XPConstants.standMilestones.filter { elapsedMinutes >= $0.minutes }
-        guard !reached.isEmpty else { return nil }
-        return reached.reduce(0) { $0 + $1.bonus }
-    }
 }
 
 // MARK: - IconPill

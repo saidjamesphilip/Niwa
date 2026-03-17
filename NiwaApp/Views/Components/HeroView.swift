@@ -249,9 +249,4 @@ struct HeroView: View {
         }
     }
 
-    // MARK: - Plant Stage Name
-
-    private var plantStageName: String {
-        XPConstants.plantStageName(for: level)
-    }
 }

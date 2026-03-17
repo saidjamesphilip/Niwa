@@ -1,5 +1,4 @@
 import SwiftUI
-import SwiftData
 
 struct DropdownRootView: View {
     let appErrorState: AppErrorState
@@ -31,7 +30,7 @@ struct DropdownRootView: View {
         ZStack {
             VStack(spacing: 0) {
                 if showSettings {
-                    settingsHeader
+                    navigationHeader(title: "Settings") { showSettings = false }
                     InlineSettingsView(
                         profileManager: profileManager,
                         timerEngine: timerEngine,
@@ -41,7 +40,7 @@ struct DropdownRootView: View {
                     )
                     .frame(height: mainContentHeight > 0 ? mainContentHeight : contentMaxHeight)
                 } else if showSounds {
-                    soundsHeader
+                    navigationHeader(title: "Sounds") { showSounds = false }
                     SoundsView(
                         soundManager: soundManager,
                         profileManager: profileManager
@@ -113,7 +112,7 @@ struct DropdownRootView: View {
         // First launch — show welcome and seed demo content
         if profile.displayName.isEmpty && profile.lastGreetingDate == nil {
             if taskManager.tasks.isEmpty {
-                seedDemoContent(context: profileManager.context)
+                profileManager.seedDemoContent()
                 taskManager.refreshTasks()
                 noteManager.refreshNotes()
             }
@@ -164,12 +163,12 @@ struct DropdownRootView: View {
         }
     }
 
-    // MARK: - Settings Header
+    // MARK: - Navigation Header
 
-    private var settingsHeader: some View {
+    private func navigationHeader(title: String, onBack: @escaping () -> Void) -> some View {
         HStack {
             Button {
-                showSettings = false
+                onBack()
             } label: {
                 HStack(spacing: DesignTokens.Spacing.xs) {
                     Image(systemName: "chevron.left")
@@ -183,51 +182,13 @@ struct DropdownRootView: View {
 
             Spacer()
 
-            Text("Settings")
+            Text(title)
                 .font(DesignTokens.Typography.headingFont)
                 .foregroundStyle(DesignTokens.Colors.textPrimary)
 
             Spacer()
 
             // Invisible spacer to balance the back button
-            HStack(spacing: DesignTokens.Spacing.xs) {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 12, weight: .semibold))
-                Text("Back")
-                    .font(DesignTokens.Typography.captionFont)
-            }
-            .opacity(0)
-        }
-        .padding(.horizontal, DesignTokens.Spacing.lg)
-        .padding(.vertical, DesignTokens.Spacing.md)
-        .background(DesignTokens.Colors.backgroundSecondary)
-    }
-
-    // MARK: - Sounds Header
-
-    private var soundsHeader: some View {
-        HStack {
-            Button {
-                showSounds = false
-            } label: {
-                HStack(spacing: DesignTokens.Spacing.xs) {
-                    Image(systemName: "chevron.left")
-                        .font(.system(size: 12, weight: .semibold))
-                    Text("Back")
-                        .font(DesignTokens.Typography.captionFont)
-                }
-                .foregroundStyle(DesignTokens.Colors.primary)
-            }
-            .buttonStyle(.plain)
-
-            Spacer()
-
-            Text("Sounds")
-                .font(DesignTokens.Typography.headingFont)
-                .foregroundStyle(DesignTokens.Colors.textPrimary)
-
-            Spacer()
-
             HStack(spacing: DesignTokens.Spacing.xs) {
                 Image(systemName: "chevron.left")
                     .font(.system(size: 12, weight: .semibold))
@@ -335,23 +296,12 @@ struct DropdownRootView: View {
     }
 
     private func resetAllData() {
-        let context = profileManager.context
-        do {
-            try context.delete(model: NiwaTask.self)
-            try context.delete(model: NiwaNote.self)
-
-            try context.delete(model: TimerSession.self)
-            try context.delete(model: HealthEvent.self)
-            try context.delete(model: XPEvent.self)
-            try context.delete(model: UserProfile.self)
-            context.insert(UserProfile())
-            try context.save()
-            profileManager.reload()
+        if profileManager.resetAllData() {
             NotificationManager.shared.cancelAllPending()
             timerEngine.forceReset()
             healthManager.stopStanding()
             healthManager.reloadStats()
-            seedDemoContent(context: context)
+            profileManager.seedDemoContent()
             taskManager.refreshTasks()
             noteManager.refreshNotes()
             resetStatusMessage = "All data reset. Fresh start!"
@@ -360,29 +310,9 @@ struct DropdownRootView: View {
                 showWelcome = true
                 resetStatusMessage = ""
             }
-        } catch {
-            resetStatusMessage = "Reset failed: \(error.localizedDescription)"
+        } else {
+            resetStatusMessage = "Reset failed. Please try again."
         }
-    }
-
-    private func seedDemoContent(context: ModelContext) {
-        let today = Calendar.current.startOfDay(for: Date())
-        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)
-        let nextWeek = Calendar.current.date(byAdding: .day, value: 7, to: today)
-
-        let task1 = NiwaTask(title: "Try completing a task for +15 XP", sortOrder: 0, priority: .high, dueDate: today)
-        let task2 = NiwaTask(title: "Start a focus timer to earn XP", sortOrder: 1, priority: .medium, dueDate: tomorrow)
-        let task3 = NiwaTask(title: "Log a health habit below", sortOrder: 2, priority: .low, dueDate: nextWeek)
-        context.insert(task1)
-        context.insert(task2)
-        context.insert(task3)
-
-        let demoNote = NiwaNote(
-            content: "Welcome to Niwa! Use notes to jot down quick thoughts. Your garden grows as you stay productive.",
-            colorIndex: 0
-        )
-        context.insert(demoNote)
-        try? context.save()
     }
 }
 
