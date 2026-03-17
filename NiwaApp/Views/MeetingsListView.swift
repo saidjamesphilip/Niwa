@@ -9,20 +9,22 @@ struct MeetingsListView: View {
     @State private var dismissedPendingId: String?
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 0) {
-                if !calendarManager.isAuthorized {
-                    emptyStateNoAccess
-                } else if calendarManager.todayEvents.isEmpty {
-                    emptyStateNoMeetings
-                } else {
-                    meetingsList
+        VStack(spacing: 0) {
+            if !calendarManager.isAuthorized {
+                emptyStateNoAccess
+            } else if calendarManager.todayEvents.isEmpty {
+                emptyStateNoMeetings
+            } else {
+                ScrollView {
+                    VStack(spacing: 0) {
+                        meetingsList
+                    }
+                    .padding(.horizontal, DesignTokens.Spacing.lg)
+                    .padding(.vertical, DesignTokens.Spacing.sm)
                 }
+                .frame(height: contentMaxHeight)
             }
-            .padding(.horizontal, DesignTokens.Spacing.lg)
-            .padding(.vertical, DesignTokens.Spacing.sm)
         }
-        .frame(height: contentMaxHeight)
         .onAppear {
             if !calendarManager.isAuthorized && !calendarManager.authorizationDenied {
                 calendarManager.requestAccess()

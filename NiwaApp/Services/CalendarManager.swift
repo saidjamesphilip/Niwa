@@ -57,6 +57,15 @@ final class CalendarManager {
         }
     }
 
+    /// Reset calendar state so the Meetings tab shows the empty/permission state again.
+    func resetState() {
+        todayEvents = []
+        pendingReview = nil
+        isAuthorized = false
+        authorizationDenied = false
+        checkAuthorization()
+    }
+
     // MARK: - Event Fetching
 
     func refreshEvents() {

@@ -24,6 +24,8 @@ struct DropdownRootView: View {
 
     private var screenHeight: CGFloat { NSScreen.main?.visibleFrame.height ?? 900 }
     private var contentMaxHeight: CGFloat { isExpanded ? screenHeight * 0.45 : screenHeight * 0.27 }
+    /// Full dropdown body height for settings/sounds — matches the total main content area
+    private var dropdownBodyHeight: CGFloat { mainContentHeight > 0 ? mainContentHeight : isExpanded ? screenHeight * 0.7 : screenHeight * 0.5 }
 
     private var profile: UserProfile? { profileManager.profile }
 
@@ -39,14 +41,14 @@ struct DropdownRootView: View {
                         onResetData: { resetAllData() },
                         statusMessage: resetStatusMessage
                     )
-                    .frame(height: mainContentHeight > 0 ? mainContentHeight : contentMaxHeight)
+                    .frame(height: dropdownBodyHeight)
                 } else if showSounds {
                     navigationHeader(title: "Sounds") { showSounds = false }
                     SoundsView(
                         soundManager: soundManager,
                         profileManager: profileManager
                     )
-                    .frame(height: mainContentHeight > 0 ? mainContentHeight : contentMaxHeight)
+                    .frame(height: dropdownBodyHeight)
                 } else {
                     if showGreeting {
                         GreetingBanner(message: greetingMessage, isVisible: $showGreeting)
@@ -305,6 +307,7 @@ struct DropdownRootView: View {
             profileManager.seedDemoContent()
             taskManager.refreshTasks()
             noteManager.refreshNotes()
+            calendarManager.resetState()
             resetStatusMessage = "All data reset. Fresh start!"
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 showSettings = false
