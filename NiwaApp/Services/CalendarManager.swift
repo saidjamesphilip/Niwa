@@ -104,6 +104,15 @@ final class CalendarManager {
         return todayEvents.filter { $0.endDate <= now }
     }
 
+    var meetingsReviewedThisWeek: Int {
+        let calendar = Calendar.current
+        let sevenDaysAgo = calendar.date(byAdding: .day, value: -7, to: calendar.startOfDay(for: Date()))!
+        let descriptor = FetchDescriptor<MeetingReview>(
+            predicate: #Predicate { $0.reviewedAt >= sevenDaysAgo }
+        )
+        return (try? modelContext.fetch(descriptor).count) ?? 0
+    }
+
     // MARK: - Meeting Reviews
 
     func review(for eventIdentifier: String) -> MeetingReview? {

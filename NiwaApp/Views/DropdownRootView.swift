@@ -162,7 +162,7 @@ struct DropdownRootView: View {
             Divider()
                 .background(DesignTokens.Colors.subtle)
 
-            XPChartView(xpEvents: gamificationEngine.recentXPEvents)
+            XPChartView(xpEvents: gamificationEngine.recentXPEvents, meetingsReviewedThisWeek: calendarManager.meetingsReviewedThisWeek)
         }
     }
 
