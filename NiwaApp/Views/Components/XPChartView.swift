@@ -27,7 +27,9 @@ private struct WeeklyInsights {
     var focusFormatted: String {
         let hours = focusMinutes / 60
         let mins = focusMinutes % 60
-        return hours > 0 ? "\(hours):\(String(format: "%02d", mins))" : "\(mins)m"
+        if hours > 0 && mins > 0 { return "\(hours)h \(mins)m" }
+        if hours > 0 { return "\(hours)h" }
+        return "\(mins)m"
     }
 
     var headline: String {
@@ -38,7 +40,7 @@ private struct WeeklyInsights {
         case 20...: return "Crushing it this week"
         case 1..<20: return "Strong week so far"
         case -1..<1: return "Steady progress"
-        case -20..<(-1): return "Slow start — you've got this"
+        case -20..<(-1): return "Below pace — you've got this"
         default: return "Quiet week — time to grow"
         }
     }

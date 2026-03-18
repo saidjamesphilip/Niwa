@@ -53,7 +53,7 @@ struct MeetingReviewCard: View {
             }
 
             if notesSubmitted {
-                Text("Notes saved +5 XP")
+                Text("Notes saved +\(XPConstants.meetingNotes) XP")
                     .font(.system(size: 10))
                     .foregroundStyle(DesignTokens.Colors.secondary)
                     .onAppear { scheduleAutoDismiss() }
@@ -61,7 +61,7 @@ struct MeetingReviewCard: View {
 
             // Skip notes — auto-dismiss after rating only
             if showNotes && !notesSubmitted && !isComplete {
-                Button("Skip") {
+                Button("Skip notes") {
                     isComplete = true
                     scheduleAutoDismiss()
                 }

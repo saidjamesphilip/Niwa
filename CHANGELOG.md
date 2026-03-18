@@ -4,28 +4,40 @@ All notable changes to Niwa will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [1.4.0] — 2026-03-18
 
 ### Added
 - **Meetings tab** — shows today's calendar events via macOS EventKit (works with Google, Outlook, iCloud)
 - Three meeting sections: Upcoming (sage), Current (terracotta), Past (muted) with color-coded left bars
 - "soon" badge on meetings starting within 15 minutes
 - Post-meeting review: 3-point rating (Bad / OK / Good) + optional quick notes
-- Auto-prompt banner for meetings that ended within the last 30 minutes
+- Auto-prompt banner for recently ended meetings with auto-dismiss after review
 - +5 XP for rating, +5 XP for notes (max +10 per meeting) via new `.meeting` XP source
 - Meeting XP segment in 7-day XP chart (amber, 70% opacity)
-- MeetingReview SwiftData model with XP de-duplication flags
+- **Weekly Insights toggle** — 💡 button on XP chart swaps bars for qualitative weekly summary
+- Insights show 4 stat pills (tasks, focus time, meetings, waters) + headline + trend
+- Week-over-week XP comparison with qualitative headlines ("Crushing it", "Steady progress", etc.)
+- Meetings feature added to welcome screen onboarding
 - Calendar entitlement (`com.apple.security.personal-information.calendars`)
 - Empty states for no calendar access and no meetings today
 - SHA256 checksum verification in install.sh
 - Content-Security-Policy headers on website HTML files
+- Tab switch animation (easeInOut 0.15s)
 
 ### Changed
+- Default dropdown height reduced 5% (collapsed and expanded)
+- Settings and Sounds views now match full dashboard height
 - Extracted duplicate settingsHeader/soundsHeader into single `navigationHeader(title:onBack:)`
 - Moved `resetAllData()` and `seedDemoContent()` from DropdownRootView to UserProfileManager
 - Renamed `UserProfileManager.context` → `modelContext` for naming consistency
+- XP event fetch window expanded from 8 to 15 days for prior-week insights comparison
 
 ### Fixed
+- Meetings tab height now matches Tasks and Notes tabs
+- Meeting review card "Done" button disabled when notes empty (was silent no-op)
+- Meeting review dismiss button enlarged for better tap target
+- MeetingsListView empty states properly centered (fixed Spacer in ScrollView)
+- Static DateFormatter in MeetingsListView (was recreating per render)
 - Removed dead code: `HeroView.plantStageName`, `HealthStatusView.milestoneBadge`, empty `setupNotificationCallbacks`
 - Removed unused imports (SwiftData, AppKit) from 6 view files
 

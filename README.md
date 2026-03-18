@@ -135,8 +135,14 @@
 - Earn XP from every productive action
 - Level formula: Total XP to reach Level N = 25N² + 75N
 - Level-up overlay with confetti animation (respects Reduce Motion)
-- 7-day XP chart with daily breakdowns
+- 7-day XP chart with daily breakdowns by source
 - Menu bar icon evolves with your level
+
+### Weekly Insights
+- Toggle 💡 button on the XP chart to see a qualitative weekly summary
+- 4 stat pills: tasks completed, focus time, meetings reviewed, waters logged
+- Headline adapts to your week-over-week XP trend ("Crushing it", "Steady progress", etc.)
+- Summary highlights your top activities with trend emoji
 
 ### Floating Window
 - Compact, borderless mini window

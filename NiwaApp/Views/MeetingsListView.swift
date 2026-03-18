@@ -170,6 +170,7 @@ struct MeetingsListView: View {
                         .foregroundStyle(DesignTokens.Colors.primary)
                 }
                 .buttonStyle(.plain)
+                .help("Rate this meeting and earn XP")
             case .reviewed:
                 if let identifier = event.eventIdentifier,
                    let rev = calendarManager.review(for: identifier) {
@@ -264,7 +265,7 @@ struct MeetingsListView: View {
                 .foregroundStyle(DesignTokens.Colors.primary)
                 .buttonStyle(.plain)
             } else {
-                Button("Tap to enable calendar access") {
+                Button("Click to enable calendar access") {
                     calendarManager.requestAccess()
                 }
                 .font(DesignTokens.Typography.captionFont)

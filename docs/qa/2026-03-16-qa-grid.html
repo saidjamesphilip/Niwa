@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Niwa v1.3.13 — QA Grid</title>
+<style>
+  :root {
+    --terracotta: #E07A5F;
+    --sage: #81B29A;
+    --cream: #FAF6F1;
+    --bark: #3D3229;
+    --bark-light: #7A6E63;
+    --sand: #D4C5B2;
+    --red: #D94F4F;
+    --amber: #E0AC3A;
+    --green: #4CAF50;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--cream);
+    color: var(--bark);
+    padding: 32px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid var(--sand);
+  }
+
+  header h1 {
+    font-size: 28px;
+    color: var(--bark);
+    margin-bottom: 4px;
+  }
+
+  header h1 span { color: var(--terracotta); }
+
+  header p {
+    color: var(--bark-light);
+    font-size: 14px;
+  }
+
+  .progress-bar {
+    margin: 16px auto 0;
+    max-width: 400px;
+    background: var(--sand);
+    border-radius: 8px;
+    height: 10px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--sage);
+    border-radius: 8px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+
+  .progress-label {
+    text-align: center;
+    font-size: 13px;
+    color: var(--bark-light);
+    margin-top: 6px;
+  }
+
+  .section {
+    margin-bottom: 28px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding: 10px 14px;
+    background: white;
+    border-radius: 10px;
+    border: 1px solid var(--sand);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .section-header:hover { background: #f5f0ea; }
+
+  .section-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--terracotta);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .section-num.website { background: var(--sage); }
+
+  .section-title {
+    font-size: 16px;
+    font-weight: 600;
+    flex: 1;
+  }
+
+  .section-status {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+  }
+
+  .status-pending { background: #f0e6d6; color: var(--bark-light); }
+  .status-pass { background: #e8f5e9; color: var(--green); }
+  .status-fail { background: #fdecea; color: var(--red); }
+  .status-partial { background: #fff8e1; color: var(--amber); }
+
+  .grid {
+    display: grid;
+    gap: 1px;
+    background: var(--sand);
+    border: 1px solid var(--sand);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 4px;
+  }
+
+  .grid-header {
+    display: grid;
+    grid-template-columns: 1fr 100px 100px 180px;
+    background: #f5f0ea;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--bark-light);
+  }
+
+  .grid-header > div { padding: 8px 12px; }
+
+  .grid-row {
+    display: grid;
+    grid-template-columns: 1fr 100px 100px 180px;
+    background: white;
+    font-size: 13px;
+    align-items: center;
+    transition: background 0.15s;
+  }
+
+  .grid-row:hover { background: #fdfaf7; }
+  .grid-row.checked-pass { background: #f6fbf6; }
+  .grid-row.checked-fail { background: #fef7f6; }
+
+  .grid-row > div { padding: 10px 12px; }
+
+  .test-desc {
+    line-height: 1.4;
+  }
+
+  .test-desc small {
+    display: block;
+    color: var(--bark-light);
+    font-size: 11px;
+    margin-top: 2px;
+  }
+
+  .result-btn {
+    border: none;
+    padding: 5px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    opacity: 0.4;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+
+  .result-btn:hover { opacity: 0.7; transform: scale(1.05); }
+  .result-btn.active { opacity: 1; transform: scale(1); }
+
+  .btn-pass { background: #e8f5e9; color: var(--green); }
+  .btn-fail { background: #fdecea; color: var(--red); }
+
+  .notes-input {
+    width: 100%;
+    border: 1px solid var(--sand);
+    border-radius: 6px;
+    padding: 5px 8px;
+    font-size: 12px;
+    font-family: inherit;
+    background: white;
+    color: var(--bark);
+  }
+
+  .notes-input:focus { outline: none; border-color: var(--terracotta); }
+
+  .divider {
+    text-align: center;
+    margin: 36px 0 20px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--bark-light);
+  }
+
+  .divider::before, .divider::after {
+    content: '';
+    display: inline-block;
+    width: 60px;
+    height: 1px;
+    background: var(--sand);
+    vertical-align: middle;
+    margin: 0 12px;
+  }
+
+  .summary {
+    margin-top: 32px;
+    padding: 20px;
+    background: white;
+    border: 1px solid var(--sand);
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    text-align: center;
+  }
+
+  .summary-item h3 { font-size: 28px; margin-bottom: 2px; }
+  .summary-item p { font-size: 12px; color: var(--bark-light); }
+  .summary-item.pass h3 { color: var(--green); }
+  .summary-item.fail h3 { color: var(--red); }
+  .summary-item.pending h3 { color: var(--bark-light); }
+
+  footer {
+    text-align: center;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--sand);
+    font-size: 12px;
+    color: var(--bark-light);
+  }
+
+  @media print {
+    body { padding: 16px; }
+    .result-btn { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Niwa <span>(庭)</span> — QA Grid</h1>
+  <p>Branch: dev/quick-wins-2026-03-15 &nbsp;|&nbsp; Target: v1.3.13 &nbsp;|&nbsp; Date: 2026-03-16</p>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-label" id="progressLabel">0 / 0 tested</div>
+</header>
+
+<div id="sections"></div>
+
+<div class="summary" id="summary">
+  <div class="summary-item pass"><h3 id="sumPass">0</h3><p>Passed</p></div>
+  <div class="summary-item fail"><h3 id="sumFail">0</h3><p>Failed</p></div>
+  <div class="summary-item pending"><h3 id="sumPending">0</h3><p>Remaining</p></div>
+</div>
+
+<footer>Niwa QA — Generated 2026-03-16</footer>
+
+<script>
+const data = [
+  {
+    id: 1, title: "Quit Warning During Active Timer", type: "app",
+    tests: [
+      { desc: "Start a focus timer (any duration)", expect: "Timer starts, progress ring visible" },
+      { desc: "Press Cmd+Q while timer is running", expect: "Alert: 'Focus session in progress' with Quit Anyway / Cancel" },
+      { desc: "Click Cancel on the alert", expect: "App stays open, timer continues uninterrupted" },
+      { desc: "Press Cmd+Q again, click Quit Anyway", expect: "App quits" },
+      { desc: "Relaunch, Cmd+Q with NO timer running", expect: "App quits immediately, no alert shown" },
+    ]
+  },
+  {
+    id: 2, title: "Health Tracking & Date Filtering", type: "app",
+    tests: [
+      { desc: "Tap water pill 3 times", expect: "Water count shows 3 (or increments by 3)" },
+      { desc: "Tap coffee pill once", expect: "Coffee count shows 1, XP awarded" },
+      { desc: "Tap creatine pill", expect: "Creatine shows as logged" },
+      { desc: "Tap gym pill", expect: "Gym shows as logged" },
+      { desc: "Close and reopen dropdown", expect: "All health counts persist correctly" },
+    ]
+  },
+  {
+    id: 3, title: "XP Chart (Pre-filtered Events)", type: "app",
+    tests: [
+      { desc: "Open dropdown, view XP chart", expect: "Chart renders with recent 7-day data, no blank chart" },
+      { desc: "Complete a task to earn XP", expect: "Chart updates to reflect new XP event" },
+    ]
+  },
+  {
+    id: 4, title: "Profile Caching", type: "app",
+    tests: [
+      { desc: "Open Settings > change display name", expect: "Name updates immediately in the header/greeting" },
+      { desc: "Close and reopen dropdown", expect: "Updated name persists" },
+      { desc: "Use Reset All Data in Settings", expect: "App resets, Garden Gate welcome screen appears" },
+    ]
+  },
+  {
+    id: 5, title: "Widgets — Container, 7am Day Start, Brand Tokens", type: "app",
+    tests: [
+      { desc: "Add small widget to desktop", expect: "Widget renders with XP level, plant, stats" },
+      { desc: "Add medium widget to desktop", expect: "Widget renders with tasks and water count" },
+      { desc: "Add large widget to desktop", expect: "Widget renders with full stats + sparkline" },
+      { desc: "Log water in app, wait for widget refresh", expect: "Widget water count matches app count" },
+      { desc: "Check widget colors", expect: "Uses Niwa brand: terracotta, sage, cream — no system blue/red" },
+    ]
+  },
+  {
+    id: 6, title: "Level-Up Overlay", type: "app",
+    tests: [
+      { desc: "Earn enough XP to trigger a level-up", expect: "Zen level-up overlay appears (plant, level number)" },
+      { desc: "Dismiss the overlay", expect: "Overlay closes, does not reappear until next level-up" },
+    ]
+  },
+  {
+    id: 7, title: "Notification Permission Indicator", type: "app",
+    tests: [
+      { desc: "Open Settings > health/reminders section", expect: "Permission status pill visible near 'Manage in System Settings'" },
+      { desc: "If notifications allowed", expect: "Green 'Allowed' indicator" },
+      { desc: "If notifications blocked", expect: "Orange 'Blocked' indicator, links to System Settings" },
+    ]
+  },
+  {
+    id: 8, title: "Tasks (Observable Migration)", type: "app",
+    tests: [
+      { desc: "Create a new task", expect: "Task appears in the list immediately" },
+      { desc: "Edit task title", expect: "Title updates in place" },
+      { desc: "Complete a task (check it off)", expect: "Task moves to completed, XP awarded (+15)" },
+      { desc: "Delete a task", expect: "Task removed from list" },
+    ]
+  },
+  {
+    id: 9, title: "Notes (Observable Migration)", type: "app",
+    tests: [
+      { desc: "Create a new note", expect: "Note appears in the list" },
+      { desc: "Edit note content", expect: "Changes save automatically" },
+      { desc: "Delete a note", expect: "Note removed from list" },
+    ]
+  },
+  {
+    id: 10, title: "Settings & Update Checker (Observable Migration)", type: "app",
+    tests: [
+      { desc: "Open Settings tab", expect: "All sections load without crash" },
+      { desc: "Toggle any setting on/off", expect: "Toggle responds, setting persists after close/reopen" },
+      { desc: "Version number visible in settings", expect: "Shows current version, no crash" },
+    ]
+  },
+  {
+    id: 11, title: "Focus Timer End-to-End", type: "app",
+    tests: [
+      { desc: "Start a short focus session (e.g. 1 min)", expect: "Timer counts down, progress ring animates" },
+      { desc: "Let timer complete", expect: "Session completes, XP awarded (1 XP/min), sound plays" },
+      { desc: "Start a timer and cancel it", expect: "Timer stops, no XP awarded, no crash" },
+    ]
+  },
+  {
+    id: 12, title: "Plant View (Deduplicated Logic)", type: "app",
+    tests: [
+      { desc: "View plant in dropdown header", expect: "Plant icon matches current level stage" },
+      { desc: "Plant matches across header and widgets", expect: "Same stage shown in app and widgets" },
+    ]
+  },
+  {
+    id: 13, title: "JSON Export (Full Data)", type: "app",
+    tests: [
+      { desc: "Log health events + complete a focus session first", expect: "Data exists to export" },
+      { desc: "Settings > Export Data > save JSON", expect: "File saves successfully" },
+      { desc: "Open JSON — check for healthEvents array", expect: "Contains entries with type, confirmedAt, etc." },
+      { desc: "Open JSON — check for timerSessions array", expect: "Contains entries with type, durationMinutes, startedAt, etc." },
+      { desc: "Open JSON — check existing data still present", expect: "tasks, notes, xpEvents, profiles arrays all present" },
+    ]
+  },
+  {
+    id: 14, title: "Clipboard Feature Removed", type: "app",
+    tests: [
+      { desc: "Check all tabs in the dropdown", expect: "No Clipboard tab visible anywhere" },
+      { desc: "Navigate between Tasks, Notes, Settings", expect: "No crashes, smooth tab switching" },
+    ]
+  },
+  {
+    id: 15, title: "Regression — Core App Flows", type: "app",
+    tests: [
+      { desc: "Menu bar icon appears on launch", expect: "Niwa icon visible in menu bar" },
+      { desc: "Click icon to open dropdown", expect: "Dropdown opens smoothly" },
+      { desc: "Drag resize handle on dropdown", expect: "Dropdown resizes, remembers size after close/reopen" },
+      { desc: "XP bar in header", expect: "Shows current XP / next level, fills correctly" },
+      { desc: "Health pills all tappable", expect: "Water, creatine, gym, coffee, standing all respond to taps" },
+      { desc: "Sound effects play (if enabled)", expect: "XP earned and level-up sounds audible" },
+    ]
+  },
+  // Website section
+  {
+    id: 16, title: "Website — Copy Updates", type: "website",
+    tests: [
+      { desc: "Hero section tagline", expect: "Says 'focus timer' not 'Pomodoro timer'" },
+      { desc: "Hero section features", expect: "No mention of 'clipboard history'" },
+      { desc: "Feature badges below showcase", expect: "'Focus Timer' badge, no 'Clipboard History' badge" },
+      { desc: "Deep Focus Timer spotlight card", expect: "Says 'Pick a preset or set a custom duration' and '+1 XP per minute'" },
+      { desc: "FAQ: How does the leveling system work?", expect: "Mentions focus sessions +1 XP/min, not Pomodoro +25 XP" },
+      { desc: "FAQ: Can I customise timer durations?", expect: "Mentions Quick Pick presets, not work/break cycles" },
+    ]
+  },
+  {
+    id: 17, title: "Website — SVG Mockups & Meta Tags", type: "website",
+    tests: [
+      { desc: "Light mode SVG mockup — tab bar", expect: "Shows Tasks and Notes tabs only, no Clipboard tab" },
+      { desc: "Dark mode SVG mockup — tab bar", expect: "Shows Tasks and Notes tabs only, no Clipboard tab" },
+      { desc: "View page source — meta description", expect: "Says 'focus timer' and no 'clipboard history'" },
+      { desc: "View page source — og:description", expect: "Says 'focus timer' and no 'clipboard history'" },
+      { desc: "View page source — twitter:description", expect: "Says 'focus timer' and no 'clipboard history'" },
+    ]
+  },
+];
+
+// Render
+const container = document.getElementById('sections');
+let lastType = null;
+
+data.forEach(section => {
+  if (section.type !== lastType) {
+    const divider = document.createElement('div');
+    divider.className = 'divider';
+    divider.textContent = section.type === 'app' ? 'App Tests' : 'Website Tests';
+    container.appendChild(divider);
+    lastType = section.type;
+  }
+
+  const sectionEl = document.createElement('div');
+  sectionEl.className = 'section';
+
+  const headerEl = document.createElement('div');
+  headerEl.className = 'section-header';
+  headerEl.innerHTML = `
+    <span class="section-num ${section.type === 'website' ? 'website' : ''}">${section.id}</span>
+    <span class="section-title">${section.title}</span>
+    <span class="section-status status-pending" id="section-status-${section.id}">Pending</span>
+  `;
+
+  const gridEl = document.createElement('div');
+  gridEl.className = 'grid';
+  gridEl.id = `grid-${section.id}`;
+
+  gridEl.innerHTML = `
+    <div class="grid-header">
+      <div>Test</div>
+      <div>Pass</div>
+      <div>Fail</div>
+      <div>Notes</div>
+    </div>
+  `;
+
+  section.tests.forEach((test, i) => {
+    const rowId = `${section.id}-${i}`;
+    const row = document.createElement('div');
+    row.className = 'grid-row';
+    row.id = `row-${rowId}`;
+    row.innerHTML = `
+      <div class="test-desc">${test.desc}<small>${test.expect}</small></div>
+      <div><button class="result-btn btn-pass" onclick="setResult('${rowId}','pass')">Pass</button></div>
+      <div><button class="result-btn btn-fail" onclick="setResult('${rowId}','fail')">Fail</button></div>
+      <div><input class="notes-input" placeholder="Notes..." oninput="saveState()"></div>
+    `;
+    gridEl.appendChild(row);
+  });
+
+  sectionEl.appendChild(headerEl);
+  sectionEl.appendChild(gridEl);
+  container.appendChild(sectionEl);
+
+  // Toggle collapse
+  headerEl.addEventListener('click', () => {
+    gridEl.style.display = gridEl.style.display === 'none' ? '' : 'none';
+  });
+});
+
+const results = {};
+
+function setResult(id, result) {
+  const [sectionId, testIdx] = id.split('-');
+  const row = document.getElementById(`row-${id}`);
+  const passBtn = row.querySelector('.btn-pass');
+  const failBtn = row.querySelector('.btn-fail');
+
+  // Toggle off if clicking same button
+  if (results[id] === result) {
+    delete results[id];
+    passBtn.classList.remove('active');
+    failBtn.classList.remove('active');
+    row.classList.remove('checked-pass', 'checked-fail');
+  } else {
+    results[id] = result;
+    passBtn.classList.toggle('active', result === 'pass');
+    failBtn.classList.toggle('active', result === 'fail');
+    row.classList.toggle('checked-pass', result === 'pass');
+    row.classList.toggle('checked-fail', result === 'fail');
+  }
+
+  updateSummary();
+  saveState();
+}
+
+function updateSummary() {
+  let pass = 0, fail = 0, total = 0;
+  data.forEach(s => { total += s.tests.length; });
+
+  Object.values(results).forEach(r => {
+    if (r === 'pass') pass++;
+    if (r === 'fail') fail++;
+  });
+
+  const pending = total - pass - fail;
+  document.getElementById('sumPass').textContent = pass;
+  document.getElementById('sumFail').textContent = fail;
+  document.getElementById('sumPending').textContent = pending;
+
+  const tested = pass + fail;
+  const pct = total > 0 ? (tested / total * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `${tested} / ${total} tested`;
+
+  // Update section statuses
+  data.forEach(section => {
+    let sp = 0, sf = 0;
+    section.tests.forEach((_, i) => {
+      const r = results[`${section.id}-${i}`];
+      if (r === 'pass') sp++;
+      if (r === 'fail') sf++;
+    });
+    const statusEl = document.getElementById(`section-status-${section.id}`);
+    const count = section.tests.length;
+    if (sf > 0) {
+      statusEl.textContent = `${sf} Failed`;
+      statusEl.className = 'section-status status-fail';
+    } else if (sp === count) {
+      statusEl.textContent = 'All Pass';
+      statusEl.className = 'section-status status-pass';
+    } else if (sp > 0) {
+      statusEl.textContent = `${sp}/${count}`;
+      statusEl.className = 'section-status status-partial';
+    } else {
+      statusEl.textContent = 'Pending';
+      statusEl.className = 'section-status status-pending';
+    }
+  });
+}
+
+// Persist state in localStorage
+function saveState() {
+  const notes = {};
+  document.querySelectorAll('.notes-input').forEach((input, i) => {
+    if (input.value) notes[i] = input.value;
+  });
+  localStorage.setItem('niwa-qa-state', JSON.stringify({ results, notes }));
+}
+
+function loadState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('niwa-qa-state'));
+    if (!saved) return;
+    if (saved.results) {
+      Object.entries(saved.results).forEach(([id, result]) => {
+        results[id] = result;
+        const row = document.getElementById(`row-${id}`);
+        if (row) {
+          const passBtn = row.querySelector('.btn-pass');
+          const failBtn = row.querySelector('.btn-fail');
+          passBtn.classList.toggle('active', result === 'pass');
+          failBtn.classList.toggle('active', result === 'fail');
+          row.classList.toggle('checked-pass', result === 'pass');
+          row.classList.toggle('checked-fail', result === 'fail');
+        }
+      });
+    }
+    if (saved.notes) {
+      const inputs = document.querySelectorAll('.notes-input');
+      Object.entries(saved.notes).forEach(([i, val]) => {
+        if (inputs[i]) inputs[i].value = val;
+      });
+    }
+    updateSummary();
+  } catch(e) {}
+}
+
+loadState();
+updateSummary();
+</script>
+</body>
+</html>
