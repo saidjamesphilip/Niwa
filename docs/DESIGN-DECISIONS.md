@@ -4,7 +4,7 @@ Reference document for final design choices made during development. Use this wh
 
 ---
 
-## Focus Timer (improvements-and-qol)
+## Focus Timer (v1.3.12)
 
 **Chosen: Simple commit-or-cancel focus sessions**
 
@@ -21,20 +21,20 @@ Reference document for final design choices made during development. Use this wh
 
 ---
 
-## Dropdown Sizing (improvements-and-qol)
+## Dropdown Sizing (v1.3.12)
 
 **Chosen: Screen-percentage height with expand/collapse toggle**
 
 - Default height: 30% of visible screen height
 - Expanded height: 50% of visible screen height (toggle via chevron button in toolbar)
 - Settings and Sounds views match main dashboard height exactly via `GeometryReader` + `PreferenceKey`
-- Width fixed at 380pt
+- Width fixed at 400pt
 
 **Rejected:** Drag-to-resize handle — caused constraint crashes in MenuBarExtra window during animated transitions. Replaced with simpler expand/collapse approach.
 
 ---
 
-## MenuBarExtra Crash Fix (improvements-and-qol)
+## MenuBarExtra Crash Fix (v1.3.12)
 
 **Problem:** Switching between main content ↔ settings/sounds views with `withAnimation` caused `NSWindow._postWindowNeedsUpdateConstraints` crash.
 
@@ -42,7 +42,7 @@ Reference document for final design choices made during development. Use this wh
 
 ---
 
-## Tab Touch Targets (improvements-and-qol)
+## Tab Touch Targets (v1.3.12)
 
 - Tasks/Notes segmented control now uses `md` vertical padding (up from `sm`) and `.contentShape(Rectangle())` for full-width tappable area
 
@@ -112,7 +112,7 @@ Sky:        rgb(100, 165, 210)
 - Font: SF Mono, 10pt medium, monospaced digit
 
 **Rejected options:**
-- A: Pulsing dot + compact "Xm" (current before v1.4.0)
+- A: Pulsing dot + compact "Xm"
 - B: Full MM:SS + dot (no progress visual)
 - D: Mini circular ring + compact time
 - E: Emoji per session type
@@ -120,7 +120,7 @@ Sky:        rgb(100, 165, 210)
 
 ---
 
-## Health Status Pills (improvements-and-qol)
+## Health Status Pills (v1.3.12)
 
 **Layout:** Horizontal row of icon-only capsule pills with info popover
 
@@ -247,6 +247,55 @@ Sky:        rgb(100, 165, 210)
 - 1 demo note with welcome text
 - Tasks show priority (high/medium/low) and due dates (today/tomorrow/next week)
 - Inserted directly into ModelContext, bypassing XP-awarding methods
+
+---
+
+## Calendar Meetings (v1.4.0)
+
+**Chosen: EventKit via macOS Calendar (Option C)**
+
+- Uses `EKEventStore` to fetch today's events from all synced calendars (Google, Outlook, iCloud)
+- No Google OAuth, no API keys — fully local-first via Apple's EventKit framework
+- Single `EKEventStore` instance retained for app lifetime (required for `EKEventStoreChanged` notifications)
+- Events fetched fresh per refresh cycle — never cached as object references
+
+**UI placement: New "Meetings" tab (third tab alongside Tasks and Notes)**
+
+- Three sections: Upcoming (sage bar), Current (terracotta bar), Past (muted bar)
+- "soon" badge on meetings starting within 15 minutes
+- Current meeting has elevated background
+- Past unreviewed meetings show "Review" button
+
+**Post-meeting review flow:**
+- Auto-prompt banner for meetings ended within 30 minutes
+- 3-point rating: Bad (muted) / OK (amber) / Good (sage)
+- Optional notes field after rating
+- Rating is immutable once set — UI disables buttons after selection
+- XP de-duplication via `ratingXPAwarded` / `notesXPAwarded` flags on MeetingReview model
+
+**XP values:**
+- +5 XP for rating (source: `.meeting`)
+- +5 XP for non-empty notes (source: `.meeting`)
+- Max +10 XP per meeting
+- Chart color: Amber (#E0AC3A, 70% opacity)
+
+**Empty states:**
+- No calendar access: PlantView seed + "Connect your calendar in System Settings" link
+- No meetings: PlantView seed + "No meetings today — focus time!"
+- Permission not yet requested: "Tap to enable calendar access" button
+
+**Entitlements:** `com.apple.security.personal-information.calendars` in NiwaApp only (not widget)
+
+**Rejected options:**
+- A: Full Google OAuth 2.0 (too complex, breaks local-first principle)
+- B: Google API key + Calendar ID (developer-friendly but not consumer-friendly)
+
+---
+
+## XP Chart — Meeting Source (v1.4.0)
+
+- Added `.meeting` segment between Gym and Creatine in stacked bar
+- Color: Amber (#E0AC3A) at 70% opacity — distinct from creatine (full amber)
 
 ---
 

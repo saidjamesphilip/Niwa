@@ -20,9 +20,9 @@ final class GamificationEngine {
 
     private func refreshRecentXPEvents() {
         let calendar = Calendar.current
-        let eightDaysAgo = calendar.date(byAdding: .day, value: -8, to: calendar.startOfDay(for: Date()))!
+        let fifteenDaysAgo = calendar.date(byAdding: .day, value: -15, to: calendar.startOfDay(for: Date()))!
         let descriptor = FetchDescriptor<XPEvent>(
-            predicate: #Predicate<XPEvent> { $0.earnedAt >= eightDaysAgo }
+            predicate: #Predicate<XPEvent> { $0.earnedAt >= fifteenDaysAgo }
         )
         recentXPEvents = (try? modelContext.fetch(descriptor)) ?? []
     }

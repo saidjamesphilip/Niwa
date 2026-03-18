@@ -22,10 +22,9 @@ Niwa is a local-first application. The only network call is a user-initiated "Ch
 
 | Area | Detail |
 |------|--------|
-| **Local data storage** | SwiftData (SQLite) in App Group container — tasks, notes, XP, settings |
-| **Clipboard access** | Reads `NSPasteboard.general` to populate clipboard history |
+| **Local data storage** | SwiftData (SQLite) in App Group container — tasks, notes, meeting reviews, XP, settings |
+| **Calendar access** | Read-only via EventKit to display today's meetings. No calendar data is persisted or transmitted — only user-submitted review ratings and notes are stored locally |
 | **Notification content** | Health reminder notifications via `UNUserNotificationCenter` |
-| **Process execution** | App restart uses `/usr/bin/open` via `Process` |
 | **Update checker** | Manual-only GET to `api.github.com/repos/.../releases/latest` — no auth, no user data sent |
 
 ### Out of Scope

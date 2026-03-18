@@ -24,7 +24,6 @@ final class HealthEventManager {
         self.profileManager = profileManager
         loadTodayStats()
         resumeStandingSession()
-        setupNotificationCallbacks()
         scheduleDailyReset()
     }
 
@@ -198,11 +197,6 @@ final class HealthEventManager {
             isStanding = true
             standingStartedAt = startTime
         }
-    }
-
-    private func setupNotificationCallbacks() {
-        // Callbacks are now wired in NiwaApp.init() to coordinate
-        // between HealthEventManager and ReminderTimerManager
     }
 
     // MARK: - Daily Reset at 7am

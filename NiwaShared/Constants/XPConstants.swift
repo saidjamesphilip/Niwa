@@ -13,6 +13,10 @@ enum XPConstants {
     static let coffeePenalty: Int = 5
     static let coffeeMaxBeforePenalty: Int = 3
 
+    // Meeting review XP
+    static let meetingRate: Int = 5
+    static let meetingNotes: Int = 5
+
     // Focus timer defaults
     static let defaultFocusPresets: [Int] = [15, 25, 45]
 

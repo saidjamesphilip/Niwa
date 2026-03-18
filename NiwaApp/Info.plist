@@ -4,5 +4,7 @@
 <dict>
 	<key>LSUIElement</key>
 	<true/>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Niwa shows your upcoming meetings and lets you earn XP by reviewing them.</string>
 </dict>
 </plist>

@@ -1,5 +1,4 @@
 import SwiftUI
-import SwiftData
 
 /// A growing plant visualization that evolves with the user's level.
 /// Stages: seed (0), sprout (1-3), seedling (4-7), young plant (8-12),

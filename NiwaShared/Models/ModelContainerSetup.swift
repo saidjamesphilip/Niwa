@@ -10,6 +10,7 @@ enum ModelContainerSetup {
         HealthEvent.self,
         XPEvent.self,
         UserProfile.self,
+        MeetingReview.self,
     ]
 
     /// Creates a ModelContainer using the Application Support directory.

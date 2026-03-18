@@ -568,7 +568,7 @@ struct InlineSettingsView: View {
         panel.nameFieldStringValue = "niwa-export.json"
         guard panel.runModal() == .OK, let url = panel.url else { return }
 
-        let context = profileManager.context
+        let context = profileManager.modelContext
         do {
             var export: [String: Any] = [:]
             let tasks = try context.fetch(FetchDescriptor<NiwaTask>())

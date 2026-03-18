@@ -1,5 +1,4 @@
 import SwiftUI
-import AppKit
 
 struct WelcomeOverlay: View {
     @Binding var isVisible: Bool
@@ -47,7 +46,9 @@ struct WelcomeOverlay: View {
                     VStack(spacing: 6) {
                         featureRow(icon: "timer", text: "Focus timer — earn XP per minute")
                         featureRow(icon: "checkmark.circle", text: "Tasks & notes — stay organised")
+                        featureRow(icon: "calendar", text: "Meetings — review and earn XP")
                         featureRow(icon: "heart.fill", text: "Health habits — water, stand, move")
+                        featureRow(icon: "lightbulb", text: "Weekly insights — see your progress")
                         featureRow(icon: "leaf.fill", text: "Grow your plant from seed to tree")
                     }
                     .padding(.horizontal, DesignTokens.Spacing.md)

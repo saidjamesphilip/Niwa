@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  A native macOS menu bar app that combines a focus timer, task management, quick notes, clipboard history, and health reminders — all wrapped in a gamified leveling system where your virtual plant grows as you do.
+  A native macOS menu bar app that combines a focus timer, task management, quick notes, calendar meetings, and health reminders — all wrapped in a gamified leveling system where your virtual plant grows as you do.
 </p>
 
 <p align="center">
@@ -78,12 +78,14 @@
 - Sorted by last updated
 - **+5 XP** per note created
 
-### Clipboard History
-- Automatic monitoring (polls every 0.5s)
-- Keeps last 20 entries
-- Tap to re-copy with visual feedback
-- Relative timestamps ("3m ago")
-- Character count for long entries
+### Calendar Meetings
+- Shows today's meetings from your macOS Calendar (works with Google, Outlook, iCloud)
+- Three sections: Upcoming (sage), Current (terracotta), Past (muted)
+- "soon" badge on meetings starting within 15 minutes
+- Post-meeting review: 3-point rating (Bad / OK / Good) + optional quick notes
+- Auto-prompt banner for meetings that ended within the last 30 minutes
+- **+5 XP** for rating a meeting, **+5 XP** for adding notes (max +10 per meeting)
+- Uses macOS EventKit — no Google sign-in or API keys needed
 
 ### Health Reminders
 - Water and standing reminders on configurable intervals
@@ -133,8 +135,14 @@
 - Earn XP from every productive action
 - Level formula: Total XP to reach Level N = 25N² + 75N
 - Level-up overlay with confetti animation (respects Reduce Motion)
-- 7-day XP chart with daily breakdowns
+- 7-day XP chart with daily breakdowns by source
 - Menu bar icon evolves with your level
+
+### Weekly Insights
+- Toggle 💡 button on the XP chart to see a qualitative weekly summary
+- 4 stat pills: tasks completed, focus time, meetings reviewed, waters logged
+- Headline adapts to your week-over-week XP trend ("Crushing it", "Steady progress", etc.)
+- Summary highlights your top activities with trend emoji
 
 ### Floating Window
 - Compact, borderless mini window
@@ -260,7 +268,7 @@ Niwa lives in your menu bar as a small leaf icon. Click it to open the dropdown 
 │────────────┴────────────────│
 │  ████████████░░░  72% XP    │  ← XP progress bar
 │─────────────────────────────│
-│  Tasks │ Notes │ Clipboard  │  ← Content tabs
+│  Tasks │ Notes │ Meetings   │  ← Content tabs
 │─────────────────────────────│
 │  ☐ Design new landing page  │
 │  ☑ Review pull requests     │
@@ -270,7 +278,7 @@ Niwa lives in your menu bar as a small leaf icon. Click it to open the dropdown 
 │─────────────────────────────│
 │  ▁▃▅▇▅▃▁  7-day XP chart   │  ← Activity
 │─────────────────────────────│
-│  🪟  v1.0.0    🔄  ⚙️  ⏻   │  ← Toolbar
+│  🪟  vX.Y.Z    🔄  ⚙️  ⏻   │  ← Toolbar
 └─────────────────────────────┘
 ```
 
@@ -280,7 +288,7 @@ All data is stored locally using **SwiftData** with an App Group container. Noth
 
 | Data | Storage |
 |------|---------|
-| Tasks, notes, clipboard | SwiftData (SQLite) |
+| Tasks, notes, meeting reviews | SwiftData (SQLite) |
 | Timer sessions | SwiftData with Date-based tracking |
 | XP events | SwiftData with source attribution |
 | User preferences | SwiftData (UserProfile model) |
@@ -303,8 +311,7 @@ Settings are embedded inline in the dropdown — no separate window.
 | **💼 Work Hours** | Start/end time (reminders only fire within) |
 | **🍜 Lunch** | Start/end time (reminders paused during) |
 | **🎨 Appearance** | System / Light / Dark theme |
-| **🪟 Window** | Always on top toggle |
-| **💾 Data** | Export JSON, Reset All Data |
+| **💾 Data** | Reset All Data |
 
 > [!TIP]
 > **Reset All Data** wipes everything — tasks, notes, XP, settings — and returns you to Level 0 with a fresh seed.
@@ -352,7 +359,8 @@ Niwa/
 │   ├── Services/                # Business logic
 │   │   ├── TaskManager.swift
 │   │   ├── NoteManager.swift
-│   │   ├── ClipboardMonitor.swift
+│   │   ├── AppErrorState.swift
+│   │   ├── CalendarManager.swift
 │   │   ├── HealthEventManager.swift
 │   │   ├── UserProfileManager.swift
 │   │   ├── NotificationManager.swift
@@ -365,10 +373,9 @@ Niwa/
 │   │   │   ├── HeroView.swift       # Plant + timer + XP bar
 │   │   │   ├── PlantView.swift      # 8 growth stages (pure SwiftUI)
 │   │   │   ├── LevelUpOverlay.swift
+│   │   │   ├── MeetingReviewCard.swift
 │   │   │   └── ...
-│   │   ├── FloatingWindow/
-│   │   │   ├── FloatingWindowController.swift
-│   │   │   └── FloatingWindowContentView.swift
+│   │   ├── MeetingsListView.swift
 │   │   └── Settings/
 │   │       └── InlineSettingsView.swift
 │   └── Assets.xcassets/         # Color sets (light + dark)
@@ -383,9 +390,9 @@ Niwa/
 │       ├── UserProfile.swift
 │       ├── NiwaTask.swift
 │       ├── NiwaNote.swift
-│       ├── ClipboardEntry.swift
 │       ├── TimerSession.swift
 │       ├── HealthEvent.swift
+│       ├── MeetingReview.swift
 │       └── XPEvent.swift
 └── NiwaWidget/                  # WidgetKit extension
     ├── SmallWidgetView.swift
@@ -403,6 +410,7 @@ Niwa/
 | **Shared ModelContainer** | Single context across all managers prevents stale state |
 | **NSPanel floating window** | Non-activating, doesn't steal focus from other apps |
 | **XcodeGen** | Reproducible project file, clean diffs |
+| **EventKit** | Calendar access via macOS system — no OAuth, no API keys |
 | **Pure SwiftUI plant shapes** | No image assets needed, scales to any size |
 
 ---
@@ -413,7 +421,7 @@ Niwa/
 |-|--------|
 | **Data storage** | All data stored locally in SwiftData (App Group container) |
 | **Network** | No analytics, no telemetry, no tracking. Optional manual "Check for Updates" calls GitHub Releases API |
-| **Clipboard** | Reads `NSPasteboard.general` locally. Text stays on your machine |
+| **Calendar** | Read-only access via EventKit to show today's meetings. No data sent anywhere |
 | **Notifications** | Local `UNUserNotificationCenter` only. No push servers |
 
 > [!IMPORTANT]

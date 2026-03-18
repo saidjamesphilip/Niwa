@@ -19,8 +19,19 @@ Package.resolved
 # CocoaPods
 Pods/
 
+# Brainstorming
+.superpowers/
+
 # Misc
 *.swp
 *.lock
 .claude/
 .wrangler/
+
+# Secrets & signing
+.env
+.env.*
+*.p12
+*.cer
+*.mobileprovision
+*.xcconfig
