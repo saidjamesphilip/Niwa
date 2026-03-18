@@ -4,11 +4,13 @@ struct MeetingReviewCard: View {
     let eventTitle: String
     let onRate: (Int) -> Void
     let onSubmitNotes: (String) -> Void
+    var onDismiss: (() -> Void)? = nil
 
     @State private var selectedRating: Int? = nil
     @State private var notes: String = ""
     @State private var showNotes: Bool = false
     @State private var notesSubmitted: Bool = false
+    @State private var isComplete: Bool = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: DesignTokens.Spacing.sm) {
@@ -54,11 +56,31 @@ struct MeetingReviewCard: View {
                 Text("Notes saved +5 XP")
                     .font(.system(size: 10))
                     .foregroundStyle(DesignTokens.Colors.secondary)
+                    .onAppear { scheduleAutoDismiss() }
+            }
+
+            // Skip notes — auto-dismiss after rating only
+            if showNotes && !notesSubmitted && !isComplete {
+                Button("Skip") {
+                    isComplete = true
+                    scheduleAutoDismiss()
+                }
+                .font(.system(size: 9))
+                .foregroundStyle(DesignTokens.Colors.textMuted)
+                .buttonStyle(.plain)
             }
         }
         .padding(DesignTokens.Spacing.md)
         .background(DesignTokens.Colors.backgroundSecondary)
         .clipShape(RoundedRectangle(cornerRadius: DesignTokens.CornerRadius.medium))
+        .opacity(isComplete ? 0.6 : 1.0)
+    }
+
+    private func scheduleAutoDismiss() {
+        isComplete = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            onDismiss?()
+        }
     }
 
     private func ratingButton(rating: Int, icon: String, label: String, color: Color) -> some View {

@@ -48,21 +48,11 @@ struct MeetingsListView: View {
                 },
                 onSubmitNotes: { notes in
                     calendarManager.submitNotes(for: pendingId, notes: notes)
+                },
+                onDismiss: {
+                    dismissedPendingId = pendingId
                 }
             )
-            .padding(.bottom, DesignTokens.Spacing.sm)
-
-            Button {
-                dismissedPendingId = pendingId
-            } label: {
-                Text("Dismiss")
-                    .font(.system(size: 10))
-                    .foregroundStyle(DesignTokens.Colors.textMuted)
-                    .padding(.vertical, DesignTokens.Spacing.xs)
-                    .padding(.horizontal, DesignTokens.Spacing.sm)
-                    .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
             .padding(.bottom, DesignTokens.Spacing.sm)
         }
 
@@ -103,6 +93,9 @@ struct MeetingsListView: View {
                             },
                             onSubmitNotes: { notes in
                                 calendarManager.submitNotes(for: identifier, notes: notes)
+                            },
+                            onDismiss: {
+                                expandedReviewId = nil
                             }
                         )
                         .padding(.top, DesignTokens.Spacing.xs)
